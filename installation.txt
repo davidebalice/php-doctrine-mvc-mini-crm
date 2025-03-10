@@ -1,0 +1,12 @@
+
+composer init
+composer require doctrine/orm
+
+
+composer require doctrine/migrations
+composer require symfony/cache
+
+
+creae tabella users
+vendor/bin/doctrine orm:schema-tool:create
+

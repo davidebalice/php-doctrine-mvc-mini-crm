@@ -1,0 +1,21 @@
+{
+  "name": "user/test",
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "davidebalice",
+      "email": "davide.balice@gmail.com"
+    }
+  ],
+  "require": {
+    "doctrine/migrations": "^3.8",
+    "doctrine/orm": "^3.3",
+    "symfony/cache": "^7.2",
+    "doctrine/annotations": "^2.0",
+    "nikic/fast-route": "^1.3"
+  }
+}
