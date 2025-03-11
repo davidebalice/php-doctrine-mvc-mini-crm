@@ -6,6 +6,9 @@ class HomeController
 {
     public function index()
     {
-        echo "Welcome to the Home Page!";
+        echo "Home Page test<br />";
+
+        echo"<a href=\"/login\">login</a>";
     }
+
 }

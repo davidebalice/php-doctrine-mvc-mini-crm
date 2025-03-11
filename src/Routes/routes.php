@@ -9,5 +9,7 @@ function defineRoutes(RouteCollector $r) {
     $r->addRoute('GET', '/', 'home');
     $r->addRoute('GET', '/login', 'login');
     $r->addRoute('POST', '/login', 'loginPost');
+    $r->addRoute('GET', '/logout', 'logout');
     $r->addRoute('GET', '/about', 'about');
+    $r->addRoute('GET', '/dashboard', 'dashboard');
 }

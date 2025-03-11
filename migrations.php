@@ -1,4 +1,5 @@
-<?phpcomposer require doctrine/orm
+<?php
+
 use Doctrine\Migrations\Configuration\Configuration;
 use Doctrine\Migrations\Tools\Console\Command\AbstractCommand;
 use Doctrine\Migrations\Tools\Console\ConsoleRunner;

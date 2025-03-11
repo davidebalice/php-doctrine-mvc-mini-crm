@@ -5,8 +5,33 @@ composer require doctrine/orm
 
 composer require doctrine/migrations
 composer require symfony/cache
+composer require doctrine/annotations
+composer require doctrine/orm
+composer require firebase/php-jwt
+composer require nikic/fast-route
 
 
-creae tabella users
-vendor/bin/doctrine orm:schema-tool:create
+dopo la modidica al composer.json
+
+
+composer dump-autoload
+
+
+
+
+
+migrazioni
+
+crea tabella users
+php vendor/bin/doctrine-migrations
+
+
+nuova migrazione
+php vendor/bin/doctrine-migrations migrations:diff
+
+
+
+avvia server sviluppo
+
+php -S localhost:8000 -t public
 
