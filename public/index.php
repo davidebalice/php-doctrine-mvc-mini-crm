@@ -1,7 +1,8 @@
 <?php
+/*
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
-
+*/
 require_once __DIR__ . '/../vendor/autoload.php';  // Carica Composer
 require_once __DIR__ . '/../src/Routes/routes.php';  // Carica le rotte
 
@@ -67,6 +68,12 @@ switch ($routeInfo[0]) {
         }
         elseif ($handler === 'logout') {
             (new LoginController($entityManager))->logout();
+        }
+        elseif ($handler === 'registerForm') {
+            (new LoginController($entityManager))->registerForm();
+        }
+        elseif ($handler === 'registerPost') {
+            (new LoginController($entityManager))->registerPost();
         }
         elseif ($handler === 'about') {
             echo "About us page";

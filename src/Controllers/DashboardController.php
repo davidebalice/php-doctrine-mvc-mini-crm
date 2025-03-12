@@ -2,10 +2,15 @@
 
 namespace App\Controllers;
 
-class DashboardController
+class DashboardController extends RenderController
 {
     public function dashboard()
     {
-       include __DIR__ . '/../Views/admin/dashboard.php';
+       $data=[
+           'title'=>'Dashboard',
+           'description'=>'Welcome to the dashboard',
+           'username'=>'test'
+       ];
+       $this->render('admin/dashboard', $data);
     }
 }

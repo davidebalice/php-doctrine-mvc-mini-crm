@@ -1,5 +1,5 @@
 {
-  "name": "user/test",
+  "name": "framework-doctrine-mini-crm-users",
   "autoload": {
     "psr-4": {
       "App\\": "src/"

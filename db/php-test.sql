@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Mar 10, 2025 alle 14:47
+-- Creato il: Mar 11, 2025 alle 15:00
 -- Versione del server: 10.4.27-MariaDB
 -- Versione PHP: 8.2.0
 
@@ -42,7 +42,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `email_verified`, `created_at`, `updated_at`) VALUES
-(3, 'Mario Rossi', 'mario@example.com', '$2y$10$xmDFCiUrn7RfOcScQzJjkuitBM0Twjf4GyzuCIdt28vRPuUPYXVdK', 0, '2025-03-10 14:34:18', '2025-03-10 14:34:18');
+(3, 'Mario Rossi', 'mario@rossi.it', '$2y$10$xmDFCiUrn7RfOcScQzJjkuitBM0Twjf4GyzuCIdt28vRPuUPYXVdK', 0, '2025-03-10 14:34:18', '2025-03-10 14:34:18');
 
 --
 -- Indici per le tabelle scaricate
@@ -62,7 +62,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT per la tabella `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>dashboard</title>
-</head>
-<body>
-    dashboard
+<div class="container">
+    <h1>Welcome to your Dashboard, <?= htmlspecialchars($username) ?>!</h1>
 
-    <br />
-    <a href="/logout">logout</a>
-</body>
-</html>
+    <p>This is your personal dashboard where you can manage your account and see your details.</p>
+
+    <ul>
+        <li><a href="/profile">View Profile</a></li>
+        <li><a href="/settings">Account Settings</a></li>
+        <li><a href="/logout">Logout</a></li>
+    </ul>
+</div>

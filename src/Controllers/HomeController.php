@@ -2,13 +2,14 @@
 
 namespace App\Controllers;
 
-class HomeController
+class HomeController extends RenderController
 {
     public function index()
     {
-        echo "Home Page test<br />";
-
-        echo"<a href=\"/login\">login</a>";
+       $data=[
+           'title'=>'Homepage',
+           'description'=>'Homepage',
+       ];
+       $this->render('index', $data);
     }
-
 }
