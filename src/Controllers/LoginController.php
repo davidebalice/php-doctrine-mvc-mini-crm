@@ -72,7 +72,7 @@ class LoginController extends RenderController
         setcookie("jwt_token", "", time() - 3600, "/");
 
         // Messaggio di logout
-        echo json_encode(["message" => "Logout effettuato con successo"]);
+        header('Location: /login');
     }
 
     // Gestisce la registrazione di un nuovo utente

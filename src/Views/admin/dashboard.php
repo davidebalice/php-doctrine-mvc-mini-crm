@@ -1,7 +1,16 @@
 <div class="container">
-    <h1>Welcome to your Dashboard, <?= htmlspecialchars($username) ?>!</h1>
+    <h1>Welcome to your Dashboard, <?= htmlspecialchars($user->getEmail()) ?>!</h1>
 
     <p>This is your personal dashboard where you can manage your account and see your details.</p>
+
+    <?php
+        if(isset($user)){
+            echo $user->getEmail();
+        }else{
+            echo"user non loggato";
+        }
+    ?>
+
 
     <ul>
         <li><a href="/profile">View Profile</a></li>

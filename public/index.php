@@ -45,7 +45,7 @@ switch ($routeInfo[0]) {
 
         // Esegui il controller appropriato
         if ($handler === 'home') {
-            (new HomeController())->index();
+            (new HomeController($entityManager))->index();
         }
         elseif ($handler === 'dashboard') {
             // Applica il middleware di autenticazione (verifica del token)
@@ -53,7 +53,7 @@ switch ($routeInfo[0]) {
             // Se il token è valido, esegui la logica del controller per il dashboard
             if ($authMiddleware->checkAuth()) {
                 // Se il token è valido, esegui il controller per il dashboard
-                $dashboardController = new DashboardController();
+                $dashboardController = new DashboardController($entityManager);
                 $dashboardController->dashboard(); // Questo carica la vista del dashboard
             } else {
                 //echo "Accesso negato. Devi essere loggato per accedere a questa pagina.";
