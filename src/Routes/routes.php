@@ -17,6 +17,11 @@ function defineRoutes(RouteCollector $r) {
     $r->addRoute('GET', '/register', 'registerForm');
     $r->addRoute('POST', '/register', 'registerPost');
 
+    //Leads
+    $r->addRoute('GET', '/leads', 'leads');
+
+    //Sources
+    $r->addRoute('GET', '/sources', 'sources');
 
 
 }

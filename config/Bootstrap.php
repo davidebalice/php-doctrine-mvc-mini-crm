@@ -15,7 +15,7 @@ $config = ORMSetup::createAttributeMetadataConfiguration(
 
 // Connessione al database (modifica con i tuoi parametri)
 $connection = DriverManager::getConnection([
-    'dbname' => 'php-test',
+    'dbname' => 'crm-doctrine',
     'user' => 'root',
     'password' => '',
     'host' => '127.0.0.1',

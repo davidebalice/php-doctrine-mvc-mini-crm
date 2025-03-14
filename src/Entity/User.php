@@ -25,6 +25,9 @@ class User
     #[ORM\Column(type: 'boolean')]
     private bool $email_verified = false;
 
+    //#[ORM\OneToMany(targetEntity: Lead::class, mappedBy: "source")]
+    //private Collection $leads;
+
     #[ORM\Column(type: 'datetime')]
     private \DateTime $created_at;
 

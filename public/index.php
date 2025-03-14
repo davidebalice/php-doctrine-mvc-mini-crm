@@ -11,6 +11,8 @@ use FastRoute\Dispatcher;
 use App\Controllers\HomeController;
 use App\Controllers\LoginController;
 use App\Controllers\DashboardController;
+use App\Controllers\LeadsController;
+use App\Controllers\SourcesController;
 use App\Middlewares\AuthMiddleware;
 
 // Ottieni il metodo HTTP e l'URI della richiesta
@@ -31,6 +33,17 @@ $entityManager = require __DIR__ . '/../config/Bootstrap.php';
 // Esegui il match tra la richiesta e la rotta
 $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
 
+// Funzione per gestire le rotte protette automaticamente
+function handleProtectedRoute($controllerClass, $method, $entityManager) {
+    $authMiddleware = new AuthMiddleware();
+    if ($authMiddleware->checkAuth()) {
+        (new $controllerClass($entityManager))->$method();
+    } else {
+        header('Location: /login');
+        exit();
+    }
+}
+
 // Gestisci la risposta
 switch ($routeInfo[0]) {
     case Dispatcher::NOT_FOUND:
@@ -48,17 +61,7 @@ switch ($routeInfo[0]) {
             (new HomeController($entityManager))->index();
         }
         elseif ($handler === 'dashboard') {
-            // Applica il middleware di autenticazione (verifica del token)
-            $authMiddleware = new AuthMiddleware();
-            // Se il token è valido, esegui la logica del controller per il dashboard
-            if ($authMiddleware->checkAuth()) {
-                // Se il token è valido, esegui il controller per il dashboard
-                $dashboardController = new DashboardController($entityManager);
-                $dashboardController->dashboard(); // Questo carica la vista del dashboard
-            } else {
-                //echo "Accesso negato. Devi essere loggato per accedere a questa pagina.";
-                header('Location: /login');  // Se il token non è valido, reindirizza alla pagina di login
-            }
+            handleProtectedRoute(DashboardController::class, 'dashboard', $entityManager);
         }
         elseif ($handler === 'login') {
             (new LoginController($entityManager))->loginForm();
@@ -75,6 +78,17 @@ switch ($routeInfo[0]) {
         elseif ($handler === 'registerPost') {
             (new LoginController($entityManager))->registerPost();
         }
+        
+        //Leads
+        elseif ($handler === 'leads') {
+            handleProtectedRoute(LeadsController::class, 'leads', $entityManager);
+        }
+
+        //Sources
+        elseif ($handler === 'sources') {
+            handleProtectedRoute(SourcesController::class, 'sources', $entityManager);
+        }
+
         elseif ($handler === 'about') {
             echo "About us page";
         }

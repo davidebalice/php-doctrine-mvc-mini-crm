@@ -3,6 +3,9 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Source;
+use App\Entity\Status;
+use App\Entity\User;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'leads')]
@@ -25,12 +28,6 @@ class Lead
     #[ORM\Column(type: 'string', length: 100)]
     private ?string $phone = null;
 
-    #[ORM\Column(type: 'string', length: 100)]
-    private string $source;
-
-    #[ORM\Column(type: 'string', length: 100)]
-    private string $status; // Ad esempio, "New", "Contacted", "Qualified", ecc.
-
     #[ORM\Column(type: 'datetime')]
     private \DateTime $created_at;
 
@@ -40,6 +37,14 @@ class Lead
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "leads")]
     #[ORM\JoinColumn(name: "user_id", referencedColumnName: "id")]
     private ?User $assigned_user = null;
+
+    #[ORM\ManyToOne(targetEntity: Source::class, inversedBy: "leads")]
+    #[ORM\JoinColumn(name: "source_id", referencedColumnName: "id", nullable: false)]
+    private Source $source;
+
+    #[ORM\ManyToOne(targetEntity: Status::class, inversedBy: "leads")]
+    #[ORM\JoinColumn(name: "status_id", referencedColumnName: "id", nullable: false)]
+    private Status $status;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $notes = null;
@@ -94,22 +99,22 @@ class Lead
         $this->phone = $phone;
     }
 
-    public function getSource(): string
+    public function getSource(): Source
     {
         return $this->source;
     }
-
-    public function setSource(string $source): void
+    
+    public function setSource(Source $source): void
     {
         $this->source = $source;
     }
-
-    public function getStatus(): string
+    
+    public function getStatus(): Status
     {
         return $this->status;
     }
-
-    public function setStatus(string $status): void
+    
+    public function setStatus(Status $status): void
     {
         $this->status = $status;
     }

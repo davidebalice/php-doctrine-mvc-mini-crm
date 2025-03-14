@@ -43,7 +43,6 @@ class RenderController
                 $decoded = JWT::decode($_COOKIE['jwt_token'], new Key($this->secretKey, 'HS256'));
                 // Ottieni l'utente dal database usando l'id
                 return $this->entityManager->getRepository(User::class)->findOneBy(['id' => $decoded->user_id]);
-                //return (new \Doctrine\ORM\EntityManager())->getRepository(User::class)->find($decoded->user_id);
             } catch (\Exception $e) {
                 return null;
             }

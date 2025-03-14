@@ -13,7 +13,7 @@ class HomeController extends RenderController
     
     public function __construct(EntityManagerInterface $entityManager)
     {
-        $this->entityManager = $entityManager;
+        parent::__construct($entityManager);
     }
     
     public function index()

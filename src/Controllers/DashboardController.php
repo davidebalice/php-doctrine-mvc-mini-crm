@@ -2,12 +2,8 @@
 
 namespace App\Controllers;
 
-
-
 class DashboardController extends RenderController
-{
-    
-    
+{ 
     public function dashboard()
     {
        $data=[

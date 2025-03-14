@@ -18,7 +18,8 @@
 
 
 
-    <a href=\"/login\">login</a>
-
-    <a href=\"/register\">register</a>
+    <a href="/login">login</a>
+    <?php
+    //<a href="/register">register</a>
+    ?>
 </div>
