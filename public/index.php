@@ -13,6 +13,7 @@ use App\Controllers\LoginController;
 use App\Controllers\DashboardController;
 use App\Controllers\LeadsController;
 use App\Controllers\SourcesController;
+use App\Controllers\StatusesController;
 use App\Middlewares\AuthMiddleware;
 
 // Ottieni il metodo HTTP e l'URI della richiesta
@@ -87,6 +88,11 @@ switch ($routeInfo[0]) {
         //Sources
         elseif ($handler === 'sources') {
             handleProtectedRoute(SourcesController::class, 'sources', $entityManager);
+        }
+
+        //Statuses
+        elseif ($handler === 'statuses') {
+            handleProtectedRoute(StatusesController::class, 'statuses', $entityManager);
         }
 
         elseif ($handler === 'about') {

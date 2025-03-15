@@ -1,6 +1,8 @@
 
     <form method="POST" action="/login" class="login-form">
-        <input type="email" name="email" placeholder="email" required><br>
-        <input type="password" name="password" placeholder="Password" required><br>
+        <label>Email:</label>
+        <input type="email" name="email" placeholder="email" required>
+        <label>Password:</label>
+        <input type="password" name="password" placeholder="Password" required>
         <button type="submit">Login</button>
     </form>

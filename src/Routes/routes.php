@@ -23,5 +23,8 @@ function defineRoutes(RouteCollector $r) {
     //Sources
     $r->addRoute('GET', '/sources', 'sources');
 
+    //Statuses
+    $r->addRoute('GET', '/statuses', 'statuses');
+
 
 }

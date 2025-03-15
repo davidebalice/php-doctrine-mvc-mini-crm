@@ -1,8 +1,9 @@
 :root {
-  --primary-color: #14263a;
-  --secondary-color: #14263a;
+  --primary-color: #1a2225;
+  --primary-color-hover: #14263a;
+  --secondary-color: #119ac2;
+  --secondary-color-hover: #0f647d;
 }
-
 
 body {
   font-family: Roboto, sans-serif;
@@ -34,6 +35,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  z-index: 10;
 }
 
 main {
@@ -111,26 +113,144 @@ footer a {
   margin-top: 70px;
 }
 
-
-.login-form{
+.login-form {
   margin: 0 auto;
   width: 90%;
   max-width: 400px;
   padding: 20px;
   background-color: #fff;
   border-radius: 5px;
-  box-shadow: 0px 2px 4px 0px rgb(0, 0, 0, 0.2);  
+  box-shadow: 0px 2px 4px 0px rgb(0, 0, 0, 0.2);
   background: white;
   height: 250px;
   margin-top: 100px;
   text-align: center;
 }
 
-.login-form input{
+.login-form input {
   width: 90%;
   margin: 0 auto;
-  border:1px solid #ddd;
+  border: 1px solid #ddd;
   background: #f1f1f1;
   padding: 10px;
   margin-bottom: 10px;
+}
+
+.login-form label {
+  font-size: 13px;
+  text-align: left;
+  margin: 0 auto;
+  width: 96%;
+  padding: 6px 2px;
+  clear: both;
+  display: flex;
+  justify-content: start;
+  color: #777;
+}
+
+.page {
+  width: 100%;
+  min-height: 300px;
+  padding-left: 0%;
+ 
+  background: #fff;
+}
+
+.page-header {
+  width: 100%;
+  height: 70px;
+  border: none;
+  color: white;
+  background-color: var(--secondary-color);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.page-subheader {
+  width: 100%;
+  height: 50px;
+  background: #f1f1f1;
+  box-shadow: 0px 2px 4px 0px rgb(0, 0, 0, 0.2);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.page-wrapper {
+  padding: 0 20px;
+}
+
+.page-header h1 {
+  font-weight: normal;
+  font-size: 18px;
+}
+
+.page-body {
+  width: calc(100% - 50px);
+  padding: 25px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border: 1px solid #ddd;
+}
+
+.table-wrapper {
+  min-height: calc(100vh - 300px);
+}
+
+td {
+  padding: 12px;
+  text-align: left;
+  font-size: 14px;
+  border-bottom: 1px solid #ddd;
+  color: #444;
+}
+
+th {
+  background: #6f6f6f;
+  text-align: left;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 12px;
+  color: white;
+}
+
+tr:hover {
+  background: #f1f1f1;
+}
+
+.pagination {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.pagination a {
+  display: inline-block;
+  padding: 8px 12px;
+  margin: 0 5px;
+  text-decoration: none;
+  color: white;
+  background-color: var(--secondary-color);
+  border-radius: 4px;
+}
+
+.pagination a.active {
+  background-color: var(--secondary-color-hover);
+  font-weight: bold;
+}
+
+.pagination a:hover {
+  background-color: var(--secondary-color-hover);
+}
+
+.pagination .disabled {
+  background-color: #ccc;
 }

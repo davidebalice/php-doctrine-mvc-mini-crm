@@ -13,11 +13,6 @@
     <br /> <br />
 
 
-
-
-
-
-
     <a href="/login">login</a>
     <?php
     //<a href="/register">register</a>

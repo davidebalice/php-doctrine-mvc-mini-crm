@@ -11,7 +11,6 @@
         }
     ?>
 
-
     <ul>
         <li><a href="/profile">View Profile</a></li>
         <li><a href="/settings">Account Settings</a></li>
