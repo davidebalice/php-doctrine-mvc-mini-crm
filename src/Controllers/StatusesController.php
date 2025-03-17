@@ -16,35 +16,11 @@ class StatusesController extends RenderController
         $this->entityManager = $entityManager;
         parent::__construct($entityManager);
     }
-/*
-    // Ottieni tutti gli status
-    public function statuses()
-    {
-        $statuses = $this->entityManager->getRepository(Status::class)->findAll();
-
-        $data = [
-            'title' => 'Statuses',
-            'description' => 'Lista di tutte gli status',
-            'statuses' => $statuses
-        ];
-        
-        $this->render('/statuses/statuses', $data);
-    }
-
-*/
-
-
-
-
-
-
-
-  
 
     public function statuses()
     {
         $page = isset($_GET['page']) ? (int) $_GET['page'] : 1; // Ottieni la pagina dalla query string
-        $limit = 2; // Numero di elementi per pagina
+        $limit = 12; // Numero di elementi per pagina
         $offset = ($page - 1) * $limit; // Calcola l'offset
     
         $query = $this->entityManager->getRepository(Status::class)
@@ -68,36 +44,50 @@ class StatusesController extends RenderController
         $this->render('/statuses/statuses', $data);
     }
 
+   // Pagina nuovo status
+   public function create() {
+        $data = [
+            'title' => 'New status',
+            'description' => 'Create new status',
+        ];
+
+        $this->render('/statuses/new', $data);
+    }
+
+    // Crea un nuovo status
+    public function store(Request $request) {
+        $status = new Status();
+        $status->setName($request->request->get('name'));
+
+        $this->entityManager->persist($status);
+        $this->entityManager->flush();
+
+        header('Location: /statuses');
+        exit();
+    }
 
 
 
-
-
-
-
-
-
-
+    public function delete($id)
+    {
+        $status = $this->entityManager->getRepository(Status::class)->find($id);
+    
+        if ($status) {
+            $this->entityManager->remove($status);
+            $this->entityManager->flush();
+        }
+    
+        header('Location: /statuses');
+        exit();
+    }
 
 
 
 
 
     /*
-    // Crea un nuovo lead
-    public function store(Request $request)
-    {
-        $lead = new Lead();
-        $lead->setName($request->request->get('name'));
-        $lead->setEmail($request->request->get('email'));
-        $lead->setPhone($request->request->get('phone'));
+   
 
-        $this->entityManager->persist($lead);
-        $this->entityManager->flush();
-
-        header('Location: /leads'); // Reindirizza alla lista leads
-        exit();
-    }
 
     // Modifica un lead esistente
     public function update(Request $request, $id)

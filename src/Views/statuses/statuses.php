@@ -1,11 +1,19 @@
 <div class="page">
     <div class="page-header">
-        <div class="page-wrapper">
-            <h1>Statuses</h1>
+        <div class="page-header-container">
+            <div class="page-wrapper">
+                <i class="fa fa-bars" aria-hidden="true" style="font-size:22px"></i>
+                <h1>Statuses</h1>
+            </div>
         </div>
     </div>
     <div class="page-subheader">
-        aaa
+        <a href="/statuses/create">
+            <div class="button">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+                <span>Aggiungi status</span>
+            </div>
+        </a>
     </div>
     <div class="page-body">
 
@@ -14,9 +22,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Nome</th>
-                            <th>Cognome</th>
-                            <th>Età</th>
+                            <th style="width:90%">Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -24,11 +30,20 @@
                         <?php foreach ($statuses as $status): ?>
                             <tr>
                                 <td><?= htmlspecialchars($status->getName()) ?></td>
-                                <td>Verdi</td>
-                                <td>40</td>
                                 <td>
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                    <i class="fa-solid fa-trash"></i>
+                                    <div class="buttons-container">
+                                        <a href="">
+                                            <div class="flex-center base-button edit-button ">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </div>
+                                        </a>
+
+                                        
+                                        <div class="flex-center base-button delete-button"  onclick="confirmDelete(<?php echo $status->getId(); ?>)">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </div>
+                                        
+                                    </div>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -67,3 +82,29 @@
         <?php endif; ?>
     </div>
 </div>
+
+
+
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <p>Sei sicuro di voler eliminare questo status?</p>
+        <div class="modal-actions">
+            <button onclick="closeModal()">Annulla</button>
+            <a id="confirmDeleteBtn" href="#"><button class="danger">Elimina</button></a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function confirmDelete(id) {
+        let modal = document.getElementById('deleteModal');
+        let confirmBtn = document.getElementById('confirmDeleteBtn');
+
+        confirmBtn.href = '/statuses/delete/' + id;
+        modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+    }
+</script>

@@ -25,6 +25,10 @@ function defineRoutes(RouteCollector $r) {
 
     //Statuses
     $r->addRoute('GET', '/statuses', 'statuses');
-
+    $r->addRoute('GET', '/statuses/create', 'statuses_create');
+    $r->addRoute('POST', '/statuses/create', 'statuses_store');
+    $r->addRoute('GET', '/statuses/edit/{id:\d+}', 'status_edit');
+    $r->addRoute('POST', '/statuses/edit/{id:\d+}', 'status_update');
+    $r->addRoute('GET', '/statuses/delete/{id:\d+}', 'statuses_delete');
 
 }

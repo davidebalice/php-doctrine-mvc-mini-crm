@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Mar 14, 2025 alle 15:00
+-- Creato il: Mar 17, 2025 alle 10:40
 -- Versione del server: 10.4.27-MariaDB
 -- Versione PHP: 8.2.0
 
@@ -88,7 +88,16 @@ CREATE TABLE `statuses` (
 INSERT INTO `statuses` (`id`, `name`) VALUES
 (1, 'New'),
 (2, 'Contacted'),
-(3, 'Qualified');
+(3, 'Qualified'),
+(8, 'Interested'),
+(9, 'Waiting for Response'),
+(10, 'Negotiation'),
+(11, 'Converted'),
+(12, 'Lost'),
+(13, 'Not Interested'),
+(14, 'Follow-up scheduled'),
+(15, 'Not suitable'),
+(16, 'Closed');
 
 -- --------------------------------------------------------
 
@@ -164,7 +173,7 @@ ALTER TABLE `sources`
 -- AUTO_INCREMENT per la tabella `statuses`
 --
 ALTER TABLE `statuses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT per la tabella `users`
