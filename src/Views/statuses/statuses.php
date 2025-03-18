@@ -14,8 +14,32 @@
                 <span>Aggiungi status</span>
             </div>
         </a>
+        <div>
+            <form class="search-form">
+                <span>Search:</span>
+                <input type="text" name="search" value="<?= (isset($search)&&($search!="")) ? $search : '' ?>" required>
+                <button type="submit" class="search-button">
+                    <i class="fa fa-search"></i>
+                </button>
+            </form>
+        </div>
     </div>
     <div class="page-body">
+        
+        <?php
+            if(isset($search)&&($search!="")){
+        ?>
+            
+            <div class="top-table">
+                <div class="flex">
+                    <p>Search term: <strong><?= $search ?></strong></p>
+                    <a href="/statuses" class="flex-center button-mini">View all</a>
+                </div>
+            </div>
+            
+        <?php
+            }
+        ?>
 
         <?php if (!empty($statuses)): ?>
             <div class="table-wrapper">
@@ -32,17 +56,15 @@
                                 <td><?= htmlspecialchars($status->getName()) ?></td>
                                 <td>
                                     <div class="buttons-container">
-                                        <a href="">
+                                        <a href="/statuses/edit/<?php echo $status->getId(); ?>">
                                             <div class="flex-center base-button edit-button ">
                                                 <i class="fa-solid fa-pen-to-square"></i>
                                             </div>
                                         </a>
 
-                                        
                                         <div class="flex-center base-button delete-button"  onclick="confirmDelete(<?php echo $status->getId(); ?>)">
                                             <i class="fa-solid fa-trash"></i>
                                         </div>
-                                        
                                     </div>
                                 </td>
                             </tr>
@@ -75,22 +97,18 @@
                 <?php endif; ?>
             </div>
 
-
-
         <?php else: ?>
             <p>Statuses not found</p>
         <?php endif; ?>
     </div>
 </div>
 
-
-
 <div id="deleteModal" class="modal">
     <div class="modal-content">
-        <p>Sei sicuro di voler eliminare questo status?</p>
+        <p>Confirm delete?</p>
         <div class="modal-actions">
-            <button onclick="closeModal()">Annulla</button>
-            <a id="confirmDeleteBtn" href="#"><button class="danger">Elimina</button></a>
+            <button onclick="closeModal()">Cancel</button>
+            <a id="confirmDeleteBtn" href="#"><button class="danger">Delete</button></a>
         </div>
     </div>
 </div>

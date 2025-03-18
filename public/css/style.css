@@ -2,7 +2,7 @@
   --primary-color: #1a2225;
   --primary-color-hover: #14263a;
   --secondary-color: #119ac2;
-  --secondary-color-hover: #0f647d;
+  --secondary-color-hover: #16809f;
 }
 
 body {
@@ -23,6 +23,15 @@ a {
   align-items: center;
 }
 
+.flex {
+  display: flex;
+  width: fit-content;
+  gap: 20px;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+}
+
 .homepage {
   width: 100%;
   height: calc(100vh - 86px);
@@ -30,6 +39,91 @@ a {
   background-image: url("../images/bg.jpg");
   background-size: cover;
   height: 100%;
+  color: #444;
+}
+
+button {
+  width: 90%;
+  height: 40px;
+  max-width: 200px;
+  box-shadow: 0px 2px 4px 0px rgb(0, 0, 0, 0.2);
+  padding: 3px;
+  cursor: pointer;
+  border: none;
+  color: white;
+  background-color: var(--secondary-color);
+  margin: 0 auto;
+}
+
+.button-mini {
+  width: fit-content;
+  box-shadow: 0px 2px 4px 0px rgb(0, 0, 0, 0.2);
+  padding: 6px 18px;
+  font-size: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+  color: white;
+  background-color: var(--secondary-color);
+  margin: 0 auto;
+}
+
+.button-mini:hover {
+  background-color: var(--secondary-color-hover);
+}
+
+.login-button {
+  width: 96% !important;
+  max-width: 96%;
+  height: 36px;
+  box-shadow: 0px 2px 4px 0px rgb(0, 0, 0, 0.2);
+  padding: 2px;
+  cursor: pointer;
+  border: none;
+  color: white;
+  background-color: var(--secondary-color);
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+.demo-data {
+  border-top: 1px dashed #ccc;
+  margin-top: 20px;
+  padding-top: 20px;
+  color: #444;
+  line-height: 24px;
+}
+
+.demo-data p {
+  font-weight: bold;
+  padding: 0;
+  margin: 0;
+  margin-bottom: 5px;
+  color: #444;
+}
+
+.homepage .line {
+  margin-top: 20px;
+  width: 100%;
+  height: 20px;
+  border-top: 1px solid #ddd;
+}
+
+.homepage button:hover {
+  background-color: var(--secondary-color-hover);
+}
+
+.homepage-container {
+  border: 1px solid #ddd;
+  width: 90%;
+  line-height: 30px;
+  max-width: 600px;
+  padding: 20px;
+  margin: 0 auto;
+  margin-top: 100px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 6px;
+  box-shadow: 0px 2px 4px 0px rgb(0, 0, 0, 0.2);
 }
 
 header {
@@ -116,7 +210,7 @@ footer a {
 
 .phpLogo {
   width: 300px;
-  margin-top: 70px;
+  margin-top: 20px;
 }
 
 .login-form {
@@ -128,18 +222,22 @@ footer a {
   border-radius: 5px;
   box-shadow: 0px 2px 4px 0px rgb(0, 0, 0, 0.2);
   background: white;
-  height: 250px;
+  height: 310px;
   margin-top: 100px;
   text-align: center;
 }
 
-.login-form input {
+input {
   width: 90%;
   margin: 0 auto;
   border: 1px solid #ddd;
   background: #f1f1f1;
   padding: 10px;
   margin-bottom: 10px;
+}
+
+.input-form {
+  width: 94%;
 }
 
 .login-form label {
@@ -209,13 +307,23 @@ footer a {
   padding: 25px;
 }
 
+.top-table {
+  font-size: 13px;
+  margin-bottom: 12px;
+  border: 1px solid #ddd;
+  padding: 0 18px;
+  border-radius: 4px;
+}
+
 table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 1px;
   background: white;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   border: 1px solid #ddd;
+  border-radius: 6px;
 }
 
 .table-wrapper {
@@ -230,7 +338,7 @@ td {
   color: #444;
 }
 
-th {
+thead {
   background: #6f6f6f;
   text-align: left;
   font-weight: bold;
@@ -239,8 +347,14 @@ th {
   color: white;
 }
 
-tr:hover {
-  background: #f1f1f1;
+thead tr {
+  background-image: url("../images/pattern.png");
+  background-size: cover;
+  width: 100%;
+}
+
+th {
+  padding: 12px;
 }
 
 .pagination {
@@ -271,6 +385,15 @@ tr:hover {
   background-color: #ccc;
 }
 
+.form {
+  text-align: left;
+  border: 1px solid #ddd;
+  padding: 40px;
+  width: fit-content;
+  min-width: 400px;
+  border-radius: 8px;
+}
+
 .button {
   background-color: var(--secondary-color);
   color: white;
@@ -279,6 +402,20 @@ tr:hover {
   border-radius: 4px;
   cursor: pointer;
   margin-left: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.input-submit {
+  background-color: var(--secondary-color);
+  color: white;
+  width: 100%;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -335,4 +472,33 @@ tr:hover {
 .danger {
   background: red;
   color: white;
+}
+
+.search-form {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  color: #444;
+  font-size: 13px;
+  gap: 8px;
+  height: 34px;
+}
+
+.search-form input {
+  background: white;
+  padding: 5px;
+  margin: 0;
+  width: 140px;
+}
+
+.search-button {
+  margin-right: 24px;
+  padding: 0px 12px;
+  height: 26px;
+  width: 60px;
+  border-radius: 4px;
+}
+
+.search-button:hover {
+  background: var(--secondary-color-hover);
 }
