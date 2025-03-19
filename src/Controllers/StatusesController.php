@@ -52,7 +52,7 @@ class StatusesController extends RenderController
 
         $data = [
             'title' => 'Statuses',
-            'description' => 'Lista di tutti gli status',
+            'description' => 'View of all statuses',
             'statuses' => $paginator,
             'currentPage' => $page,
             'totalPages' => $totalPages,
@@ -62,10 +62,7 @@ class StatusesController extends RenderController
         $this->render('/statuses/statuses', $data);
     }
 
-    
-
-   // Pagina nuovo status
-   public function create() {
+    public function create() {
         $data = [
             'title' => 'New status',
             'description' => 'Create new status',
@@ -74,9 +71,12 @@ class StatusesController extends RenderController
         $this->render('/statuses/new', $data);
     }
 
-    // Crea un nuovo status
     public function store(Request $request) {
         $name = trim($request->request->get('name', ''));
+        
+        // Sanificazione
+        $name = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
+        
         if (empty($name)) {
             $_SESSION['error'] = "Name field is mandatory";
             header('Location: /statuses/create');
@@ -93,7 +93,6 @@ class StatusesController extends RenderController
         exit();
     }
 
-    // Pagina nuovo status
     public function edit($id) {
         $status = $this->entityManager->getRepository(Status::class)->find($id);
 
@@ -104,6 +103,28 @@ class StatusesController extends RenderController
         ];
 
         $this->render('/statuses/edit', $data);
+    }
+
+    public function update(Request $request)
+    {
+        $id = $request->request->get('id');
+        $id = (int) $id; // Conversione sicura a intero
+       
+        $status = $this->entityManager->getRepository(Status::class)->find($id);
+
+        if (!$status) {
+            die('Status non found');
+        }
+
+        // Sanificazione
+        $name = htmlspecialchars($request->request->get('name'), ENT_QUOTES, 'UTF-8');
+
+        $status->setName($name);
+
+        $this->entityManager->flush();
+
+        header('Location: /statuses');
+        exit();
     }
 
     public function delete($id)
@@ -118,48 +139,4 @@ class StatusesController extends RenderController
         header('Location: /statuses');
         exit();
     }
-
-
-
-
-
-    /*
-   
-
-
-    // Modifica un lead esistente
-    public function update(Request $request, $id)
-    {
-        $lead = $this->entityManager->getRepository(Lead::class)->find($id);
-
-        if (!$lead) {
-            die('Lead non trovato');
-        }
-
-        $lead->setName($request->request->get('name'));
-        $lead->setEmail($request->request->get('email'));
-        $lead->setPhone($request->request->get('phone'));
-
-        $this->entityManager->flush();
-
-        header('Location: /leads');
-        exit();
-    }
-
-    // Cancella un lead
-    public function delete($id)
-    {
-        $lead = $this->entityManager->getRepository(Lead::class)->find($id);
-
-        if (!$lead) {
-            die('Lead non trovato');
-        }
-
-        $this->entityManager->remove($lead);
-        $this->entityManager->flush();
-
-        header('Location: /leads');
-        exit();
-    }
-        */
 }

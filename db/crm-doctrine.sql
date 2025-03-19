@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Mar 17, 2025 alle 10:40
+-- Creato il: Mar 19, 2025 alle 18:05
 -- Versione del server: 10.4.27-MariaDB
 -- Versione PHP: 8.2.0
 
@@ -68,7 +68,13 @@ CREATE TABLE `sources` (
 INSERT INTO `sources` (`id`, `name`) VALUES
 (1, 'Facebook'),
 (2, 'Google'),
-(3, 'Email');
+(3, 'Email'),
+(5, 'Referral'),
+(6, 'Website'),
+(7, 'Landing page'),
+(8, 'Seo'),
+(9, 'Sms marketing'),
+(10, 'Newsletter');
 
 -- --------------------------------------------------------
 
@@ -167,13 +173,13 @@ ALTER TABLE `leads`
 -- AUTO_INCREMENT per la tabella `sources`
 --
 ALTER TABLE `sources`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT per la tabella `statuses`
 --
 ALTER TABLE `statuses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT per la tabella `users`

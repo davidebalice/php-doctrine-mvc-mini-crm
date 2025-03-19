@@ -11,7 +11,7 @@
         <a href="/statuses/create">
             <div class="button">
                 <i class="fa fa-plus" aria-hidden="true"></i>
-                <span>Aggiungi status</span>
+                <span>Add status</span>
             </div>
         </a>
         <div>
@@ -29,7 +29,6 @@
         <?php
             if(isset($search)&&($search!="")){
         ?>
-            
             <div class="top-table">
                 <div class="flex">
                     <p>Search term: <strong><?= $search ?></strong></p>
@@ -53,7 +52,7 @@
                     <tbody>
                         <?php foreach ($statuses as $status): ?>
                             <tr>
-                                <td><?= htmlspecialchars($status->getName()) ?></td>
+                                <td><?= $status->getName() ?></td>
                                 <td>
                                     <div class="buttons-container">
                                         <a href="/statuses/edit/<?php echo $status->getId(); ?>">
@@ -77,9 +76,9 @@
             <div class="pagination">
                 <!-- Bottone "Prev" -->
                 <?php if ($currentPage > 1): ?>
-                    <a href="?page=<?= $currentPage - 1; ?>">&#8592; Prev</a>
+                    <a href="?page=<?= $currentPage - 1; ?>"><i class="fa-solid fa-backward-step"></i> Prev</a>
                 <?php else: ?>
-                    <a href="#" class="disabled">&#8592; Prev</a>
+                    <a href="#" class="disabled"><i class="fa-solid fa-backward-step"></i> Prev</a>
                 <?php endif; ?>
 
                 <!-- Numeri di pagina -->
@@ -91,9 +90,9 @@
 
                 <!-- Bottone "Next" -->
                 <?php if ($currentPage < $totalPages): ?>
-                    <a href="?page=<?= $currentPage + 1; ?>">Next &#8594;</a>
+                    <a href="?page=<?= $currentPage + 1; ?>">Next <i class="fa-solid fa-forward-step"></i></a>
                     <?php else: ?>
-                    <a href="#" class="disabled">Next &#8594;</a>
+                    <a href="#" class="disabled">Next <i class="fa-solid fa-forward-step"></i></a>
                 <?php endif; ?>
             </div>
 
@@ -106,7 +105,7 @@
 <div id="deleteModal" class="modal">
     <div class="modal-content">
         <p>Confirm delete?</p>
-        <div class="modal-actions">
+        <div class="modal-actions flex-center">
             <button onclick="closeModal()">Cancel</button>
             <a id="confirmDeleteBtn" href="#"><button class="danger">Delete</button></a>
         </div>

@@ -1,25 +1,60 @@
 <div class="sidebar">
-    <div class="sidebarContainer">
-
-
-
-    <i class="fa-solid fa-user"></i> Utente
-                                <i class="fa-solid fa-envelope"></i> Email
-                                <i class="fa-solid fa-phone"></i> Telefono
-
-
-
-
-
-
+    <div class="sidebar-container">
+        <div class="sidebar-header">
+            <div class="sidebar-img">
+                <img src="/images/mariorossi.jpg">
+            </div>
+            <div class="sidebar-name">
+                <?= $user->getName();?>
+                <br />
+                <span class="sidebar-email">
+                    <?= $user->getEmail();?>
+                </span>
+            </div>
+        </div>
 
         <ul>
-            <li><a href="/profile">View Profile</a></li>
-            <li><a href="/leads">Leads</a></li>
-            <li><a href="/sources">Sources</a></li>
-            <li><a href="/statuses">Statuses</a></li>
-            <li><a href="/settings">Account Settings</a></li>
-            <li><a href="/logout">Logout</a></li>
+            <a href="/leads">
+                <li>
+                    <i class="fa-regular fa-address-card"></i>
+                    Leads
+                </li>
+            </a>
+            <a href="/sources">
+                <li>
+                    <i class="fa-solid fa-list"></i>
+                    Sources
+                </li>
+            </a>
+            <a href="/statuses">
+                <li>
+                    <i class="fa-solid fa-list"></i>
+                    Statuses
+                </li>
+            </a>
+
+            <a href="/profile">
+                <li>
+                    <i class="fa-regular fa-circle-user"></i>
+                    Users
+                </li>
+            </a>
+
+
+            <a href="#">
+                <li>
+                    <i class="fa-solid fa-gear"></i>
+                    Settings
+                </li>
+            </a>
+
+            <a href="/logout">
+                <li>
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    Logout
+                </li>
+            </a>
+
         </ul>
     </div>
 </div>
