@@ -113,15 +113,31 @@
 </div>
 
 <script>
-    function confirmDelete(id) {
-        let modal = document.getElementById('deleteModal');
-        let confirmBtn = document.getElementById('confirmDeleteBtn');
+    // Variabile per la modalità demo
+    const demoMode = <?php echo DEMO_MODE ? 'true' : 'false'; ?>;
 
-        confirmBtn.href = '/statuses/delete/' + id;
-        modal.style.display = 'flex';
+    function confirmDelete(id) {
+        if (demoMode) {
+            // Se è in modalità demo, mostriamo il messaggio di avviso
+            Swal.fire({
+                title: "Demo mode",
+                text: "Crud operations not allowed",
+                icon: "error",
+                confirmButtonText: "Ok"
+            });
+        } else {
+            // Se non è in modalità demo, mostra il modale di conferma per la cancellazione
+            let modal = document.getElementById('deleteModal');
+            let confirmBtn = document.getElementById('confirmDeleteBtn');
+            
+            // Imposta l'azione di cancellazione sul bottone di conferma
+            confirmBtn.href = '/statuses/delete/' + id;
+            modal.style.display = 'flex';
+        }
     }
 
     function closeModal() {
         document.getElementById('deleteModal').style.display = 'none';
     }
 </script>
+

@@ -6,6 +6,11 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Source;
 use App\Entity\Status;
 use App\Entity\User;
+use App\Entity\History;
+use App\Entity\Document;
+use App\Entity\Call;
+use App\Entity\Task;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'leads')]
@@ -46,11 +51,47 @@ class Lead
     #[ORM\JoinColumn(name: "status_id", referencedColumnName: "id", nullable: false)]
     private Status $status;
 
+    #[ORM\OneToMany(mappedBy: "lead", targetEntity: History::class)]
+    private $histories;
+
+    #[ORM\OneToMany(mappedBy: "lead", targetEntity: Document::class)]
+    private $documents;
+
+    #[ORM\OneToMany(mappedBy: "lead", targetEntity: Task::class)]
+    private $tasks;
+
+    #[ORM\OneToMany(mappedBy: "lead", targetEntity: Call::class)]
+    private $calls;
+
+    public function getHistories()
+    {
+        return $this->histories;
+    }
+
+    public function getDocuments()
+    {
+        return $this->documents;
+    }
+
+    public function getTasks()
+    {
+        return $this->tasks;
+    }
+
+    public function getCalls()
+    {
+        return $this->calls;
+    }
+
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $notes = null;
 
     public function __construct()
     {
+        $this->histories = new ArrayCollection();
+        $this->documents = new ArrayCollection();
+        $this->tasks = new ArrayCollection();
+        $this->calls = new ArrayCollection();
         $this->created_at = new \DateTime();
     }
 

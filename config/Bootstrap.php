@@ -4,6 +4,8 @@ namespace App\Config;
 use Doctrine\ORM\ORMSetup;
 use Doctrine\ORM\EntityManager;
 use Doctrine\DBAL\DriverManager;
+use Dotenv\Dotenv;
+
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -12,6 +14,11 @@ $config = ORMSetup::createAttributeMetadataConfiguration(
     paths: [__DIR__ . '/../src/Entity'],
     isDevMode: true
 );
+
+//demo mode
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
+define('DEMO_MODE', filter_var($_ENV['DEMO_MODE'] ?? false, FILTER_VALIDATE_BOOLEAN));
 
 // Connessione al database (modifica con i tuoi parametri)
 $connection = DriverManager::getConnection([

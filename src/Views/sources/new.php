@@ -25,7 +25,28 @@
     </div>
 </div>
 
+<script>
+// Variabile per indicare se il sistema è in modalità demo
+const demoMode = <?php echo DEMO_MODE ? 'true' : 'false'; ?>;
 
+// Aggiungi l'event listener per il submit del form
+document.getElementById("sources-form").addEventListener("submit", function(event){
+    event.preventDefault(); // Blocca l'invio del form
+
+    if (demoMode) {
+        // Mostra il messaggio se è in modalità demo
+        Swal.fire({
+            title: "Demo Mode",
+            text: "Crud operations not allowed",
+            icon: "error",
+            confirmButtonText: "Ok"
+        });
+    } else {
+        // Se non è in modalità demo, invia il modulo
+        this.submit();
+    }
+});
+</script>
 
 <script>
 document.getElementById("sources-form").addEventListener("submit", function(event) {

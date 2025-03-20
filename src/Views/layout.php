@@ -36,5 +36,9 @@
     <footer>
         <a href="https://www.davidebalice.dev" target="_blank">www.davidebalice.dev</a>
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+   
+
 </body>
 </html>

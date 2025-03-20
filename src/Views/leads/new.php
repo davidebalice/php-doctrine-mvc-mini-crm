@@ -2,13 +2,13 @@
     <div class="page-header">
         <div class="page-header-container">
             <div class="page-wrapper">
-                <i class="fa fa-bars" aria-hidden="true" style="font-size:22px"></i>
-                <h1>New status</h1>
+                <i class="fa fa-address-card" aria-hidden="true" style="font-size:22px"></i>
+                <h1>New source</h1>
             </div>
         </div>
     </div>
     <div class="page-subheader">
-        <a href="/statuses">
+        <a href="/sources">
             <div class="button">
                 <i class="fa fa-angle-left" aria-hidden="true"></i>
                 <span>Back</span>
@@ -16,8 +16,8 @@
         </a>
     </div>
     <div class="page-body">
-        <form action="/statuses/store" method="post" class="form" id="status-form">
-            <label>Name of status:</label>
+        <form action="/sources/store" method="post" class="form" id="sources-form">
+            <label>Name of source:</label>
             <input type="text" name="name" class="input-form" data-mandatory="true" required>
             <input type="submit" class="input-submit" value="Send">
             <p id="error-message" style="color: red; display: none;"></p>
@@ -30,7 +30,7 @@
 const demoMode = <?php echo DEMO_MODE ? 'true' : 'false'; ?>;
 
 // Aggiungi l'event listener per il submit del form
-document.getElementById("status-form").addEventListener("submit", function(event){
+document.getElementById("sources-form").addEventListener("submit", function(event){
     event.preventDefault(); // Blocca l'invio del form
 
     if (demoMode) {
@@ -49,7 +49,7 @@ document.getElementById("status-form").addEventListener("submit", function(event
 </script>
 
 <script>
-document.getElementById("status-form").addEventListener("submit", function(event) {
+document.getElementById("sources-form").addEventListener("submit", function(event) {
     let isValid = true;
     let errorMessage = "";
     

@@ -63,7 +63,6 @@ class SourcesController extends RenderController
         $this->render('/sources/sources', $data);
     }
 
-    
     public function create() {
         $data = [
             'title' => 'New source',
@@ -74,6 +73,12 @@ class SourcesController extends RenderController
     }
 
     public function store(Request $request) {
+        if (DEMO_MODE) {
+            echo "<script>alert('Demo mode: crud operations not allowed'); 
+            window.location.href='/sources';</script>";
+            exit();
+        }
+
         $name = trim($request->request->get('name', ''));
         
         // Sanificazione
@@ -109,6 +114,12 @@ class SourcesController extends RenderController
 
     public function update(Request $request)
     {
+        if (DEMO_MODE) {
+            echo "<script>alert('Demo mode: crud operations not allowed'); 
+            window.location.href='/sources';</script>";
+            exit();
+        }
+
         $id = $request->request->get('id');
         $id = (int) $id; // Conversione sicura a intero
        
@@ -131,6 +142,12 @@ class SourcesController extends RenderController
 
     public function delete($id)
     {
+        if (DEMO_MODE) {
+            echo "<script>alert('Demo mode: crud operations not allowed'); 
+            window.location.href='/sources';</script>";
+            exit();
+        }
+
         $source = $this->entityManager->getRepository(Source::class)->find($id);
     
         if ($source) {

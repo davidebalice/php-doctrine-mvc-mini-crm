@@ -72,6 +72,12 @@ class StatusesController extends RenderController
     }
 
     public function store(Request $request) {
+        if (DEMO_MODE) {
+            echo "<script>alert('Demo mode: crud operations not allowed'); 
+            window.location.href='/statuses';</script>";
+            exit();
+        }
+
         $name = trim($request->request->get('name', ''));
         
         // Sanificazione
@@ -107,6 +113,12 @@ class StatusesController extends RenderController
 
     public function update(Request $request)
     {
+        if (DEMO_MODE) {
+            echo "<script>alert('Demo mode: crud operations not allowed'); 
+            window.location.href='/statuses';</script>";
+            exit();
+        }
+
         $id = $request->request->get('id');
         $id = (int) $id; // Conversione sicura a intero
        
@@ -129,6 +141,11 @@ class StatusesController extends RenderController
 
     public function delete($id)
     {
+        if (DEMO_MODE) {
+            echo "<script>alert('Demo mode: crud operations not allowed'); 
+            window.location.href='/statuses';</script>";
+            exit();
+        }
         $status = $this->entityManager->getRepository(Status::class)->find($id);
     
         if ($status) {

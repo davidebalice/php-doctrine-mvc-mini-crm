@@ -49,7 +49,15 @@ switch ($routeInfo[0]) {
             'logout' => ['App\\Controllers\\LoginController', 'logout'],
             'registerForm' => ['App\\Controllers\\LoginController', 'registerForm'],
             'registerPost' => ['App\\Controllers\\LoginController', 'registerPost'],
+
+            //leads
             'leads' => ['App\\Controllers\\LeadsController', 'leads', true],
+            'leads_create' => ['App\\Controllers\\LeadsController', 'create', true],
+            'leads_store' => ['App\\Controllers\\LeadsController', 'store', true],
+            'leads_detail' => ['App\\Controllers\\LeadsController', 'detail', true],
+            'leads_edit' => ['App\\Controllers\\LeadsController', 'edit', true],
+            'leads_update' => ['App\\Controllers\\LeadsController', 'update', true],
+            'leads_delete' => ['App\\Controllers\\LeadsController', 'delete', true],
             
             //sources
             'sources' => ['App\\Controllers\\SourcesController', 'sources', true],

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Mar 19, 2025 alle 18:05
+-- Creato il: Mar 20, 2025 alle 10:40
 -- Versione del server: 10.4.27-MariaDB
 -- Versione PHP: 8.2.0
 
@@ -20,6 +20,33 @@ SET time_zone = "+00:00";
 --
 -- Database: `crm-doctrine`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `documents`
+--
+
+CREATE TABLE `documents` (
+  `id` int(11) NOT NULL,
+  `filename` varchar(255) NOT NULL,
+  `path` varchar(255) NOT NULL,
+  `uploaded_at` datetime NOT NULL,
+  `lead_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `history`
+--
+
+CREATE TABLE `history` (
+  `id` int(11) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `event` text NOT NULL,
+  `lead_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -100,10 +127,23 @@ INSERT INTO `statuses` (`id`, `name`) VALUES
 (10, 'Negotiation'),
 (11, 'Converted'),
 (12, 'Lost'),
-(13, 'Not Interested'),
 (14, 'Follow-up scheduled'),
 (15, 'Not suitable'),
 (16, 'Closed');
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `tasks`
+--
+
+CREATE TABLE `tasks` (
+  `id` int(11) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `due_date` datetime NOT NULL,
+  `status` varchar(50) NOT NULL,
+  `lead_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -133,6 +173,20 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `email_verified`, `creat
 --
 
 --
+-- Indici per le tabelle `documents`
+--
+ALTER TABLE `documents`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `lead_id` (`lead_id`);
+
+--
+-- Indici per le tabelle `history`
+--
+ALTER TABLE `history`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `lead_id` (`lead_id`);
+
+--
 -- Indici per le tabelle `leads`
 --
 ALTER TABLE `leads`
@@ -154,6 +208,13 @@ ALTER TABLE `statuses`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indici per le tabelle `tasks`
+--
+ALTER TABLE `tasks`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `lead_id` (`lead_id`);
+
+--
 -- Indici per le tabelle `users`
 --
 ALTER TABLE `users`
@@ -162,6 +223,18 @@ ALTER TABLE `users`
 --
 -- AUTO_INCREMENT per le tabelle scaricate
 --
+
+--
+-- AUTO_INCREMENT per la tabella `documents`
+--
+ALTER TABLE `documents`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `history`
+--
+ALTER TABLE `history`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT per la tabella `leads`
@@ -173,19 +246,47 @@ ALTER TABLE `leads`
 -- AUTO_INCREMENT per la tabella `sources`
 --
 ALTER TABLE `sources`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT per la tabella `statuses`
 --
 ALTER TABLE `statuses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+
+--
+-- AUTO_INCREMENT per la tabella `tasks`
+--
+ALTER TABLE `tasks`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT per la tabella `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- Limiti per le tabelle scaricate
+--
+
+--
+-- Limiti per la tabella `documents`
+--
+ALTER TABLE `documents`
+  ADD CONSTRAINT `documents_ibfk_1` FOREIGN KEY (`lead_id`) REFERENCES `leads` (`id`);
+
+--
+-- Limiti per la tabella `history`
+--
+ALTER TABLE `history`
+  ADD CONSTRAINT `history_ibfk_1` FOREIGN KEY (`lead_id`) REFERENCES `leads` (`id`);
+
+--
+-- Limiti per la tabella `tasks`
+--
+ALTER TABLE `tasks`
+  ADD CONSTRAINT `tasks_ibfk_1` FOREIGN KEY (`lead_id`) REFERENCES `leads` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

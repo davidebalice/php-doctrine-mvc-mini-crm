@@ -495,8 +495,29 @@ label {
   background-color: var(--secondary-color);
 }
 
+.edit-button:hover {
+  background-color: var(--secondary-color-hover);
+}
+
 .delete-button {
   background-color: #e61134;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  background-color: #bc0f2b;
+}
+
+.detail-button {
+  background: #0c9122;
+  width: 90px;
+  display: flex;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.detail-button:hover {
+  background: #0e711e;
 }
 
 .buttons-container {
@@ -562,4 +583,51 @@ label {
 
 .search-button:hover {
   background: var(--secondary-color-hover);
+}
+
+.tabs-container {
+  font-family: Arial, sans-serif;
+}
+
+.tabs {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  border-top: 1px solid #ddd;
+  box-shadow: 0px 2px 4px 0px rgb(0, 0, 0, 0.2);
+}
+
+.tab {
+  padding: 10px 20px;
+  cursor: pointer;
+  text-align: center;
+  font-weight: bold;
+  font-size: 13px;
+  color: #333;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.tab:hover {
+  background: #e1e1e1;
+}
+
+.tab.active {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.tab-content {
+  padding: 20px;
+  display: none;
+  border-top: 1px solid #ccc;
+}
+
+.tab-content p {
+  font-size: 15px;
+  color: #555;
+}
+
+#content-detail {
+  display: block;
 }
