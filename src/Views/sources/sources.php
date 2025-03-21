@@ -126,7 +126,7 @@
                 confirmButtonText: "Ok"
             });
         } else {
-            // Se non è in modalità demo, mostra il modale di conferma per la cancellazione
+            // Se non è in modalità demo, mostra il modal di conferma per la cancellazione
             let modal = document.getElementById('deleteModal');
             let confirmBtn = document.getElementById('confirmDeleteBtn');
             

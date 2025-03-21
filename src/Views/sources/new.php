@@ -17,6 +17,7 @@
     </div>
     <div class="page-body">
         <form action="/sources/store" method="post" class="form" id="sources-form">
+            <h2>New source</h2>
             <label>Name of source:</label>
             <input type="text" name="name" class="input-form" data-mandatory="true" required>
             <input type="submit" class="input-submit" value="Send">

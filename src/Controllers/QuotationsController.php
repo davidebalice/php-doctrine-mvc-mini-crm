@@ -2,12 +2,11 @@
 
 namespace App\Controllers;
 
-use App\Entity\Source;
+use App\Entity\Quotation;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-
-class SourcesController extends RenderController
+class QuotationsController extends RenderController
 {
     private $entityManager;
     
@@ -17,8 +16,8 @@ class SourcesController extends RenderController
         parent::__construct($entityManager);
     }
 
-    // Ottieni tutti i sources
-    public function sources()
+    // Ottieni tutti i preventivi
+    public function quotations()
     {
         $page = isset($_GET['page']) ? filter_var($_GET['page'], FILTER_VALIDATE_INT) : 1;
         $page = $page && $page > 0 ? $page : 1; // Controllo sulla pariagile get page
@@ -34,7 +33,7 @@ class SourcesController extends RenderController
          // Sanifica il valore per prevenire attacchi XSS
         $search = htmlspecialchars($search, ENT_QUOTES, 'UTF-8');
 
-        $queryBuilder = $this->entityManager->getRepository(Source::class)->createQueryBuilder('s');
+        $queryBuilder = $this->entityManager->getRepository(Quotation::class)->createQueryBuilder('s');
 
         if (!empty($search)) {
             $queryBuilder->where('s.name LIKE :search')
@@ -42,7 +41,7 @@ class SourcesController extends RenderController
         }
 
         $query = $queryBuilder
-            ->orderBy('s.name', 'ASC')
+            ->orderBy('s.created_at', 'DESC')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->getQuery();
@@ -52,30 +51,42 @@ class SourcesController extends RenderController
         $totalPages = ceil($totalItems / $limit);
 
         $data = [
-            'title' => 'Sources',
-            'description' => 'View of all sources',
-            'sources' => $paginator,
+            'title' => 'Quotations',
+            'description' => 'View of all quotations',
+            'quotations' => $paginator,
             'currentPage' => $page,
             'totalPages' => $totalPages,
             'search' => $search
         ];
 
-        $this->render('/sources/sources', $data);
+        $this->render('/quotations/quotations', $data);
+    }
+
+    public function detail($id) {
+        $quotation = $this->entityManager->getRepository(Quotation::class)->find($id);
+
+        $data = [
+            'title' => 'quotations details',
+            'description' => 'Quotation details',
+            'quotation' => $quotation,
+        ];
+
+        $this->render('/quotations/detail', $data);
     }
 
     public function create() {
         $data = [
-            'title' => 'New source',
-            'description' => 'Create new source',
+            'title' => 'New quotation',
+            'description' => 'Create new quotation',
         ];
 
-        $this->render('/sources/new', $data);
+        $this->render('/quotations/new', $data);
     }
 
     public function store(Request $request) {
         if (DEMO_MODE) {
             echo "<script>alert('Demo mode: crud operations not allowed'); 
-            window.location.href='/sources';</script>";
+            window.location.href='/quotations';</script>";
             exit();
         }
 
@@ -86,76 +97,77 @@ class SourcesController extends RenderController
         
         if (empty($name)) {
             $_SESSION['error'] = "Name field is mandatory";
-            header('Location: /sources/create');
+            header('Location: /quotations/create');
             exit();
         }
 
-        $source = new Source();
-        $source->setName($name);
+        $quotation = new Quotation();
+        $quotation->setTitle($name);
 
-        $this->entityManager->persist($source);
+        $this->entityManager->persist($quotation);
         $this->entityManager->flush();
 
-        header('Location: /sources');
+        header('Location: /quotations');
         exit();
     }
 
     public function edit($id) {
-        $source = $this->entityManager->getRepository(Source::class)->find($id);
+        $quotation = $this->entityManager->getRepository(Quotation::class)->find($id);
 
         $data = [
-            'title' => 'Edit source',
-            'description' => 'Edit source',
-            'source' => $source,
+            'title' => 'New quotation',
+            'description' => 'Create new quotation',
+            'quotation' => $quotation,
         ];
 
-        $this->render('/sources/edit', $data);
+        $this->render('/quotations/edit', $data);
     }
 
     public function update(Request $request)
     {
         if (DEMO_MODE) {
             echo "<script>alert('Demo mode: crud operations not allowed'); 
-            window.location.href='/sources';</script>";
+            window.location.href='/quotations';</script>";
             exit();
         }
 
         $id = $request->request->get('id');
         $id = (int) $id; // Conversione sicura a intero
        
-        $source = $this->entityManager->getRepository(Source::class)->find($id);
+        $quotation = $this->entityManager->getRepository(Quotation::class)->find($id);
 
-        if (!$source) {
-            die('Source non found');
+        if (!$quotation) {
+            die('Quotation non found');
         }
 
         // Sanificazione
         $name = htmlspecialchars($request->request->get('name'), ENT_QUOTES, 'UTF-8');
 
-        $source->setName($name);
+        $quotation->setName($name);
 
         $this->entityManager->flush();
 
-        header('Location: /sources');
+        header('Location: /quotations');
         exit();
     }
 
     public function delete($id)
     {
         if (DEMO_MODE) {
-            echo "<script>alert('Demo mode: crud operations not allowed'); 
-            window.location.href='/sources';</script>";
+            echo "<script>alert('Demo mode: crud operations not allowed');
+            window.location.href='/quotations';</script>";
             exit();
         }
 
-        $source = $this->entityManager->getRepository(Source::class)->find($id);
+        $quotation = $this->entityManager->getRepository(Quotation::class)->find($id);
     
-        if ($source) {
-            $this->entityManager->remove($source);
+        if ($quotation) {
+            $this->entityManager->remove($quotation);
             $this->entityManager->flush();
         }
     
-        header('Location: /sources');
+        header('Location: /quotations');
         exit();
     }
+
 }

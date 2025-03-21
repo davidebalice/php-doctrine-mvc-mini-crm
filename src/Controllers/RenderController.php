@@ -24,7 +24,7 @@ class RenderController
         extract($data);
 
         // Determina il contenuto da caricare
-        $content = __DIR__ . '/../../src/Views/' . $viewName . '.php'; // Cerca la vista
+        $content = __DIR__ . '/../../src/Views/' . $viewName . '.php';
 
          // Ottieni l'utente loggato
          $user = $this->getLoggedInUser();
@@ -36,7 +36,7 @@ class RenderController
         include __DIR__ . '/../../src/Views/layout.php';
     }
 
-    private function getLoggedInUser()
+    public function getLoggedInUser()
     {
         if (isset($_COOKIE['jwt_token'])) {
             try {

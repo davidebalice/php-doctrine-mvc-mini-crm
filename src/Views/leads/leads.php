@@ -45,10 +45,11 @@
                 <table>
                     <thead>
                         <tr>
-                        <th style="width:40%">Surname name</th>
-                        <th style="width:20%">Status</th>
-                        <th style="width:20%">Source</th>
-                        <th style="width:20%">Data</th>
+                        <th style="width:30%">Surname name</th>
+                        <th style="width:15%">Status</th>
+                        <th style="width:15%">Source</th>
+                        <th style="width:15%">Assigned user</th>
+                        <th style="width:15%">Data</th>
                         <th>Actions</th>
                         </tr>
                     </thead>
@@ -58,6 +59,7 @@
                                 <td><?= $lead->getLastName() ?> <?= $lead->getFirstName() ?></td>
                                 <td><?= $lead->getStatus()->getName() ?></td>
                                 <td><?= $lead->getSource()->getName() ?></td>
+                                <td><?= $lead->getAssignedUser()->getName() ?></td>
                                 <td><?= $lead->getCreatedAt()->format('d/m/Y H:i')  ?></td>
                                 <td>
                                     <div class="buttons-container">

@@ -17,6 +17,7 @@
     </div>
     <div class="page-body">
         <form action="/sources/update" method="post" class="form" id="sources-form">
+            <h2>Edit source</h2>
             <label>Name of source:</label>
             <input type="text" name="name" class="input-form" data-mandatory="true" required value="<?php echo $source->getName(); ?>">
             <input type="hidden" name="id" value="<?php echo $source->getId(); ?>">

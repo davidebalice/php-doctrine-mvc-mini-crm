@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Mar 20, 2025 alle 10:40
+-- Creato il: Mar 21, 2025 alle 15:03
 -- Versione del server: 10.4.27-MariaDB
 -- Versione PHP: 8.2.0
 
@@ -60,6 +60,10 @@ CREATE TABLE `leads` (
   `last_name` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
   `phone` varchar(100) NOT NULL,
+  `city` varchar(100) NOT NULL,
+  `address` varchar(100) NOT NULL,
+  `zip` int(5) NOT NULL,
+  `country` varchar(100) NOT NULL,
   `source` varchar(100) NOT NULL,
   `status` varchar(100) NOT NULL,
   `created_at` datetime NOT NULL,
@@ -67,15 +71,47 @@ CREATE TABLE `leads` (
   `user_id` int(11) NOT NULL,
   `status_id` int(11) NOT NULL,
   `source_id` int(11) NOT NULL,
-  `notes` text NOT NULL
+  `notes` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dump dei dati per la tabella `leads`
 --
 
-INSERT INTO `leads` (`id`, `first_name`, `last_name`, `email`, `phone`, `source`, `status`, `created_at`, `updated_at`, `user_id`, `status_id`, `source_id`, `notes`) VALUES
-(1, 'Luigi', 'Verdi', 'luigi@verdi.it', '32345643643', 'Facebook', 'New', '2025-03-14 11:12:13', '2025-03-14 11:12:13', 1, 1, 1, '');
+INSERT INTO `leads` (`id`, `first_name`, `last_name`, `email`, `phone`, `city`, `address`, `zip`, `country`, `source`, `status`, `created_at`, `updated_at`, `user_id`, `status_id`, `source_id`, `notes`) VALUES
+(1, 'Luigi', 'Verdi', 'luigi@verdi.it', '32345643643', 'Milan', 'Corso Buenos Aires, 1', 20124, 'Italy', 'Facebook', 'New', '2025-03-14 11:12:13', '2025-03-14 11:12:13', 1, 1, 1, ''),
+(2, 'sedfsfsfsdf', 'wefwefcwefwefe', '3123213@lklk.gg', '1233232423', '12312', '324', 32423, '', '', '', '2025-03-21 14:22:33', '2025-03-21 14:49:50', 1, 15, 8, NULL),
+(4, 'efw', 'wfwefwefwefw', 'efw@lk.lk', 'efwef', 'dfsdf', 'fsdfs', 6678, '', '', '', '2025-03-21 14:53:21', '2025-03-21 14:54:50', 1, 11, 1, 'aaaaaaaaaaaaaaaaaaaaaa\r\nsdfsd\r\nfsd\r\nf\r\nsdf\r\nsd\r\nfsd');
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `quotations`
+--
+
+CREATE TABLE `quotations` (
+  `id` int(11) NOT NULL,
+  `lead_id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `quotation_items`
+--
+
+CREATE TABLE `quotation_items` (
+  `id` int(11) NOT NULL,
+  `quotation_id` int(11) NOT NULL,
+  `service_name` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `quantity` int(11) NOT NULL DEFAULT 1,
+  `subtotal` decimal(10,2) GENERATED ALWAYS AS (`price` * `quantity`) STORED
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -196,6 +232,20 @@ ALTER TABLE `leads`
   ADD KEY `source_id` (`source_id`);
 
 --
+-- Indici per le tabelle `quotations`
+--
+ALTER TABLE `quotations`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `lead_id` (`lead_id`);
+
+--
+-- Indici per le tabelle `quotation_items`
+--
+ALTER TABLE `quotation_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `quotation_id` (`quotation_id`);
+
+--
 -- Indici per le tabelle `sources`
 --
 ALTER TABLE `sources`
@@ -240,7 +290,19 @@ ALTER TABLE `history`
 -- AUTO_INCREMENT per la tabella `leads`
 --
 ALTER TABLE `leads`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT per la tabella `quotations`
+--
+ALTER TABLE `quotations`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `quotation_items`
+--
+ALTER TABLE `quotation_items`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT per la tabella `sources`
@@ -281,6 +343,18 @@ ALTER TABLE `documents`
 --
 ALTER TABLE `history`
   ADD CONSTRAINT `history_ibfk_1` FOREIGN KEY (`lead_id`) REFERENCES `leads` (`id`);
+
+--
+-- Limiti per la tabella `quotations`
+--
+ALTER TABLE `quotations`
+  ADD CONSTRAINT `quotations_ibfk_1` FOREIGN KEY (`lead_id`) REFERENCES `leads` (`id`) ON DELETE CASCADE;
+
+--
+-- Limiti per la tabella `quotation_items`
+--
+ALTER TABLE `quotation_items`
+  ADD CONSTRAINT `quotation_items_ibfk_1` FOREIGN KEY (`quotation_id`) REFERENCES `quotations` (`id`) ON DELETE CASCADE;
 
 --
 -- Limiti per la tabella `tasks`

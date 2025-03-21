@@ -8,6 +8,7 @@ use App\Entity\Status;
 use App\Entity\User;
 use App\Entity\History;
 use App\Entity\Document;
+use App\Entity\Quotation;
 use App\Entity\Call;
 use App\Entity\Task;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -33,6 +34,18 @@ class Lead
     #[ORM\Column(type: 'string', length: 100)]
     private ?string $phone = null;
 
+    #[ORM\Column(type: 'string', length: 100)]
+    private ?string $city = null;
+
+    #[ORM\Column(type: 'string', length: 100)]
+    private ?string $address = null;
+
+    #[ORM\Column(type: 'integer', length: 5)]
+    private ?string $zip = null;
+
+    #[ORM\Column(type: 'string', length: 100)]
+    private ?string $country = null;
+
     #[ORM\Column(type: 'datetime')]
     private \DateTime $created_at;
 
@@ -51,6 +64,9 @@ class Lead
     #[ORM\JoinColumn(name: "status_id", referencedColumnName: "id", nullable: false)]
     private Status $status;
 
+    #[ORM\OneToMany(mappedBy: "lead", targetEntity: Quotation::class)]
+    private $quotations;
+
     #[ORM\OneToMany(mappedBy: "lead", targetEntity: History::class)]
     private $histories;
 
@@ -63,6 +79,11 @@ class Lead
     #[ORM\OneToMany(mappedBy: "lead", targetEntity: Call::class)]
     private $calls;
 
+    public function getQuotations()
+    {
+        return $this->quotations;
+    }
+    
     public function getHistories()
     {
         return $this->histories;
@@ -88,6 +109,7 @@ class Lead
 
     public function __construct()
     {
+        $this->quotations = new ArrayCollection();
         $this->histories = new ArrayCollection();
         $this->documents = new ArrayCollection();
         $this->tasks = new ArrayCollection();
@@ -138,6 +160,46 @@ class Lead
     public function setPhone(?string $phone): void
     {
         $this->phone = $phone;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(?string $city): void
+    {
+        $this->city = $city;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?string $address): void
+    {
+        $this->address = $address;
+    }
+
+    public function getZip(): ?string
+    {
+        return $this->zip;
+    }
+
+    public function setZip(?string $zip): void
+    {
+        $this->zip = $zip;
+    }
+
+    public function getCountry(): ?string
+    {
+        return $this->country;
+    }
+
+    public function setCountry(?string $country): void
+    {
+        $this->country = $country;
     }
 
     public function getSource(): Source

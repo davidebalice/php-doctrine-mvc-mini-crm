@@ -17,6 +17,7 @@
     </div>
     <div class="page-body">
         <form action="/statuses/update" method="post" class="form" id="status-form">
+            <h2>Edit status</h2>
             <label>Name of status:</label>
             <input type="text" name="name" class="input-form" data-mandatory="true" required value="<?php echo $status->getName(); ?>">
             <input type="hidden" name="id" value="<?php echo $status->getId(); ?>">

@@ -103,8 +103,8 @@ class StatusesController extends RenderController
         $status = $this->entityManager->getRepository(Status::class)->find($id);
 
         $data = [
-            'title' => 'New status',
-            'description' => 'Create new status',
+            'title' => 'Edit status',
+            'description' => 'Edit status',
             'status' => $status,
         ];
 

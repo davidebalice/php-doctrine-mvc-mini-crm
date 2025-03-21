@@ -17,6 +17,7 @@
     </div>
     <div class="page-body">
         <form action="/statuses/store" method="post" class="form" id="status-form">
+            <h2>New status</h2>
             <label>Name of status:</label>
             <input type="text" name="name" class="input-form" data-mandatory="true" required>
             <input type="submit" class="input-submit" value="Send">

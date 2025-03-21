@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Entity\Lead;
+use App\Entity\Source;
+use App\Entity\Status;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -20,7 +22,7 @@ class LeadsController extends RenderController
     public function leads()
     {
         $page = isset($_GET['page']) ? filter_var($_GET['page'], FILTER_VALIDATE_INT) : 1;
-        $page = $page && $page > 0 ? $page : 1; // Controllo sulla pariagile get page
+        $page = $page && $page > 0 ? $page : 1; // Controllo sulla variabile get page
         $limit = 12;
         $offset = ($page - 1) * $limit;
         $search = isset($_GET['search']) ? trim($_GET['search']) : '';
@@ -75,79 +77,232 @@ class LeadsController extends RenderController
     }
 
     public function create() {
+        $sources = $this->entityManager->getRepository(Source::class)
+            ->createQueryBuilder('s')
+            ->orderBy('s.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+        $statuses = $this->entityManager->getRepository(Status::class)
+            ->createQueryBuilder('s')
+            ->orderBy('s.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+        
         $data = [
-            'title' => 'New source',
-            'description' => 'Create new source',
+            'title' => 'New lead',
+            'description' => 'Create new lead',
+            'sources' => $sources,
+            'statuses' => $statuses,
         ];
 
-        $this->render('/sources/new', $data);
+        $this->render('/leads/new', $data);
     }
 
     public function store(Request $request) {
         if (DEMO_MODE) {
             echo "<script>alert('Demo mode: crud operations not allowed'); 
-            window.location.href='/sources';</script>";
+            window.location.href='/leads';</script>";
             exit();
         }
 
+        //utente loggato
+        $user = $this->getLoggedInUser();
+
+        // Recupero e sanificazione dei dati inviati dal form
         $name = trim($request->request->get('name', ''));
+        $surname = trim($request->request->get('surname', ''));
+        $email = trim($request->request->get('email', ''));
+        $phone = trim($request->request->get('phone', ''));
+        $city = trim($request->request->get('city', ''));
+        $address = trim($request->request->get('address', ''));
+        $zip = trim($request->request->get('zip', ''));
+        $country = trim($request->request->get('country', ''));
+        $notes = trim($request->request->get('notes', ''));
         
-        // Sanificazione
-        $name = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
-        
-        if (empty($name)) {
-            $_SESSION['error'] = "Name field is mandatory";
+         // Recupera il valore selezionato per Source e Status
+        $sourceId = $request->request->get('source', '');
+        $statusId = $request->request->get('status', '');
+
+        // Recupera l'entità Source corrispondente
+        $source = $this->entityManager->getRepository(Source::class)->find($sourceId);
+        if (!$source) {
+            $_SESSION['error'] = "Invalid source selected";
             header('Location: /sources/create');
             exit();
         }
 
-        $source = new Lead();
-        $source->setFirstName($name);
+        // Recupera l'entità Status corrispondente
+        $status = $this->entityManager->getRepository(Status::class)->find($statusId);
+        if (!$status) {
+            $_SESSION['error'] = "Invalid status selected";
+            header('Location: /sources/create');
+            exit();
+        }
 
-        $this->entityManager->persist($source);
+        // Sanificazione dei dati
+        $name = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
+        $surname = htmlspecialchars($surname, ENT_QUOTES, 'UTF-8');
+        $email = htmlspecialchars($email, ENT_QUOTES, 'UTF-8');
+        $phone = htmlspecialchars($phone, ENT_QUOTES, 'UTF-8');
+        $city = htmlspecialchars($city, ENT_QUOTES, 'UTF-8');
+        $address = htmlspecialchars($address, ENT_QUOTES, 'UTF-8');
+        $zip = htmlspecialchars($zip, ENT_QUOTES, 'UTF-8');
+        $country = htmlspecialchars($country, ENT_QUOTES, 'UTF-8');
+        $notes = htmlspecialchars($notes, ENT_QUOTES, 'UTF-8');
+
+        // Verifica se i campi obbligatori sono vuoti
+        if (empty($name) || empty($email) || empty($phone) || empty($city) || empty($country) || empty($address) || empty($zip) || empty($sourceId) || empty($statusId)) {
+            $_SESSION['error'] = "All fields are mandatory";
+            header('Location: /leads/create');
+            exit();
+        }
+
+        // Crea un nuovo Lead e imposta i dati
+        $lead = new Lead();
+        $lead->setFirstName($name);
+        $lead->setLastName($surname);
+        $lead->setEmail($email);
+        $lead->setPhone($phone);
+        $lead->setCity($city);
+        $lead->setAddress($address);
+        $lead->setZip($zip);
+        $lead->setCountry($country);
+        $lead->setAssignedUser($user);
+        $lead->setNotes($notes);
+
+        // Imposta source e status
+        $lead->setSource($source);
+        $lead->setStatus($status);
+
+        $currentDate = new \DateTime();
+        $lead->setCreatedAt($currentDate);
+        $lead->setUpdatedAt($currentDate);
+
+        $this->entityManager->persist($lead);
         $this->entityManager->flush();
 
-        header('Location: /sources');
+        header('Location: /leads');
         exit();
     }
 
     public function edit($id) {
-        $source = $this->entityManager->getRepository(Lead::class)->find($id);
+        $lead = $this->entityManager->getRepository(Lead::class)->find($id);
+
+        $sources = $this->entityManager->getRepository(Source::class)
+            ->createQueryBuilder('s')
+            ->orderBy('s.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+        $statuses = $this->entityManager->getRepository(Status::class)
+            ->createQueryBuilder('s')
+            ->orderBy('s.name', 'ASC')
+            ->getQuery()
+            ->getResult();
 
         $data = [
-            'title' => 'New source',
-            'description' => 'Create new source',
-            'source' => $source,
+            'title' => 'Edit lead',
+            'description' => 'Edit lead',
+            'lead' => $lead,
+            'sources' => $sources,
+            'statuses' => $statuses,
         ];
 
-        $this->render('/sources/edit', $data);
+        $this->render('/leads/edit', $data);
     }
 
     public function update(Request $request)
     {
         if (DEMO_MODE) {
             echo "<script>alert('Demo mode: crud operations not allowed'); 
-            window.location.href='/sources';</script>";
+            window.location.href='/leads';</script>";
             exit();
         }
 
+        //utente loggato
+        $user = $this->getLoggedInUser();
+
         $id = $request->request->get('id');
         $id = (int) $id; // Conversione sicura a intero
-       
-        $source = $this->entityManager->getRepository(Lead::class)->find($id);
 
-        if (!$source) {
-            die('Source non found');
+        $lead = $this->entityManager->getRepository(Lead::class)->find($id);
+
+        if (!$lead) {
+            die('lead non found');
         }
 
-        // Sanificazione
-        $name = htmlspecialchars($request->request->get('name'), ENT_QUOTES, 'UTF-8');
+        // Recupero e sanificazione dei dati inviati dal form
+        $name = trim($request->request->get('name', ''));
+        $surname = trim($request->request->get('surname', ''));
+        $email = trim($request->request->get('email', ''));
+        $phone = trim($request->request->get('phone', ''));
+        $city = trim($request->request->get('city', ''));
+        $address = trim($request->request->get('address', ''));
+        $zip = trim($request->request->get('zip', ''));
+        $country = trim($request->request->get('country', ''));
+        $notes = trim($request->request->get('notes', ''));
+        
+         // Recupera il valore selezionato per Source e Status
+        $sourceId = $request->request->get('source', '');
+        $statusId = $request->request->get('status', '');
 
-        $source->setName($name);
+        // Recupera l'entità Source corrispondente
+        $source = $this->entityManager->getRepository(Source::class)->find($sourceId);
+        if (!$source) {
+            $_SESSION['error'] = "Invalid source selected";
+            header('Location: /sources/create');
+            exit();
+        }
+
+        // Recupera l'entità Status corrispondente
+        $status = $this->entityManager->getRepository(Status::class)->find($statusId);
+        if (!$status) {
+            $_SESSION['error'] = "Invalid status selected";
+            header('Location: /sources/create');
+            exit();
+        }
+
+        // Sanificazione dei dati
+        $name = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
+        $surname = htmlspecialchars($surname, ENT_QUOTES, 'UTF-8');
+        $email = htmlspecialchars($email, ENT_QUOTES, 'UTF-8');
+        $phone = htmlspecialchars($phone, ENT_QUOTES, 'UTF-8');
+        $city = htmlspecialchars($city, ENT_QUOTES, 'UTF-8');
+        $address = htmlspecialchars($address, ENT_QUOTES, 'UTF-8');
+        $zip = htmlspecialchars($zip, ENT_QUOTES, 'UTF-8');
+        $country = htmlspecialchars($country, ENT_QUOTES, 'UTF-8');
+        $notes = htmlspecialchars($notes, ENT_QUOTES, 'UTF-8');
+
+        // Verifica se i campi obbligatori sono vuoti
+        if (empty($name) || empty($email) || empty($phone) || empty($city) || empty($country) || empty($address) || empty($zip) || empty($sourceId) || empty($statusId)) {
+            $_SESSION['error'] = "All fields are mandatory";
+            header('Location: /leads/edit');
+            exit();
+        }
+
+        // Crea un nuovo Lead e imposta i dati
+        $lead->setFirstName($name);
+        $lead->setLastName($surname);
+        $lead->setEmail($email);
+        $lead->setPhone($phone);
+        $lead->setCity($city);
+        $lead->setAddress($address);
+        $lead->setZip($zip);
+        $lead->setCountry($country);
+        $lead->setAssignedUser($user);
+        $lead->setNotes($notes);
+
+        // Imposta source e status
+        $lead->setSource($source);
+        $lead->setStatus($status);
+
+        $currentDate = new \DateTime();
+        $lead->setUpdatedAt($currentDate);
 
         $this->entityManager->flush();
 
-        header('Location: /sources');
+        header('Location: /leads');
         exit();
     }
 
@@ -155,18 +310,18 @@ class LeadsController extends RenderController
     {
         if (DEMO_MODE) {
             echo "<script>alert('Demo mode: crud operations not allowed'); 
-            window.location.href='/sources';</script>";
+            window.location.href='/leads';</script>";
             exit();
         }
 
-        $source = $this->entityManager->getRepository(Source::class)->find($id);
+        $lead = $this->entityManager->getRepository(Lead::class)->find($id);
     
-        if ($source) {
-            $this->entityManager->remove($source);
+        if ($lead) {
+            $this->entityManager->remove($lead);
             $this->entityManager->flush();
         }
     
-        header('Location: /sources');
+        header('Location: /leads');
         exit();
     }
 
