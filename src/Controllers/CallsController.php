@@ -13,7 +13,7 @@ use App\Entity\Note;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-class LeadsController extends RenderController
+class CallsController extends RenderController
 {
     private $entityManager;
     
@@ -23,9 +23,17 @@ class LeadsController extends RenderController
         parent::__construct($entityManager);
     }
 
-    // Ottieni tutti i leads
-    public function leads()
+    // Ottieni tutti le chiamate
+    public function calls($id)
     {
+        // Verifica che l'ID sia valido
+        $leadId = filter_var($id, FILTER_VALIDATE_INT);
+        if (!$leadId || $leadId <= 0) {
+            die("ID Lead non valido.");
+        }
+
+        $lead = $this->entityManager->getRepository(Lead::class)->find($leadId);
+        
         $page = isset($_GET['page']) ? filter_var($_GET['page'], FILTER_VALIDATE_INT) : 1;
         $page = $page && $page > 0 ? $page : 1; // Controllo sulla variabile get page
         $limit = 12;
@@ -37,18 +45,23 @@ class LeadsController extends RenderController
             $search = substr($search, 0, 255);
         }
 
-         // Sanifica il valore per prevenire attacchi XSS
+        // Sanifica il valore per prevenire attacchi XSS
         $search = htmlspecialchars($search, ENT_QUOTES, 'UTF-8');
 
-        $queryBuilder = $this->entityManager->getRepository(Lead::class)->createQueryBuilder('s');
+        // Query per ottenere le chiamate del lead specifico
+        $queryBuilder = $this->entityManager->getRepository(Call::class)->createQueryBuilder('c')
+            ->where('c.lead = :lead')
+            ->setParameter('lead', $lead);
 
+        /*
         if (!empty($search)) {
-            $queryBuilder->where('s.name LIKE :search')
-                        ->setParameter('search', "%$search%");
+            $queryBuilder->andWhere('c.name LIKE :search')
+                ->setParameter('search', "%$search%");
         }
+        */
 
         $query = $queryBuilder
-            ->orderBy('s.created_at', 'DESC')
+            ->orderBy('c.call_time', 'DESC')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->getQuery();
@@ -58,15 +71,16 @@ class LeadsController extends RenderController
         $totalPages = ceil($totalItems / $limit);
 
         $data = [
-            'title' => 'Leads',
-            'description' => 'View of all leads',
-            'leads' => $paginator,
+            'title' => 'Calls',
+            'description' => 'View calls of lead',
+            'lead' => $lead,
+            'calls' => $paginator,
             'currentPage' => $page,
             'totalPages' => $totalPages,
             'search' => $search
         ];
 
-        $this->render('/leads/leads', $data);
+        $this->render('/leads/calls', $data);
     }
 
     public function detail($id) {

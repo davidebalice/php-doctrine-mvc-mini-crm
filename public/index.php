@@ -58,7 +58,11 @@ switch ($routeInfo[0]) {
             'leads_edit' => ['App\\Controllers\\LeadsController', 'edit', true],
             'leads_update' => ['App\\Controllers\\LeadsController', 'update', true],
             'leads_delete' => ['App\\Controllers\\LeadsController', 'delete', true],
-            
+            'leads_history' => ['App\\Controllers\\LeadsController', 'history', true],
+            'leads_tasks' => ['App\\Controllers\\LeadsController', 'tasks', true],
+            'leads_quotations' => ['App\\Controllers\\LeadsController', 'quotations', true],
+            'leads_notes' => ['App\\Controllers\\LeadsController', 'notes', true],
+
             //sources
             'sources' => ['App\\Controllers\\SourcesController', 'sources', true],
             'sources_create' => ['App\\Controllers\\SourcesController', 'create', true],
@@ -74,6 +78,9 @@ switch ($routeInfo[0]) {
             'statuses_edit' => ['App\\Controllers\\StatusesController', 'edit', true],
             'statuses_update' => ['App\\Controllers\\StatusesController', 'update', true],
             'statuses_delete' => ['App\\Controllers\\StatusesController', 'delete', true],
+
+            //calls
+            'leads_calls' => ['App\\Controllers\\CallsController', 'calls', true],
         ];
         
         if (isset($routesMap[$handler])) {

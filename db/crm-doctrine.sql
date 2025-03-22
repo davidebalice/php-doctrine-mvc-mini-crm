@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Mar 21, 2025 alle 15:03
+-- Creato il: Mar 22, 2025 alle 16:56
 -- Versione del server: 10.4.27-MariaDB
 -- Versione PHP: 8.2.0
 
@@ -20,6 +20,27 @@ SET time_zone = "+00:00";
 --
 -- Database: `crm-doctrine`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `calls`
+--
+
+CREATE TABLE `calls` (
+  `id` int(11) NOT NULL,
+  `notes` varchar(255) NOT NULL,
+  `call_time` datetime NOT NULL,
+  `status` varchar(50) NOT NULL,
+  `lead_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dump dei dati per la tabella `calls`
+--
+
+INSERT INTO `calls` (`id`, `notes`, `call_time`, `status`, `lead_id`) VALUES
+(1, 'wgfewffewf', '2025-03-22 16:55:57', 'called', 1);
 
 -- --------------------------------------------------------
 
@@ -47,6 +68,13 @@ CREATE TABLE `history` (
   `event` text NOT NULL,
   `lead_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dump dei dati per la tabella `history`
+--
+
+INSERT INTO `history` (`id`, `created_at`, `event`, `lead_id`) VALUES
+(1, '2025-03-22 14:37:47', 'Added calls', 1);
 
 -- --------------------------------------------------------
 
@@ -209,6 +237,13 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `email_verified`, `creat
 --
 
 --
+-- Indici per le tabelle `calls`
+--
+ALTER TABLE `calls`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `lead_id` (`lead_id`);
+
+--
 -- Indici per le tabelle `documents`
 --
 ALTER TABLE `documents`
@@ -275,6 +310,12 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT per la tabella `calls`
+--
+ALTER TABLE `calls`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT per la tabella `documents`
 --
 ALTER TABLE `documents`
@@ -284,7 +325,7 @@ ALTER TABLE `documents`
 -- AUTO_INCREMENT per la tabella `history`
 --
 ALTER TABLE `history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT per la tabella `leads`
@@ -331,6 +372,12 @@ ALTER TABLE `users`
 --
 -- Limiti per le tabelle scaricate
 --
+
+--
+-- Limiti per la tabella `calls`
+--
+ALTER TABLE `calls`
+  ADD CONSTRAINT `calls_ibfk_1` FOREIGN KEY (`lead_id`) REFERENCES `leads` (`id`);
 
 --
 -- Limiti per la tabella `documents`

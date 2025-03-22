@@ -19,74 +19,40 @@
     <div class="page-body">
         <div class="tabs-container">
             <?php
-                $currentPage="detail";
+                $currentPage="quotations";
                 include('menu.php');
             ?>
-            
+
             <div class="tab-content" id="content-detail">
-                <h2>Lead details</h2>
-               
-                <div class="detail-row">
-                    <div>Name:</div>
-                    <div><?php echo $lead->getFirstName() ?></div>
-                </div>
-
-                <div class="detail-row">
-                    <div>Surname:</div>
-                    <div><?php echo $lead->getLastName(); ?></div>
-                </div>
-
-                <div class="detail-row">
-                    <div>Status:</div>
-                    <div><?php echo $lead->getStatus()->getName(); ?></div>
-                </div>
-
-                <div class="detail-row">
-                    <div>Source:</div>
-                    <div><?php echo $lead->getSource()->getName(); ?></div>
-                </div>
-
-                <div class="detail-row">
-                    <div>City:</div>
-                    <div><?php echo $lead->getCity(); ?></div>
-                </div>
-
-                <div class="detail-row">
-                    <div>Address:</div>
-                    <div><?php echo $lead->getAddress(); ?></div>
-                </div>
-
-                <div class="detail-row">
-                    <div>ZIP:</div>
-                    <div><?php echo $lead->getZip(); ?></div>
-                </div>
-
-                <div class="detail-row">
-                    <div>Phone:</div>
-                    <div><?php echo $lead->getPhone(); ?></div>
-                </div>
-
-                <div class="detail-row">
-                    <div>Email:</div>
-                    <div><?php echo $lead->getEmail(); ?></div>
-                </div>
-
-                <div class="detail-row">
-                    <div>Created at:</div>
-                    <div><?php echo $lead->getCreatedAt()->format('d/m/Y H:i'); ?></div>
-                </div>
-            </div>
-            <div class="tab-content" id="content-history">
-                <h2>History</h2>
-            </div>
-            <div class="tab-content" id="content-note">
-                <h2>Notes</h2>
-            </div>
-            <div class="tab-content" id="content-call">
-                <h2>Calls</h2>
-            </div>
-            <div class="tab-content" id="content-task">
-                <h2>Tasks</h2>
+                <h2>Quotations</h2>
+                <?php foreach ($lead->getQuotations() as $quotation): ?>
+                    <div class="quotation">
+                        <h3><?php echo $quotation->getTitle(); ?></h3>
+                        <p><strong>Data:</strong> <?php echo $quotation->getCreatedAt(); ?></p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Servizio</th>
+                                    <th>Descrizione</th>
+                                    <th>Quantità</th>
+                                    <th>Prezzo Unitario</th>
+                                    <th>Subtotale</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($quotation->getItems() as $item): ?>
+                                    <tr>
+                                        <td><?php echo $item->getServiceName(); ?></td>
+                                        <td><?php echo $item->getDescription(); ?></td>
+                                        <td><?php echo $item->getQuantity(); ?></td>
+                                        <td>&euro;<?php echo number_format($item->getPrice(), 2, ',', '.'); ?></td>
+                                        <td>&euro;<?php echo number_format($item->getSubtotal(), 2, ',', '.'); ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php endforeach; ?>
             </div>
         </div>
     </div>
@@ -113,7 +79,7 @@
 const demoMode = <?php echo DEMO_MODE ? 'true' : 'false'; ?>;
 
 // Aggiungi l'event listener per il submit del form
-document.getElementById("sources-form").addEventListener("submit", function(event){
+document.getElementById("histories-form").addEventListener("submit", function(event){
     event.preventDefault(); // Blocca l'invio del form
 
     if (demoMode) {
@@ -132,7 +98,7 @@ document.getElementById("sources-form").addEventListener("submit", function(even
 </script>
 
 <script>
-document.getElementById("sources-form").addEventListener("submit", function(event) {
+document.getElementById("histories-form").addEventListener("submit", function(event) {
     let isValid = true;
     let errorMessage = "";
     

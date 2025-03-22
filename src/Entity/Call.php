@@ -22,7 +22,7 @@ class Call
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $notes = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "calls")]
+    #[ORM\ManyToOne(targetEntity: Lead::class, inversedBy: "calls")]
     #[ORM\JoinColumn(name: "lead_id", referencedColumnName: "id")]
     private Lead $lead;
 

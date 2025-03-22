@@ -25,6 +25,10 @@ function defineRoutes(RouteCollector $r) {
     $r->addRoute('GET', '/leads/edit/{id:\d+}', 'leads_edit');
     $r->addRoute('POST', '/leads/update', 'leads_update');
     $r->addRoute('GET', '/leads/delete/{id:\d+}', 'leads_delete');
+    $r->addRoute('GET', '/leads/history/{id:\d+}', 'leads_history');
+    $r->addRoute('GET', '/leads/quotations/{id:\d+}', 'leads_quotations');
+    $r->addRoute('GET', '/leads/tasks/{id:\d+}', 'leads_tasks');
+    $r->addRoute('GET', '/leads/notes/{id:\d+}', 'leads_notes');
 
     //Quotations
     $r->addRoute('GET', '/quotations', 'quotations');
@@ -34,6 +38,10 @@ function defineRoutes(RouteCollector $r) {
     $r->addRoute('GET', '/quotations/edit/{id:\d+}', 'quotations_edit');
     $r->addRoute('POST', '/quotations/update', 'quotations_update');
     $r->addRoute('GET', '/quotations/delete/{id:\d+}', 'quotations_delete');
+
+    //Calls
+    $r->addRoute('GET', '/leads/calls/{id:\d+}', 'leads_calls');
+
     
     //Sources
     $r->addRoute('GET', '/sources', 'sources');
