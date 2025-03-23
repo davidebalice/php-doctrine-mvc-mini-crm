@@ -19,7 +19,7 @@
     <div class="page-body">
         <div class="tabs-container">
             <?php
-                $currentPage="history";
+                $currentTab="history";
                 include('menu.php');
             ?>
 

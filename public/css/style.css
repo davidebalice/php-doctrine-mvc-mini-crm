@@ -17,9 +17,24 @@ a {
   color: #333;
 }
 
+.w100 {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.align-left {
+  text-align: left;
+}
+
 .flex-center {
   display: flex;
   justify-content: center;
+  align-items: center;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -447,6 +462,16 @@ th {
   box-shadow: 0px 2px 4px 0px rgb(0, 0, 0, 0.2);
 }
 
+.form-modal {
+  text-align: left;
+  border: 1px solid #ddd;
+  padding: 26px;
+  width: calc(100% - 56px);
+  border-radius: 8px;
+  display: block;
+  box-shadow: 0px 2px 4px 0px rgb(0, 0, 0, 0.2);
+}
+
 form select {
   width: 100%;
   margin: 0 auto;
@@ -462,7 +487,7 @@ form textarea {
   margin: 0 auto;
   border: 1px solid #ddd;
   background: #f1f1f1;
- 
+
   margin-bottom: 10px;
 }
 
@@ -507,6 +532,12 @@ label {
   align-items: center;
   gap: 8px;
   font-size: 14px;
+}
+
+.add-button {
+  width: fit-content;
+  margin-left: 0;
+  margin-bottom: 12px;
 }
 
 .input-submit {
@@ -580,7 +611,9 @@ label {
 }
 .modal-content {
   background: white;
-  padding: 20px;
+  width: 90%;
+  max-width: 400px;
+  padding: 10px 20px;
   border-radius: 5px;
   text-align: center;
 }
@@ -688,4 +721,19 @@ label {
   width: 110px;
   font-weight: bold;
   height: 40px;
+}
+
+.close {
+  color: white;
+  border-radius: 50%;
+  font-weight: bold;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  background: #222;
+  font-size: 25px;
+}
+
+.close:hover {
+  background: #444;
 }

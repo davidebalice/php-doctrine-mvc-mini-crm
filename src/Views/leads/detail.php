@@ -19,7 +19,7 @@
     <div class="page-body">
         <div class="tabs-container">
             <?php
-                $currentPage="detail";
+                $currentTab="detail";
                 include('menu.php');
             ?>
             

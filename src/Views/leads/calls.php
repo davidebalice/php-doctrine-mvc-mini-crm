@@ -19,12 +19,47 @@
     <div class="page-body">
         <div class="tabs-container">
             <?php
-                $currentPage="calls";
+                $currentTab="calls";
                 include('menu.php');
             ?>
 
             <div class="tab-content" id="content-detail">
                 <h2>Calls</h2>
+
+                <div class="button add-button" id="addCallBtn">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                    <span>Add call</span>
+                </div>
+         
+                <!-- Modal di aggiunta -->
+                <div id="addCallForm" class="modal">
+                    <div class="modal-content">
+                        <div class="flex-between">
+                            <h3>Add Call</h3>
+                            <span class="close flex-center" id="closeAddForm">&times;</span>
+                        </div>
+                        <form id="addCall" action="/leads/calls/store" class="form-modal" method="POST">
+                            <label for="call_time">Date / hour:</label>
+                            <input type="datetime-local" id="call_time" name="call_time" required>
+
+                            <label for="call_time">Status:</label>
+                            <select id="status" name="status" required>
+                                <option value="">- Select status -</option>
+                                <option value="Canceled">Canceled</option>
+                                <option value="Completed">Completed</option>
+                                <option value="No answer">No answer</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Rescheduled">Rescheduled</option>
+                                <option value="Voicemail left">Voicemail left</option>
+                            </select>
+
+                            <label for="notes">Note:</label>
+                            <textarea id="notes" name="notes" required></textarea>
+                            <input type="hidden" id="lead_id" name="lead_id" value="<? echo $lead->getId();?>" required>
+                            <button type="submit" class="w100">Add</button>
+                        </form>
+                    </div>
+                </div>
                
                 <?php if (!empty($calls)): ?>
                     <div class="table-wrapper">
@@ -43,6 +78,9 @@
                                         <td><?= $call->getNotes() ?></td>
                                         <td>
                                             <div class="buttons-container">
+
+                                            <button class="editBtn" data-id="<?= $call->getId(); ?>">Modifica</button>
+
                                                 <a href="/leads/call/edit/<?php echo $call->getId(); ?>">
                                                     <div class="flex-center base-button edit-button ">
                                                         <i class="fa-solid fa-pen-to-square"></i>
@@ -92,6 +130,24 @@
     </div>
 </div>
 
+<!-- Modale di modifica -->
+<div id="editCallModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeEditForm">&times;</span>
+        <h3>Modifica Call</h3>
+        <form id="editCall" action="/leads/call/edit" method="POST">
+            <input type="hidden" id="edit_call_id" name="call_id">
+            <label for="edit_call_time">Data e Ora:</label>
+            <input type="datetime-local" id="edit_call_time" name="call_time" required>
+
+            <label for="edit_notes">Note:</label>
+            <textarea id="edit_notes" name="notes" required></textarea>
+
+            <button type="submit">Salva</button>
+        </form>
+    </div>
+</div>
+
 <script>
     function showTab(tab) {
         // Hide all tab contents
@@ -113,7 +169,7 @@
 const demoMode = <?php echo DEMO_MODE ? 'true' : 'false'; ?>;
 
 // Aggiungi l'event listener per il submit del form
-document.getElementById("calls-form").addEventListener("submit", function(event){
+document.getElementById("editCall").addEventListener("submit", function(event){
     event.preventDefault(); // Blocca l'invio del form
 
     if (demoMode) {
@@ -129,9 +185,8 @@ document.getElementById("calls-form").addEventListener("submit", function(event)
         this.submit();
     }
 });
-</script>
 
-<script>
+/*
 document.getElementById("calls-form").addEventListener("submit", function(event) {
     let isValid = true;
     let errorMessage = "";
@@ -150,4 +205,65 @@ document.getElementById("calls-form").addEventListener("submit", function(event)
         errorElement.style.display = "block";
     }
 });
+*/
+
+// Apre il modulo di aggiunta call
+document.getElementById("addCallBtn").addEventListener("click", function() {
+    document.getElementById("addCallForm").style.display = "flex";
+});
+
+// Chiude il modulo di aggiunta
+document.getElementById("closeAddForm").addEventListener("click", function() {
+    document.getElementById("addCallForm").style.display = "none";
+});
+
+// Aggiungi validazione (come nel codice esistente) se necessario
+document.getElementById("addCall").addEventListener("submit", function(event){
+    let isValid = true;
+    let errorMessage = "";
+    
+    document.querySelectorAll("[data-mandatory='true']").forEach(input => {
+        if (input.value.trim() === "") {
+            isValid = false;
+            errorMessage += `Field "${input.name}" is mandatory.<br>`;
+        }
+    });
+
+    if (!isValid) {
+        event.preventDefault(); // Blocca l'invio del form
+        let errorElement = document.getElementById("error-message");
+        errorElement.innerHTML = errorMessage;
+        errorElement.style.display = "block";
+    }
+});
+
+// Apre modal di modifica
+document.querySelectorAll(".editBtn").forEach(button => {
+    button.addEventListener("click", function() {
+        // Recupera i dati dalla riga della tabella
+        const callId = this.getAttribute("data-id");
+        const callTime = this.getAttribute("data-time");
+        const callNotes = this.getAttribute("data-notes");
+
+        // Popola il form di modifica con i dati della call
+        document.getElementById("edit_call_id").value = callId;
+        document.getElementById("edit_call_time").value = callTime;
+        document.getElementById("edit_notes").value = callNotes;
+
+        // Mostra la modal
+        document.getElementById("editCallModal").style.display = "block"; 
+    });
+});
+
+// Funzione per chiudere la modal
+document.getElementById("closeEditModal").addEventListener("click", function() {
+    document.getElementById("editCallModal").style.display = "none";
+});
+
+
+// Chiude la modal di modifica
+document.getElementById("closeEditForm").addEventListener("click", function() {
+    document.getElementById("editCallForm").style.display = "none";
+});
+
 </script>

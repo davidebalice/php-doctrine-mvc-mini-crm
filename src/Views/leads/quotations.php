@@ -19,7 +19,7 @@
     <div class="page-body">
         <div class="tabs-container">
             <?php
-                $currentPage="quotations";
+                $currentTab="quotations";
                 include('menu.php');
             ?>
 
