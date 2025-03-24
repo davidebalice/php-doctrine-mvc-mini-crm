@@ -3,6 +3,8 @@
   --primary-color-hover: #14263a;
   --secondary-color: #119ac2;
   --secondary-color-hover: #16809f;
+  --tertiary-color: #0c9122;
+  --tertiary-color-hover: #0e711e;
 }
 
 body {
@@ -85,6 +87,10 @@ button {
 
 .button-mini:hover {
   background-color: var(--secondary-color-hover);
+}
+
+.button-mid {
+  padding: 6px 30px !important;
 }
 
 .login-button {
@@ -579,8 +585,16 @@ label {
   background-color: #bc0f2b;
 }
 
+.view-button {
+  background: var(--tertiary-color);
+}
+
+.view-button:hover {
+  background: var(--tertiary-color-hover);
+}
+
 .detail-button {
-  background: #0c9122;
+  background: var(--tertiary-color);
   width: 90px;
   display: flex;
   gap: 8px;
@@ -588,7 +602,7 @@ label {
 }
 
 .detail-button:hover {
-  background: #0e711e;
+  background: var(--tertiary-color-hover);
 }
 
 .buttons-container {
@@ -624,11 +638,21 @@ label {
   padding: 10px;
   margin: 5px;
 }
+.modal-detail {
+  text-align: left;
+}
+.modal-delete {
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
 .danger {
   background: red;
   color: white;
 }
-
+.danger:hover {
+  background: #b4301a;
+  color: white;
+}
 .search-form {
   display: flex;
   align-items: center;
@@ -729,11 +753,22 @@ label {
   font-weight: bold;
   width: 30px;
   height: 30px;
+  padding-top: 1px;
   cursor: pointer;
   background: #222;
-  font-size: 25px;
+  font-size: 24px;
 }
 
 .close:hover {
   background: #444;
+}
+
+.notes {
+  width: calc(100% - 40px);
+  height: 150px;
+  overflow-y: scroll;
+  background-color: #f1f1f1;
+  scrollbar-width: thin;
+  font-size: 13px;
+  padding: 10px;
 }

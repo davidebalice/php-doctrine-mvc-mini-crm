@@ -42,10 +42,11 @@ function defineRoutes(RouteCollector $r) {
     //Calls
     $r->addRoute('GET', '/leads/calls/{id:\d+}', 'leads_calls');
     $r->addRoute('POST', '/leads/calls/store', 'leads_calls_store');
+    $r->addRoute('GET', '/leads/calls/edit/{id:\d+}', 'leads_calls_edit');
     $r->addRoute('GET', '/leads/calls/detail/{id:\d+}', 'leads_calls_detail');
     $r->addRoute('POST', '/leads/calls/update', 'leads_calls_update');
-    $r->addRoute('GET', '/leads/calls/delete/{id:\d+}', 'leads_calls_delete');
-    
+    $r->addRoute('GET', '/leads/calls/{lead_id:\d+}/delete/{id:\d+}', 'leads_calls_delete');
+
     //Sources
     $r->addRoute('GET', '/sources', 'sources');
     $r->addRoute('GET', '/sources/create', 'sources_create');

@@ -61,6 +61,11 @@ class Call
         return $this->notes;
     }
 
+    public function getShortNotes(int $length = 50): string
+    {
+        return strlen($this->notes) > $length ? substr($this->notes, 0, $length) . '...' : $this->notes;
+    }
+
     public function setNotes(?string $notes): void
     {
         $this->notes = $notes;

@@ -120,12 +120,22 @@
     </div>
 </div>
 
+<!-- Modal conferma eliminazione -->
 <div id="deleteModal" class="modal">
-    <div class="modal-content">
-        <p>Confirm delete?</p>
+    <div class="modal-content modal-delete">
+        <b>Confirm delete?</b>
+        <br /><br />
         <div class="modal-actions flex-center">
-            <button onclick="closeModal()">Cancel</button>
-            <a id="confirmDeleteBtn" href="#"><button class="danger">Delete</button></a>
+            <button onclick="closeModal()" class="button-mini button-mid">
+                <i class="fa-solid fa-xmark"></i>
+                Cancel
+            </button>
+            <a id="confirmDeleteBtn" href="#">
+                <button class="danger button-mini button-mid">
+                    <i class="fa-solid fa-trash-can"></i>
+                    Delete
+                </button>
+            </a>
         </div>
     </div>
 </div>

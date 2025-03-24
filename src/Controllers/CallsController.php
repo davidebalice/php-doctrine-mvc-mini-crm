@@ -23,6 +23,14 @@ class CallsController extends RenderController
         parent::__construct($entityManager);
     }
 
+    //metodo per inviare risposta in json
+    private function jsonResponse($data, $status = 200) {
+        header('Content-Type: application/json');
+        http_response_code($status);
+        echo json_encode($data);
+        exit;
+    }
+
     // Ottieni tutti le chiamate
     public function calls($id)
     {
@@ -84,21 +92,23 @@ class CallsController extends RenderController
     }
 
     public function detail($id) {
-        $lead = $this->entityManager->getRepository(Lead::class)->find($id);
+        $call = $this->entityManager->getRepository(Call::class)->find($id);
 
         $data = [
-            'title' => 'Lead details',
-            'description' => 'Lead details',
-            'lead' => $lead,
+            'call_time' => $call->getCallTime(),
+            'status' => $call->getStatus(),
+            'notes' => $call->getNotes(),
         ];
 
-        $this->render('/leads/detail', $data);
+        return $this->jsonResponse($data);
     }
 
     public function store(Request $request) {
+        $lead_id = trim($request->request->get('lead_id', ''));
+
         if (DEMO_MODE) {
             echo "<script>alert('Demo mode: crud operations not allowed'); 
-            window.location.href='/leads';</script>";
+            window.location.href='/leads/calls/$lead_id';</script>";
             exit();
         }
 
@@ -144,29 +154,15 @@ class CallsController extends RenderController
     }
 
     public function edit($id) {
-        $lead = $this->entityManager->getRepository(Lead::class)->find($id);
-
-        $sources = $this->entityManager->getRepository(Source::class)
-            ->createQueryBuilder('s')
-            ->orderBy('s.name', 'ASC')
-            ->getQuery()
-            ->getResult();
-
-        $statuses = $this->entityManager->getRepository(Status::class)
-            ->createQueryBuilder('s')
-            ->orderBy('s.name', 'ASC')
-            ->getQuery()
-            ->getResult();
+        $call = $this->entityManager->getRepository(Call::class)->find($id);
 
         $data = [
-            'title' => 'Edit lead',
-            'description' => 'Edit lead',
-            'lead' => $lead,
-            'sources' => $sources,
-            'statuses' => $statuses,
+            'call_time' => $call->getCallTime(),
+            'status' => $call->getStatus(),
+            'notes' => $call->getNotes(),
         ];
 
-        $this->render('/leads/edit', $data);
+        return $this->jsonResponse($data);
     }
 
     public function update(Request $request)
@@ -177,151 +173,63 @@ class CallsController extends RenderController
             exit();
         }
 
-        //utente loggato
-        $user = $this->getLoggedInUser();
-
-        $id = $request->request->get('id');
+        $id = $request->request->get('call_id');
         $id = (int) $id; // Conversione sicura a intero
 
-        $lead = $this->entityManager->getRepository(Lead::class)->find($id);
+        $call = $this->entityManager->getRepository(Call::class)->find($id);
 
-        if (!$lead) {
-            die('lead non found');
+        if (!$call) {
+            die('call non found');
         }
 
         // Recupero e sanificazione dei dati inviati dal form
-        $name = trim($request->request->get('name', ''));
-        $surname = trim($request->request->get('surname', ''));
-        $email = trim($request->request->get('email', ''));
-        $phone = trim($request->request->get('phone', ''));
-        $city = trim($request->request->get('city', ''));
-        $address = trim($request->request->get('address', ''));
-        $zip = trim($request->request->get('zip', ''));
-        $country = trim($request->request->get('country', ''));
+        $call_time = trim($request->request->get('call_time', ''));
+        $status = trim($request->request->get('status', ''));
         $notes = trim($request->request->get('notes', ''));
+        $lead_id = trim($request->request->get('lead_id', ''));
+  
         
-         // Recupera il valore selezionato per Source e Status
-        $sourceId = $request->request->get('source', '');
-        $statusId = $request->request->get('status', '');
-
-        // Recupera l'entità Source corrispondente
-        $source = $this->entityManager->getRepository(Source::class)->find($sourceId);
-        if (!$source) {
-            $_SESSION['error'] = "Invalid source selected";
-            header('Location: /sources/create');
-            exit();
-        }
-
-        // Recupera l'entità Status corrispondente
-        $status = $this->entityManager->getRepository(Status::class)->find($statusId);
-        if (!$status) {
-            $_SESSION['error'] = "Invalid status selected";
-            header('Location: /sources/create');
-            exit();
-        }
-
         // Sanificazione dei dati
-        $name = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
-        $surname = htmlspecialchars($surname, ENT_QUOTES, 'UTF-8');
-        $email = htmlspecialchars($email, ENT_QUOTES, 'UTF-8');
-        $phone = htmlspecialchars($phone, ENT_QUOTES, 'UTF-8');
-        $city = htmlspecialchars($city, ENT_QUOTES, 'UTF-8');
-        $address = htmlspecialchars($address, ENT_QUOTES, 'UTF-8');
-        $zip = htmlspecialchars($zip, ENT_QUOTES, 'UTF-8');
-        $country = htmlspecialchars($country, ENT_QUOTES, 'UTF-8');
+        $call_time = htmlspecialchars($call_time, ENT_QUOTES, 'UTF-8');
+        $status = htmlspecialchars($status, ENT_QUOTES, 'UTF-8');
         $notes = htmlspecialchars($notes, ENT_QUOTES, 'UTF-8');
 
+
         // Verifica se i campi obbligatori sono vuoti
-        if (empty($name) || empty($email) || empty($phone) || empty($city) || empty($country) || empty($address) || empty($zip) || empty($sourceId) || empty($statusId)) {
+        if (empty($call_time) || empty($status) || empty($notes) ) {
             $_SESSION['error'] = "All fields are mandatory";
-            header('Location: /leads/edit');
+            header('Location: /leads/calls/'.$lead_id);
             exit();
         }
 
-        // Crea un nuovo Lead e imposta i dati
-        $lead->setFirstName($name);
-        $lead->setLastName($surname);
-        $lead->setEmail($email);
-        $lead->setPhone($phone);
-        $lead->setCity($city);
-        $lead->setAddress($address);
-        $lead->setZip($zip);
-        $lead->setCountry($country);
-        $lead->setAssignedUser($user);
-        $lead->setNotes($notes);
-
-        // Imposta source e status
-        $lead->setSource($source);
-        $lead->setStatus($status);
-
-        $currentDate = new \DateTime();
-        $lead->setUpdatedAt($currentDate);
+        $call_time = new \DateTime($call_time);
+        $call->setCallTime($call_time);
+        $call->setStatus($status);
+        $call->setNotes($notes);
+      
 
         $this->entityManager->flush();
 
-        header('Location: /leads');
+        header('Location: /leads/calls/'.$lead_id);
         exit();
     }
 
-    public function delete($id)
+    public function delete($lead_id,$id)
     {
         if (DEMO_MODE) {
             echo "<script>alert('Demo mode: crud operations not allowed'); 
-            window.location.href='/leads';</script>";
+            window.location.href='/leads/calls/$lead_id';</script>";
             exit();
         }
 
-        $lead = $this->entityManager->getRepository(Lead::class)->find($id);
+        $call = $this->entityManager->getRepository(Call::class)->find($id);
     
-        if ($lead) {
-            $this->entityManager->remove($lead);
+        if ($call) {
+            $this->entityManager->remove($call);
             $this->entityManager->flush();
         }
     
-        header('Location: /leads');
+        header('Location: /leads/calls/'.$lead_id);
         exit();
     }
-
-    public function history($id) {
-        $lead = $this->entityManager->getRepository(Lead::class)->find($id);
-
-        $histories = $this->entityManager->getRepository(History::class)
-            ->createQueryBuilder('h')
-            ->where('h.lead = :lead')
-            ->setParameter('lead', $lead)
-            ->orderBy('h.created_at', 'DESC')
-            ->getQuery()
-            ->getResult();
-
-        $data = [
-            'title' => 'Lead details',
-            'description' => 'Lead details',
-            'lead' => $lead,
-            'histories' => $histories,
-        ];
-
-        $this->render('/leads/history', $data);
-    }
-
-    public function quotations($id) {
-        $lead = $this->entityManager->getRepository(Lead::class)->find($id);
-
-        $quotations = $this->entityManager->getRepository(Quotation::class)
-            ->createQueryBuilder('q')
-            ->where('q.lead = :lead')
-            ->setParameter('lead', $lead)
-            ->orderBy('q.created_at', 'DESC')
-            ->getQuery()
-            ->getResult();
-
-        $data = [
-            'title' => 'Lead details',
-            'description' => 'Lead details',
-            'lead' => $lead,
-            'quotations' => $quotations,
-        ];
-
-        $this->render('/leads/quotations', $data);
-    }
-
 }

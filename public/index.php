@@ -82,6 +82,7 @@ switch ($routeInfo[0]) {
             //calls
             'leads_calls' => ['App\\Controllers\\CallsController', 'calls', true],
             'leads_calls_store' => ['App\\Controllers\\CallsController', 'store', true],
+            'leads_calls_edit' => ['App\\Controllers\\CallsController', 'edit', true],
             'leads_calls_detail' => ['App\\Controllers\\CallsController', 'detail', true],
             'leads_calls_update' => ['App\\Controllers\\CallsController', 'update', true],
             'leads_calls_delete' => ['App\\Controllers\\CallsController', 'delete', true],
