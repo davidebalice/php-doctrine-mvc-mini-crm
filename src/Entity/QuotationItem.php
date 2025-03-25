@@ -76,6 +76,11 @@ class QuotationItem
         $this->price = $price;
     }
 
+    public function getSubtotal(): float
+    {
+        return $this->price*$this->quantity;
+    }
+
     public function getQuantity(): int
     {
         return $this->quantity;

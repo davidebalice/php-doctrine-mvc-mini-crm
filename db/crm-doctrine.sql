@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Mar 22, 2025 alle 16:56
+-- Creato il: Mar 25, 2025 alle 11:26
 -- Versione del server: 10.4.27-MariaDB
 -- Versione PHP: 8.2.0
 
@@ -40,7 +40,9 @@ CREATE TABLE `calls` (
 --
 
 INSERT INTO `calls` (`id`, `notes`, `call_time`, `status`, `lead_id`) VALUES
-(1, 'wgfewffewf', '2025-03-22 16:55:57', 'called', 1);
+(4, 'Commodo aliquip dolor eiusmod quis sit esse quis elit aliqua.', '2025-01-14 13:11:00', 'Canceled', 1),
+(5, 'Aliquip consequat dolore quis amet quis lorem sed fugiat sed.', '2025-03-01 13:12:00', 'Completed', 1),
+(6, 'Magna duis enim magna dolor commodo elit consectetur nostrud consequat.', '2025-03-12 19:10:00', 'Canceled', 1);
 
 -- --------------------------------------------------------
 
@@ -109,7 +111,7 @@ CREATE TABLE `leads` (
 INSERT INTO `leads` (`id`, `first_name`, `last_name`, `email`, `phone`, `city`, `address`, `zip`, `country`, `source`, `status`, `created_at`, `updated_at`, `user_id`, `status_id`, `source_id`, `notes`) VALUES
 (1, 'Luigi', 'Verdi', 'luigi@verdi.it', '32345643643', 'Milan', 'Corso Buenos Aires, 1', 20124, 'Italy', 'Facebook', 'New', '2025-03-14 11:12:13', '2025-03-14 11:12:13', 1, 1, 1, ''),
 (2, 'sedfsfsfsdf', 'wefwefcwefwefe', '3123213@lklk.gg', '1233232423', '12312', '324', 32423, '', '', '', '2025-03-21 14:22:33', '2025-03-21 14:49:50', 1, 15, 8, NULL),
-(4, 'efw', 'wfwefwefwefw', 'efw@lk.lk', 'efwef', 'dfsdf', 'fsdfs', 6678, '', '', '', '2025-03-21 14:53:21', '2025-03-21 14:54:50', 1, 11, 1, 'aaaaaaaaaaaaaaaaaaaaaa\r\nsdfsd\r\nfsd\r\nf\r\nsdf\r\nsd\r\nfsd');
+(4, 'ciao', 'wfwefwefwefw', 'efw@lk.lk', 'efwef', 'dfsdf', 'fsdfs', 6678, 'Italy', '', '', '2025-03-21 14:53:21', '2025-03-24 10:27:38', 1, 11, 1, 'aaaaaaaaaaaaaaaaaaaaaa\r\nsdfsd\r\nfsd\r\nf\r\nsdf\r\nsd\r\nfsd');
 
 -- --------------------------------------------------------
 
@@ -120,10 +122,19 @@ INSERT INTO `leads` (`id`, `first_name`, `last_name`, `email`, `phone`, `city`, 
 CREATE TABLE `quotations` (
   `id` int(11) NOT NULL,
   `lead_id` int(11) NOT NULL,
+  `code` varchar(50) DEFAULT NULL,
   `title` varchar(255) NOT NULL,
+  `status` varchar(50) DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dump dei dati per la tabella `quotations`
+--
+
+INSERT INTO `quotations` (`id`, `lead_id`, `code`, `title`, `status`, `created_at`, `updated_at`) VALUES
+(1, 1, '42564256', 'wqrthrtj', 'Completed', '2025-03-06 11:12:43', '2025-03-25 11:26:31');
 
 -- --------------------------------------------------------
 
@@ -140,6 +151,13 @@ CREATE TABLE `quotation_items` (
   `quantity` int(11) NOT NULL DEFAULT 1,
   `subtotal` decimal(10,2) GENERATED ALWAYS AS (`price` * `quantity`) STORED
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dump dei dati per la tabella `quotation_items`
+--
+
+INSERT INTO `quotation_items` (`id`, `quotation_id`, `service_name`, `description`, `price`, `quantity`) VALUES
+(1, 1, 'aergeregerger', 'etyteykjetyetyjtyjtyjtyjetyj', '100.00', 1);
 
 -- --------------------------------------------------------
 
@@ -209,6 +227,14 @@ CREATE TABLE `tasks` (
   `lead_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dump dei dati per la tabella `tasks`
+--
+
+INSERT INTO `tasks` (`id`, `description`, `due_date`, `status`, `lead_id`) VALUES
+(1, 'sdfsdfewrfefwefwef', '2025-06-27 10:41:00', 'In progress', 1),
+(2, 'efdf', '2025-05-08 10:47:00', 'Canceled', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -271,7 +297,8 @@ ALTER TABLE `leads`
 --
 ALTER TABLE `quotations`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `lead_id` (`lead_id`);
+  ADD KEY `lead_id` (`lead_id`),
+  ADD KEY `code` (`code`);
 
 --
 -- Indici per le tabelle `quotation_items`
@@ -313,7 +340,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT per la tabella `calls`
 --
 ALTER TABLE `calls`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT per la tabella `documents`
@@ -337,13 +364,13 @@ ALTER TABLE `leads`
 -- AUTO_INCREMENT per la tabella `quotations`
 --
 ALTER TABLE `quotations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT per la tabella `quotation_items`
 --
 ALTER TABLE `quotation_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT per la tabella `sources`
@@ -361,7 +388,7 @@ ALTER TABLE `statuses`
 -- AUTO_INCREMENT per la tabella `tasks`
 --
 ALTER TABLE `tasks`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT per la tabella `users`

@@ -22,6 +22,12 @@ class Quotation
     #[ORM\Column(type: 'string', length: 255)]
     private string $title;
 
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $code;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $status;
+
     #[ORM\OneToMany(mappedBy: 'quotation', targetEntity: QuotationItem::class, cascade: ['persist', 'remove'])]
     private Collection $items;
 
@@ -62,8 +68,43 @@ class Quotation
         $this->title = $title;
     }
 
+    public function getCode(): string
+    {
+        return $this->code;
+    }
+
+    public function setCode(string $code): void
+    {
+        $this->code = $code;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): void
+    {
+        $this->code = $status;
+    }
+
     public function getItems(): Collection
     {
         return $this->items;
+    }
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->created_at;
+    }
+
+    public function getTotal(): float
+    {
+        $total = 0.0;
+
+        foreach ($this->items as $item) {
+            $total += $item->getPrice();
+        }
+
+        return $total;
     }
 }

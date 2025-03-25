@@ -59,10 +59,18 @@ switch ($routeInfo[0]) {
             'leads_update' => ['App\\Controllers\\LeadsController', 'update', true],
             'leads_delete' => ['App\\Controllers\\LeadsController', 'delete', true],
             'leads_history' => ['App\\Controllers\\LeadsController', 'history', true],
-            'leads_tasks' => ['App\\Controllers\\LeadsController', 'tasks', true],
             'leads_quotations' => ['App\\Controllers\\LeadsController', 'quotations', true],
             'leads_notes' => ['App\\Controllers\\LeadsController', 'notes', true],
 
+            //leads quotations
+            'leads_quotations' => ['App\\Controllers\\LeadsQuotationsController', 'quotations', true],
+            'leads_quotations_create' => ['App\\Controllers\\LeadsQuotationsController', 'create', true],
+            'leads_quotations_store' => ['App\\Controllers\\LeadsQuotationsController', 'store', true],
+            'leads_quotations_detail' => ['App\\Controllers\\LeadsQuotationsController', 'detail', true],
+            'leads_quotations_edit' => ['App\\Controllers\\LeadsQuotationsController', 'edit', true],
+            'leads_quotations_update' => ['App\\Controllers\\LeadsQuotationsController', 'update', true],
+            'leads_quotations_delete' => ['App\\Controllers\\LeadsQuotationsController', 'delete', true],
+          
             //sources
             'sources' => ['App\\Controllers\\SourcesController', 'sources', true],
             'sources_create' => ['App\\Controllers\\SourcesController', 'create', true],
@@ -86,6 +94,14 @@ switch ($routeInfo[0]) {
             'leads_calls_detail' => ['App\\Controllers\\CallsController', 'detail', true],
             'leads_calls_update' => ['App\\Controllers\\CallsController', 'update', true],
             'leads_calls_delete' => ['App\\Controllers\\CallsController', 'delete', true],
+
+            //tasks
+            'leads_tasks' => ['App\\Controllers\\TasksController', 'tasks', true],
+            'leads_tasks_store' => ['App\\Controllers\\TasksController', 'store', true],
+            'leads_tasks_edit' => ['App\\Controllers\\TasksController', 'edit', true],
+            'leads_tasks_detail' => ['App\\Controllers\\TasksController', 'detail', true],
+            'leads_tasks_update' => ['App\\Controllers\\TasksController', 'update', true],
+            'leads_tasks_delete' => ['App\\Controllers\\TasksController', 'delete', true],
 
         ];
         

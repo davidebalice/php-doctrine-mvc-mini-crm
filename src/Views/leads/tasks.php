@@ -39,8 +39,8 @@
                             <span class="close flex-center" id="closeAddForm">&times;</span>
                         </div>
                         <form id="addTask" action="/leads/tasks/store" class="form-modal" method="POST">
-                            <label for="task_time">Date / hour:</label>
-                            <input type="datetime-local" id="task_time" name="task_time" required>
+                            <label for="due_date">Due date:</label>
+                            <input type="datetime-local" id="due_date" name="due_date" required>
 
                             <label for="status">Status:</label>
                             <select id="status" name="status" required>
@@ -54,8 +54,8 @@
                                 <option value="Failed">Failed</option>
                             </select>
 
-                            <label for="notes">Note:</label>
-                            <textarea id="notes" name="notes" required></textarea>
+                            <label for="description">Description:</label>
+                            <textarea id="description" name="description" required></textarea>
                             <input type="hidden" id="lead_id" name="lead_id" value="<? echo $lead->getId();?>" required>
                             <button type="submit" class="w100">Add</button>
                         </form>
@@ -73,22 +73,23 @@
                         <form id="editTask" action="/leads/tasks/update" class="form-modal" method="POST">
                             <input type="hidden" id="edit_lead_id" name="lead_id" value="<?= $lead->getId();?>" required>
                             <input type="hidden" id="edit_id" name="task_id" required>
-                            <label for="edit_task_time">Date / time:</label>
-                            <input type="datetime-local" id="edit_task_time" name="task_time" required>
+                            <label for="edit_due_date">Due date:</label>
+                            <input type="datetime-local" id="edit_due_date" name="due_date" required>
 
-                            <label for="task_time">Status:</label>
+                            <label for="status">Status:</label>
                             <select name="status" id="edit_status" required>
                                 <option value="">- Select status -</option>
+                                <option value="To Do">To Do</option>
+                                <option value="In progress">In progress</option>
+                                <option value="Blocked">Blocked</option>
+                                <option value="Review">Review</option>
+                                <option value="Done">Done</option>
                                 <option value="Canceled">Canceled</option>
-                                <option value="Completed">Completed</option>
-                                <option value="No answer">No answer</option>
-                                <option value="Pending">Pending</option>
-                                <option value="Rescheduled">Rescheduled</option>
-                                <option value="Voicemail left">Voicemail left</option>
+                                <option value="Failed">Failed</option>
                             </select>
 
-                            <label for="edit_notes">Note:</label>
-                            <textarea id="edit_notes" name="notes" required></textarea>
+                            <label for="edit_description">Description:</label>
+                            <textarea id="edit_description" name="description" required></textarea>
 
                             <button type="submit" class="w100">Save</button>
                         </form>
@@ -129,15 +130,14 @@
                         </div>
                     </div>
                 </div>
-
-               
-                <?php if (!empty($tasks)): ?>
+           
+                <?php if (isset($tasks) && count($tasks) > 0): ?>
                     <div class="table-wrapper">
                         <table>
                             <thead>
                                 <tr>
-                                    <th style="width:10%">Date</th>
-                                    <th style="width:40%">Note</th>
+                                    <th style="width:10%">Due date</th>
+                                    <th style="width:40%">Description</th>
                                     <th style="width:40%">Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -145,8 +145,12 @@
                             <tbody>
                                 <?php foreach ($tasks as $task): ?>
                                     <tr>
-                                        <td><?= $task->getTaskTime()->format('d/m/Y H:i') ?></td>
-                                        <td><?= $task->getShortNotes() ?></td>
+                                        <td>
+                                            <span class="<?= $task->getDueDateClass() ?>">
+                                                <?= $task->getDueDate()->format('d/m/Y') ?>
+                                            </span>
+                                        </td>
+                                        <td><?= $task->getShortDescription() ?></td>
                                         <td><?= $task->getStatus() ?></td>
                                         <td>
                                             <div class="buttons-container">
@@ -196,7 +200,8 @@
                     </div>
 
                 <?php else: ?>
-                    <p>Tasks not found</p>
+                    <br />
+                    <b>Tasks not found</b>
                 <?php endif; ?>
             
             </div>
@@ -289,13 +294,12 @@
             fetch(`/leads/tasks/edit/${taskId}`)
                 .then(response => response.json())
                 .then(data => {
-
-                    const taskTime = data.task_time.date.replace(" ", "T").slice(0, 16);
+                    const due_date = data.due_date.date.replace(" ", "T").slice(0, 16);
 
                     // Popola il form con i dati ricevuti
                     document.getElementById("edit_id").value = data.id;
-                    document.getElementById("edit_task_time").value = taskTime;
-                    document.getElementById("edit_notes").value = data.notes;
+                    document.getElementById("edit_due_date").value = due_date;
+                    document.getElementById("edit_description").value = data.description;
                     document.getElementById("edit_id").value = taskId;
                     
                     // Seleziona lo stato corretto
@@ -326,20 +330,18 @@
                 .then(response => response.json())
                 .then(data => {
                     // Popola il contenuto della modal con i dettagli
-                    const taskTime = new Date(data.task_time.date.replace(" ", "T")).toLocaleString('it-IT', {
+                    const due_date = new Date(data.due_date.date.replace(" ", "T")).toLocaleString('it-IT', {
                         day: '2-digit',
                         month: '2-digit',
                         year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
                     });
                     const status = data.status;
-                    const notes = data.notes;
+                    const description = data.description;
 
                     const taskDetailsHTML = `
-                        <p><strong>Date/time:</strong> ${taskTime}</p>
+                        <p><strong>Due date:</strong> ${due_date}</p>
                         <p><strong>Status:</strong> ${status}</p>
-                        <p><strong>Notes:</strong> <div class=\"notes\">${notes}</div></p>
+                        <p><strong>Description:</strong> <div class=\"notes\">${description}</div></p>
                     `;
 
                     // Inserisce i dettagli nella modal

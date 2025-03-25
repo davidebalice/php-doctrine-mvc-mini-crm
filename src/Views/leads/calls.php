@@ -129,8 +129,7 @@
                     </div>
                 </div>
 
-               
-                <?php if (!empty($calls)): ?>
+                <?php if (isset($calls) && count($calls) > 0): ?>
                     <div class="table-wrapper">
                         <table>
                             <thead>
@@ -195,7 +194,8 @@
                     </div>
 
                 <?php else: ?>
-                    <p>Calls not found</p>
+                    <br />
+                    <b>Calls not found</b>
                 <?php endif; ?>
             
             </div>

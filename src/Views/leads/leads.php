@@ -40,7 +40,7 @@
             }
         ?>
 
-        <?php if (!empty($leads)): ?>
+        <?php if (isset($leads) && count($leads) > 0): ?>
             <div class="table-wrapper">
                 <table>
                     <thead>
@@ -115,7 +115,8 @@
             </div>
 
         <?php else: ?>
-            <p>Leads not found</p>
+            <br />
+            <b>Leads not found</b>
         <?php endif; ?>
     </div>
 </div>

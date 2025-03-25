@@ -20,7 +20,7 @@ class Task
     private \DateTime $due_date;
 
     #[ORM\Column(type: 'string', length: 50)]
-    private string $status; // Es. "Pending", "Completed"
+    private string $status;
 
     #[ORM\ManyToOne(targetEntity: Lead::class, inversedBy: 'tasks')]
     #[ORM\JoinColumn(name: 'lead_id', referencedColumnName: 'id')]
@@ -46,9 +46,22 @@ class Task
         $this->description = $description;
     }
 
+    public function getShortDescription(int $length = 70): string
+    {
+        return strlen($this->description) > $length ? substr($this->description, 0, $length) . '...' : $this->description;
+    }
+
     public function getDueDate(): \DateTime
     {
         return $this->due_date;
+    }
+
+    public function getDueDateClass(): string
+    {
+        $today = new \DateTime();
+        
+        // Se la data di scadenza è passata, restituisce la classe "text-red"
+        return $this->due_date < $today ? 'text-red' : '';
     }
 
     public function setDueDate(\DateTime $due_date): void
