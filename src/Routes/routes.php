@@ -32,8 +32,8 @@ function defineRoutes(RouteCollector $r) {
     $r->addRoute('GET', '/leads/quotations/{id:\d+}', 'leads_quotations');
     $r->addRoute('GET', '/leads/quotations/{id:\d+}/create', 'leads_quotations_create');
     $r->addRoute('POST', '/leads/quotations/store', 'leads_quotations_store');
-    $r->addRoute('GET', '/leads/quotations/detail/{id:\d+}', 'leads_quotations_detail');
-    $r->addRoute('GET', '/leads/quotations/edit/{id:\d+}', 'leads_quotations_edit');
+    $r->addRoute('GET', '/leads/quotations/{lead_id:\d+}/detail/{id:\d+}', 'leads_quotations_detail');
+    $r->addRoute('GET', '/leads/quotations/{lead_id:\d+}/edit/{id:\d+}', 'leads_quotations_edit');
     $r->addRoute('POST', '/leads/quotations/update', 'leads_quotations_update');
     $r->addRoute('GET', '/leads/quotations/delete/{id:\d+}', 'leads_quotations_delete');
 

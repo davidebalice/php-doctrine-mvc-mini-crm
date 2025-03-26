@@ -85,7 +85,7 @@ class Quotation
 
     public function setStatus(string $status): void
     {
-        $this->code = $status;
+        $this->status = $status;
     }
 
     public function getItems(): Collection

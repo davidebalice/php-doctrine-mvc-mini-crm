@@ -7,6 +7,7 @@ use App\Entity\Source;
 use App\Entity\Status;
 use App\Entity\History;
 use App\Entity\Quotation;
+use App\Entity\QuotationItem;
 use App\Entity\Note;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -89,26 +90,29 @@ class LeadsQuotationsController extends RenderController
         $this->render('/leads/quotations', $data);
     }
 
-    public function create() {
-      
+    public function create($id) {
+        $lead = $this->entityManager->getRepository(Lead::class)->find($id);
+
         $data = [
             'title' => 'New quotation',
             'description' => 'Create new quotation',
+            'lead_id' => $id,
+            'lead' => $lead,
         ];
 
         $this->render('/leads/quotations_new', $data);
     }
 
-    public function detail($id) {
+    public function detail($lead_id,$id) {
+        $lead = $this->entityManager->getRepository(Lead::class)->find($lead_id);
         $quotation = $this->entityManager->getRepository(Quotation::class)->find($id);
 
         $data = [
-            'due_date' => $quotation->getDueDate(),
-            'status' => $quotation->getStatus(),
-            'description' => $quotation->getDescription(),
+            'lead' => $lead,
+            'quotation' => $quotation,
         ];
 
-        return $this->jsonResponse($data);
+        $this->render('/leads/quotations_detail', $data);
     }
 
     public function store(Request $request) {
@@ -121,49 +125,57 @@ class LeadsQuotationsController extends RenderController
         }
     
         // Recupero e sanificazione dei dati inviati dal form
-        $due_date = trim($request->request->get('due_date', ''));
+        //$due_date = trim($request->request->get('due_date', ''));
         $status = trim($request->request->get('status', ''));
-        $description = trim($request->request->get('description', ''));
-        $items = $request->request->all('items'); // Array degli items
+        $title = trim($request->request->get('title', ''));
+        $code = trim($request->request->get('code', ''));
+        $items = $request->request->all('items');
     
+
+        //var_dump($request->request->all()); die;
+
+
         $lead = $this->entityManager->getRepository(Lead::class)->find($lead_id);
         if (!$lead) {
             $_SESSION['error'] = "Lead not found";
-            header('Location: /leads');
+            header('Location: /leads/quotations/'.$lead_id);
             exit();
         }
     
         // Sanificazione dei dati
-        $due_date = htmlspecialchars($due_date, ENT_QUOTES, 'UTF-8');
+        //$due_date = htmlspecialchars($due_date, ENT_QUOTES, 'UTF-8');
         $status = htmlspecialchars($status, ENT_QUOTES, 'UTF-8');
-        $description = htmlspecialchars($description, ENT_QUOTES, 'UTF-8');
+        $title = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+        $code = htmlspecialchars($code, ENT_QUOTES, 'UTF-8');
     
-        if (empty($due_date) || empty($description) || empty($status)) {
+        if (empty($title) || empty($code)) {
             $_SESSION['error'] = "All fields are mandatory";
-            header('Location: /leads');
+            header('Location: /leads/quotations/'.$lead_id);
             exit();
         }
     
         // Creazione della Quotation
         $quotation = new Quotation();
-        $quotation->setDueDate(new \DateTime($due_date));
+        //$quotation->setCreatedAt(new \DateTime($due_date));
         $quotation->setStatus($status);
-        $quotation->setDescription($description);
+        $quotation->setTitle($title);
+        $quotation->setCode($code);
         $quotation->setLead($lead);
     
         $this->entityManager->persist($quotation);
     
         // Aggiunta degli Items
         foreach ($items as $itemData) {
-            if (!isset($itemData['name']) || !isset($itemData['price']) || !isset($itemData['quantity'])) {
+            if (!isset($itemData['service_name']) || !isset($itemData['price']) || !isset($itemData['quantity'])) {
                 continue;
             }
     
-            $item = new Item();
-            $item->setName(htmlspecialchars($itemData['name'], ENT_QUOTES, 'UTF-8'));
+            $item = new QuotationItem();
+            $item->setServiceName(htmlspecialchars($itemData['service_name'], ENT_QUOTES, 'UTF-8'));
+            $item->setDescription(htmlspecialchars($itemData['description'], ENT_QUOTES, 'UTF-8'));
             $item->setPrice((float)$itemData['price']);
             $item->setQuantity((int)$itemData['quantity']);
-            $item->setQuotation($quotation); // Associa l'item alla Quotation
+            $item->setQuotation($quotation);
     
             $this->entityManager->persist($item);
         }
@@ -175,67 +187,103 @@ class LeadsQuotationsController extends RenderController
         exit();
     }
     
-
-    public function edit($id) {
+    public function edit($lead_id,$id) {
+        $lead = $this->entityManager->getRepository(Lead::class)->find($lead_id);
         $quotation = $this->entityManager->getRepository(Quotation::class)->find($id);
 
         $data = [
-            'due_date' => $quotation->getDueDate(),
-            'status' => $quotation->getStatus(),
-            'description' => $quotation->getDescription(),
+            'lead' => $lead,
+            'quotation' => $quotation,
         ];
 
-        return $this->jsonResponse($data);
+        $this->render('/leads/quotations_edit', $data);
     }
 
     public function update(Request $request)
     {
+        $quotationId = trim($request->request->get('id', ''));
+        $leadId = trim($request->request->get('lead_id', ''));
+
         if (DEMO_MODE) {
             echo "<script>alert('Demo mode: crud operations not allowed'); 
-            window.location.href='/leads';</script>";
+            window.location.href='/leads/quotations/$leadId';</script>";
             exit();
         }
 
-        $id = $request->request->get('quotation_id');
-        $id = (int) $id; // Conversione sicura a intero
-
-        $quotation = $this->entityManager->getRepository(Quotation::class)->find($id);
-
+        // Recupera la Quotation dal database
+        $quotation = $this->entityManager->getRepository(Quotation::class)->find($quotationId);
         if (!$quotation) {
-            die('quotation non found');
-        }
-
-        // Recupero e sanificazione dei dati inviati dal form
-        $due_date = trim($request->request->get('due_date', ''));
-        $status = trim($request->request->get('status', ''));
-        $description = trim($request->request->get('description', ''));
-        $lead_id = trim($request->request->get('lead_id', ''));
-  
-        
-        // Sanificazione dei dati
-        $due_date = htmlspecialchars($due_date, ENT_QUOTES, 'UTF-8');
-        $status = htmlspecialchars($status, ENT_QUOTES, 'UTF-8');
-        $description = htmlspecialchars($description, ENT_QUOTES, 'UTF-8');
-
-
-        // Verifica se i campi obbligatori sono vuoti
-        if (empty($due_date) || empty($status) || empty($description) ) {
-            $_SESSION['error'] = "All fields are mandatory";
-            header('Location: /leads/quotations/'.$lead_id);
+            $_SESSION['error'] = "Quotation not found";
+            header("Location: /leads/quotations/$leadId");
             exit();
         }
 
-        $due_date = new \DateTime($due_date);
-        $quotation->setDueDate($due_date);
-        $quotation->setStatus($status);
-        $quotation->setDescription($description);
-      
+        // Recupera e sanifica i dati inviati dal form
+        $title = htmlspecialchars(trim($request->request->get('title', '')), ENT_QUOTES, 'UTF-8');
+        $code = htmlspecialchars(trim($request->request->get('code', '')), ENT_QUOTES, 'UTF-8');
+        $status = htmlspecialchars(trim($request->request->get('status', '')), ENT_QUOTES, 'UTF-8');
+        $itemsData = $request->request->all('items'); // Array degli items
 
+        // Verifica se i campi obbligatori sono presenti
+        if (empty($title) || empty($code) || empty($status)) {
+            $_SESSION['error'] = "All fields are mandatory";
+            header("Location: /leads/quotations/$leadId/edit/$quotationId");
+            exit();
+        }
+
+        // Aggiorna la Quotation
+        $quotation->setTitle($title);
+        $quotation->setCode($code);
+        $quotation->setStatus($status);
+        $this->entityManager->persist($quotation);
+
+        // Recupera gli attuali items associati alla Quotation
+        $existingItems = $this->entityManager->getRepository(QuotationItem::class)->findBy(['quotation' => $quotation]);
+        $existingItemIds = [];
+
+        // Aggiorna o aggiungi nuovi items
+        foreach ($itemsData as $itemData) {
+            if (!isset($itemData['service_name'], $itemData['price'], $itemData['quantity'])) {
+                continue;
+            }
+
+            if (!empty($itemData['id'])) {
+                // Modifica un item esistente
+                $item = $this->entityManager->getRepository(QuotationItem::class)->find($itemData['id']);
+                if ($item && $item->getQuotation() === $quotation) {
+                    $item->setServiceName(htmlspecialchars($itemData['service_name'], ENT_QUOTES, 'UTF-8'));
+                    $item->setDescription(htmlspecialchars($itemData['description'] ?? '', ENT_QUOTES, 'UTF-8'));
+                    $item->setPrice((float)$itemData['price']);
+                    $item->setQuantity((int)$itemData['quantity']);
+                    $existingItemIds[] = $item->getId();
+                    $this->entityManager->persist($item);
+                }
+            } else {
+                // Aggiunge un nuovo item
+                $newItem = new QuotationItem();
+                $newItem->setServiceName(htmlspecialchars($itemData['service_name'], ENT_QUOTES, 'UTF-8'));
+                $newItem->setDescription(htmlspecialchars($itemData['description'] ?? '', ENT_QUOTES, 'UTF-8'));
+                $newItem->setPrice((float)$itemData['price']);
+                $newItem->setQuantity((int)$itemData['quantity']);
+                $newItem->setQuotation($quotation);
+                $this->entityManager->persist($newItem);
+            }
+        }
+
+        // Rimuove gli items eliminati dall'utente
+        foreach ($existingItems as $existingItem) {
+            if (!in_array($existingItem->getId(), $existingItemIds)) {
+                $this->entityManager->remove($existingItem);
+            }
+        }
+
+        // Salva le modifiche nel database
         $this->entityManager->flush();
 
-        header('Location: /leads/quotations/'.$lead_id);
+        header("Location: /leads/quotations/$leadId");
         exit();
     }
+
 
     public function delete($lead_id,$id)
     {

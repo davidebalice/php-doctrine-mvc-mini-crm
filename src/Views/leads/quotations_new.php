@@ -16,9 +16,15 @@
         </a>
     </div>
     <div class="page-body">
+        <div class="tabs-container">
+            <?php
+                $currentTab="quotations";
+                include('menu.php');
+            ?>
 
 
-    <form method="POST">
+    <form action="/leads/quotations/store" method="post" class="form form2" id="leads-form">
+        <h2>New quotation</h2>
         <label>Titolo:</label>
         <input type="text" name="title" required>
         
@@ -39,6 +45,8 @@
         <h3>Totale: €<span id="total">0.00</span></h3>
         
         <button type="submit">Crea Preventivo</button>
+        <p id="error-message" style="color: red; display: none;"></p>
+        <input type="hidden" name="lead_id" value="<?= $lead_id?>" required>
     </form>
 
 
@@ -52,62 +60,8 @@
 
 
 
-        <form action="/leads/store" method="post" class="form" id="leads-form">
-            <h2>New lead</h2>
-            <div class="row">
-                <div class="col">
-                    <label>Name:</label>
-                    <input type="text" name="name" class="input-form" data-mandatory="true" required>
-                    
-                    <label>Phone:</label>
-                    <input type="text" name="phone" class="input-form" data-mandatory="true" required>
-                   
-                    <label>Source:</label>
-                    <select name="source" data-mandatory="true" required>
-                        <option value="">Select Source</option>
-
-                        <?php foreach ($sources as $source): ?>
-                            <option value="<?php echo htmlspecialchars($source->getId()); ?>"><?php echo htmlspecialchars($source->getName()); ?></option>
-                        <?php endforeach; ?>
-                    </select>
-
-                    <label>City:</label>
-                    <input type="text" name="city" class="input-form" data-mandatory="true" required>
-
-                    <label>ZIP Code:</label>
-                    <input type="text" name="zip" class="input-form" data-mandatory="true" required>
-                </div>
-                <div class="col">
-                    <label>Surname:</label>
-                    <input type="text" name="surname" class="input-form" data-mandatory="true" required>
-                    
-                    <label>Email:</label>
-                    <input type="email" name="email" class="input-form" data-mandatory="true" required>
-
-                    <label>Status:</label>
-                    <select name="status" data-mandatory="true" required>
-                        <option value="">Select Status</option>
-                        <?php foreach ($statuses as $status): ?>
-                            <option value="<?php echo htmlspecialchars($status->getId()); ?>"><?php echo htmlspecialchars($status->getName()); ?></option>
-                        <?php endforeach; ?>
-                    </select>
-
-                    <label>Address:</label>
-                    <input type="text" name="address" class="input-form" data-mandatory="true" required>
-
-                    <label>Country:</label>
-                    <input type="text" name="country" class="input-form" data-mandatory="true" required>
-                </div>
-            </div>
-
-            <br />
-
-            <label>Note:</label>
-            <textarea name="notes"></textarea>
-            <br /><br />
-            <input type="submit" class="input-submit" value="Send">
-            <p id="error-message" style="color: red; display: none;"></p>
-        </form>
+      
+        </div>
     </div>
 </div>
 

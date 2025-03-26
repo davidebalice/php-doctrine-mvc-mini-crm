@@ -32,86 +32,6 @@
                     </div>
                 </a>
 
-                <!-- Modal di aggiunta -->
-                <div id="addQuotationForm" class="modal">
-                    <div class="modal-content">
-                        <div class="flex-between">
-                            <h3>Add Quotation</h3>
-                            <span class="close flex-center" id="closeAddForm">&times;</span>
-                        </div>
-                        <form id="addQuotation" action="/leads/quotations/store" class="form-modal" method="POST">
-                            <label for="due_date">Due date:</label>
-                            <input type="datetime-local" id="due_date" name="due_date" required>
-
-                            <label for="status">Status:</label>
-                            <select id="status" name="status" required>
-                                <option value="">- Select status -</option>
-                                <option value="To Do">To Do</option>
-                                <option value="In progress">In progress</option>
-                                <option value="Blocked">Blocked</option>
-                                <option value="Review">Review</option>
-                                <option value="Done">Done</option>
-                                <option value="Canceled">Canceled</option>
-                                <option value="Failed">Failed</option>
-                            </select>
-
-                            <label for="description">Description:</label>
-                            <textarea id="description" name="description" required></textarea>
-                            <input type="hidden" id="lead_id" name="lead_id" value="<? echo $lead->getId();?>" required>
-                            <button type="submit" class="w100">Add</button>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Modal di modifica -->
-                <div id="editQuotationModal" class="modal">
-                    <div class="modal-content">
-                        <div class="flex-between">
-                            <h3>Edit Quotation</h3>
-                            <span class="close flex-center" id="closeEditForm">&times;</span>
-                        </div>
-
-                        <form id="editQuotation" action="/leads/quotations/update" class="form-modal" method="POST">
-                            <input type="hidden" id="edit_lead_id" name="lead_id" value="<?= $lead->getId();?>" required>
-                            <input type="hidden" id="edit_id" name="quotation_id" required>
-                            <label for="edit_due_date">Due date:</label>
-                            <input type="datetime-local" id="edit_due_date" name="due_date" required>
-
-                            <label for="status">Status:</label>
-                            <select name="status" id="edit_status" required>
-                                <option value="">- Select status -</option>
-                                <option value="To Do">To Do</option>
-                                <option value="In progress">In progress</option>
-                                <option value="Blocked">Blocked</option>
-                                <option value="Review">Review</option>
-                                <option value="Done">Done</option>
-                                <option value="Canceled">Canceled</option>
-                                <option value="Failed">Failed</option>
-                            </select>
-
-                            <label for="edit_description">Description:</label>
-                            <textarea id="edit_description" name="description" required></textarea>
-
-                            <button type="submit" class="w100">Save</button>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Modal visualizzazione dettagli -->
-                <div id="viewQuotationModal" class="modal">
-                    <div class="modal-content modal-detail">
-                        <div class="flex-between">
-                            <h3>Quotation Details</h3>
-                            <span class="close flex-center" id="closeViewForm">&times;</span>
-                        </div>
-
-                        <div id="quotationDetailsContainer">
-                            <!-- Dettagli verranno caricati qui -->
-                        </div>
-                    </div>
-                </div>
-
-
                 <!-- Modal conferma eliminazione -->
                 <div id="deleteModal" class="modal">
                     <div class="modal-content modal-delete">
@@ -176,14 +96,18 @@
                                         <td>
                                             <div class="buttons-container">
                                                 <div>
-                                                    <button class="viewBtn base-button view-button" data-id="<?= $quotation->getId(); ?>">
-                                                        <i class="fa-solid fa-eye"></i>
-                                                    </button>
+                                                    <a href="/leads/quotations/<?= $lead->getId()?>/detail/<?= $quotation->getId()?>">
+                                                        <button class="viewBtn base-button view-button" data-id="<?= $quotation->getId(); ?>">
+                                                            <i class="fa-solid fa-eye"></i>
+                                                        </button>
+                                                        </a>
                                                 </div>
                                                 <div>
-                                                    <button class="editBtn base-button edit-button" data-id="<?= $quotation->getId(); ?>">
-                                                        <i class="fa-solid fa-pen-to-square"></i>
-                                                    </button>
+                                                    <a href="/leads/quotations/<?= $lead->getId()?>/edit/<?= $quotation->getId()?>">
+                                                        <button class="editBtn base-button edit-button">
+                                                            <i class="fa-solid fa-pen-to-square"></i>
+                                                        </button>
+                                                    </a>
                                                 </div>
                                                 <div class="flex-center base-button delete-button"  onclick="confirmDelete(<?php echo $quotation->getId(); ?>,<?php echo $lead->getId(); ?>)">
                                                     <i class="fa-solid fa-trash"></i>

@@ -1,3 +1,6 @@
+<div>
+    <?= $lead->getLastName()?>
+</div>
 <ul class="tabs">
     <a href="/leads/detail/<?= $lead->getId();?>">
         <li class="tab <?= str_contains($currentTab, 'detail') ? 'active' : '' ?>" id="tab-detail" onclick="showTab('detail')">Detail</li>
