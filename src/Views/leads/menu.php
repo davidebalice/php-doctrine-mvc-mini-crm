@@ -1,6 +1,3 @@
-<div>
-    <?= $lead->getLastName()?>
-</div>
 <ul class="tabs">
     <a href="/leads/detail/<?= $lead->getId();?>">
         <li class="tab <?= str_contains($currentTab, 'detail') ? 'active' : '' ?>" id="tab-detail" onclick="showTab('detail')">Detail</li>
@@ -19,5 +16,8 @@
     </a>
     <a href="/leads/quotations/<?= $lead->getId();?>">
         <li class="tab <?= str_contains($currentTab, 'quotations') ? 'active' : '' ?>" id="tab-quotation" onclick="showTab('quotation')">Quotations</li>
+    </a>
+    <a href="/leads/documents/<?= $lead->getId();?>">
+        <li class="tab <?= str_contains($currentTab, 'documents') ? 'active' : '' ?>" id="tab-document" onclick="showTab('document')">Documents</li>
     </a>
 </ul>

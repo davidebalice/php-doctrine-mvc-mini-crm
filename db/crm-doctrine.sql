@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Mar 25, 2025 alle 11:26
+-- Creato il: Mar 28, 2025 alle 18:26
 -- Versione del server: 10.4.27-MariaDB
 -- Versione PHP: 8.2.0
 
@@ -52,11 +52,19 @@ INSERT INTO `calls` (`id`, `notes`, `call_time`, `status`, `lead_id`) VALUES
 
 CREATE TABLE `documents` (
   `id` int(11) NOT NULL,
+  `title` varchar(220) NOT NULL,
   `filename` varchar(255) NOT NULL,
-  `path` varchar(255) NOT NULL,
+  `path` varchar(255) DEFAULT NULL,
   `uploaded_at` datetime NOT NULL,
   `lead_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dump dei dati per la tabella `documents`
+--
+
+INSERT INTO `documents` (`id`, `title`, `filename`, `path`, `uploaded_at`, `lead_id`) VALUES
+(8, '54aa3709', '1_54aa3709.png', NULL, '2025-03-28 18:04:35', 1);
 
 -- --------------------------------------------------------
 
@@ -68,6 +76,7 @@ CREATE TABLE `history` (
   `id` int(11) NOT NULL,
   `created_at` datetime NOT NULL,
   `event` text NOT NULL,
+  `type` varchar(20) NOT NULL,
   `lead_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -75,8 +84,8 @@ CREATE TABLE `history` (
 -- Dump dei dati per la tabella `history`
 --
 
-INSERT INTO `history` (`id`, `created_at`, `event`, `lead_id`) VALUES
-(1, '2025-03-22 14:37:47', 'Added calls', 1);
+INSERT INTO `history` (`id`, `created_at`, `event`, `type`, `lead_id`) VALUES
+(1, '2025-03-22 14:37:47', 'Added calls', '', 1);
 
 -- --------------------------------------------------------
 
@@ -116,6 +125,26 @@ INSERT INTO `leads` (`id`, `first_name`, `last_name`, `email`, `phone`, `city`, 
 -- --------------------------------------------------------
 
 --
+-- Struttura della tabella `notes`
+--
+
+CREATE TABLE `notes` (
+  `id` int(11) NOT NULL,
+  `content` varchar(255) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `lead_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dump dei dati per la tabella `notes`
+--
+
+INSERT INTO `notes` (`id`, `content`, `created_at`, `lead_id`) VALUES
+(1, 'sdfsdfewrfefwefwef\r\nterter\r\ntert', '2025-06-27 10:41:00', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Struttura della tabella `quotations`
 --
 
@@ -134,7 +163,8 @@ CREATE TABLE `quotations` (
 --
 
 INSERT INTO `quotations` (`id`, `lead_id`, `code`, `title`, `status`, `created_at`, `updated_at`) VALUES
-(1, 1, '42564256', 'wqrthrtj', 'Completed', '2025-03-06 11:12:43', '2025-03-25 11:26:31');
+(1, 1, 'bbbbbbbbbbb', 'aaaaaaaaaaaa', 'Approved', '2025-03-06 11:12:43', '2025-03-26 20:36:54'),
+(5, 1, 'wefwef', 'wefwefe', 'Pending', '2025-03-26 20:13:11', NULL);
 
 -- --------------------------------------------------------
 
@@ -157,7 +187,9 @@ CREATE TABLE `quotation_items` (
 --
 
 INSERT INTO `quotation_items` (`id`, `quotation_id`, `service_name`, `description`, `price`, `quantity`) VALUES
-(1, 1, 'aergeregerger', 'etyteykjetyetyjtyjtyjtyjetyj', '100.00', 1);
+(3, 5, 'wefwef', 'wefewf', '3232.00', 1),
+(7, 1, '1111111111', '222222222', '300.00', 1),
+(8, 1, '3333333333333', '44444444', '566.00', 1);
 
 -- --------------------------------------------------------
 
@@ -293,6 +325,13 @@ ALTER TABLE `leads`
   ADD KEY `source_id` (`source_id`);
 
 --
+-- Indici per le tabelle `notes`
+--
+ALTER TABLE `notes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `lead_id` (`lead_id`);
+
+--
 -- Indici per le tabelle `quotations`
 --
 ALTER TABLE `quotations`
@@ -346,7 +385,7 @@ ALTER TABLE `calls`
 -- AUTO_INCREMENT per la tabella `documents`
 --
 ALTER TABLE `documents`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT per la tabella `history`
@@ -361,16 +400,22 @@ ALTER TABLE `leads`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT per la tabella `notes`
+--
+ALTER TABLE `notes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT per la tabella `quotations`
 --
 ALTER TABLE `quotations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT per la tabella `quotation_items`
 --
 ALTER TABLE `quotation_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT per la tabella `sources`
@@ -417,6 +462,12 @@ ALTER TABLE `documents`
 --
 ALTER TABLE `history`
   ADD CONSTRAINT `history_ibfk_1` FOREIGN KEY (`lead_id`) REFERENCES `leads` (`id`);
+
+--
+-- Limiti per la tabella `notes`
+--
+ALTER TABLE `notes`
+  ADD CONSTRAINT `notes_ibfk_1` FOREIGN KEY (`lead_id`) REFERENCES `leads` (`id`);
 
 --
 -- Limiti per la tabella `quotations`

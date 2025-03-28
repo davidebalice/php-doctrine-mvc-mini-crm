@@ -19,6 +19,9 @@ class History
     #[ORM\Column(type: 'text')]
     private string $event;
 
+    #[ORM\Column(type: 'text')]
+    private string $type;
+
     #[ORM\ManyToOne(targetEntity: Lead::class, inversedBy: 'histories')]
     #[ORM\JoinColumn(name: 'lead_id', referencedColumnName: 'id')]
     private Lead $lead;
@@ -51,6 +54,15 @@ class History
     public function setEvent(string $event): void
     {
         $this->event = $event;
+    }
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): void
+    {
+        $this->type = $type;
     }
 
     public function getLead(): Lead

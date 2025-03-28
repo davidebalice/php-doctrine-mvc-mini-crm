@@ -10,6 +10,7 @@ use FastRoute\RouteCollector;
 use FastRoute\Dispatcher;
 use App\Middlewares\AuthMiddleware;
 use Symfony\Component\HttpFoundation\Request;
+use App\Services\HistoryService;
 
 // Ottieni il metodo HTTP e l'URI della richiesta
 $httpMethod = $_SERVER['REQUEST_METHOD'];
@@ -103,6 +104,22 @@ switch ($routeInfo[0]) {
             'leads_tasks_update' => ['App\\Controllers\\TasksController', 'update', true],
             'leads_tasks_delete' => ['App\\Controllers\\TasksController', 'delete', true],
 
+            //documents
+            'leads_documents' => ['App\\Controllers\\DocumentsController', 'documents', true],
+            'leads_documents_store' => ['App\\Controllers\\DocumentsController', 'store', true],
+            'leads_documents_edit' => ['App\\Controllers\\DocumentsController', 'edit', true],
+            'leads_documents_detail' => ['App\\Controllers\\DocumentsController', 'detail', true],
+            'leads_documents_update' => ['App\\Controllers\\DocumentsController', 'update', true],
+            'leads_documents_delete' => ['App\\Controllers\\DocumentsController', 'delete', true],
+
+            //notes
+            'leads_notes' => ['App\\Controllers\\NotesController', 'notes', true],
+            'leads_notes_store' => ['App\\Controllers\\NotesController', 'store', true],
+            'leads_notes_edit' => ['App\\Controllers\\NotesController', 'edit', true],
+            'leads_notes_detail' => ['App\\Controllers\\NotesController', 'detail', true],
+            'leads_notes_update' => ['App\\Controllers\\NotesController', 'update', true],
+            'leads_notes_delete' => ['App\\Controllers\\NotesController', 'delete', true],
+
         ];
         
         if (isset($routesMap[$handler])) {
@@ -119,7 +136,11 @@ switch ($routeInfo[0]) {
             $request = Request::createFromGlobals(); // Crea l'oggetto Request
         
             // Controlla se il metodo del controller richiede l'oggetto Request
-            $controllerInstance = new $controller($entityManager);
+            $historyService = new HistoryService($entityManager);
+       
+            // Crea l'istanza del controller con entityManager e historyService
+            $controllerInstance = new $controller($entityManager, $historyService);
+
             $methodParams = (new ReflectionMethod($controllerInstance, $method))->getParameters();
         
             if (!empty($methodParams) && $methodParams[0]->getType() && $methodParams[0]->getType()->getName() === Request::class) {

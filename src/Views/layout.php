@@ -14,11 +14,9 @@
     <!-- Header -->
     <header>
         <img src="/images/logo.png" alt="Logo" class="dbLogo">
-        <nav>
-        <a href="/">Home</a>
-        <a href="/dashboard">Dashboard</a>
-        <a href="/logout">Logout</a>
-        </nav>
+        <span>
+            Mini Crm - PHP custom Framework
+        </span>
         <img src="/images/github.png" alt="Logo" class="githubLogo">
     </header>
 
@@ -29,7 +27,7 @@
                 include __DIR__ . '/admin/siderbar.php';
             }
         ?>
-        <?php include $content; ?>  <!-- Qui viene inserito il contenuto dinamico -->
+        <?php include $content; ?>
     </main>
 
     <!-- Footer -->

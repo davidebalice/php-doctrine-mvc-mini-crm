@@ -3,12 +3,9 @@
 namespace App\Controllers;
 
 use App\Entity\Lead;
-use App\Entity\Source;
-use App\Entity\Status;
 use App\Entity\History;
 use App\Entity\Quotation;
 use App\Entity\QuotationItem;
-use App\Entity\Note;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\Tools\Pagination\Paginator;

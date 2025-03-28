@@ -14,6 +14,9 @@ class Document
     private int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    private string $title;
+
+    #[ORM\Column(type: 'string', length: 255)]
     private string $filename;
 
     #[ORM\Column(type: 'string', length: 255)]
@@ -36,6 +39,16 @@ class Document
         return $this->id;
     }
 
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): void
+    {
+        $this->title = $title;
+    }
+    
     public function getFilename(): string
     {
         return $this->filename;

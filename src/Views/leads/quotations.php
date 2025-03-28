@@ -3,7 +3,7 @@
         <div class="page-header-container">
             <div class="page-wrapper">
                 <i class="fa fa-address-card" aria-hidden="true" style="font-size:22px"></i>
-                <h1>Lead details  -> Quotations</h1>
+                <h1>Lead > Quotations</h1>
             </div>
         </div>
     </div>
@@ -14,6 +14,9 @@
                 <span>Back</span>
             </div>
         </a>
+        <?php
+            include('selected_lead.php');
+        ?>
     </div>
 
     <div class="page-body">

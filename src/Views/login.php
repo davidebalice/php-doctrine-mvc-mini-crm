@@ -1,5 +1,7 @@
 
-    <form method="POST" action="/login" class="login-form">
+<div class="homepage">
+   <form method="POST" action="/login" class="login-form">
+        <img src="/images/logo.png" alt="Logo" class="dbLogo-login">
         <label>Email:</label>
         <input type="email" name="email" placeholder="email" required>
         <label>Password:</label>
@@ -13,3 +15,4 @@
             12345678
         </div>
     </form>
+</div>

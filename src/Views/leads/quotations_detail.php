@@ -14,6 +14,9 @@
                 <span>Back</span>
             </div>
         </a>
+        <?php
+            include('selected_lead.php');
+        ?>
     </div>
     <div class="page-body">
         <div class="tabs-container">
@@ -103,6 +106,6 @@
 
 
             
-                </div>
-            </div>
         </div>
+    </div>
+</div>

@@ -3,7 +3,7 @@
         <div class="page-header-container">
             <div class="page-wrapper">
                 <i class="fa fa-address-card" aria-hidden="true" style="font-size:22px"></i>
-                <h1>Lead > Calls</h1>
+                <h1>Lead > Notes</h1>
             </div>
         </div>
     </div>
@@ -22,42 +22,28 @@
     <div class="page-body">
         <div class="tabs-container">
             <?php
-                $currentTab="calls";
+                $currentTab="notes";
                 include('menu.php');
             ?>
 
             <div class="tab-content" id="content-detail">
-                <h2>Calls</h2>
+                <h2>Notes</h2>
 
-                <div class="button add-button" id="addCallBtn">
+                <div class="button add-button" id="addNoteBtn">
                     <i class="fa fa-plus" aria-hidden="true"></i>
-                    <span>Add call</span>
+                    <span>Add note</span>
                 </div>
          
                 <!-- Modal di aggiunta -->
-                <div id="addCallForm" class="modal">
+                <div id="addNoteForm" class="modal">
                     <div class="modal-content">
                         <div class="flex-between">
-                            <h3>Add Call</h3>
+                            <h3>Add Note</h3>
                             <span class="close flex-center" id="closeAddForm">&times;</span>
                         </div>
-                        <form id="addCall" action="/leads/calls/store" class="form-modal" method="POST">
-                            <label for="call_time">Date / hour:</label>
-                            <input type="datetime-local" id="call_time" name="call_time" required>
-
-                            <label for="status">Status:</label>
-                            <select id="status" name="status" required>
-                                <option value="">- Select status -</option>
-                                <option value="Canceled">Canceled</option>
-                                <option value="Completed">Completed</option>
-                                <option value="No answer">No answer</option>
-                                <option value="Pending">Pending</option>
-                                <option value="Rescheduled">Rescheduled</option>
-                                <option value="Voicemail left">Voicemail left</option>
-                            </select>
-
-                            <label for="notes">Note:</label>
-                            <textarea id="notes" name="notes" required></textarea>
+                        <form id="addNote" action="/leads/notes/store" class="form-modal" method="POST">
+                            <label for="content">Note:</label>
+                            <textarea id="content" name="content" required></textarea>
                             <input type="hidden" id="lead_id" name="lead_id" value="<? echo $lead->getId();?>" required>
                             <button type="submit" class="w100">Add</button>
                         </form>
@@ -65,32 +51,19 @@
                 </div>
 
                 <!-- Modal di modifica -->
-                <div id="editCallModal" class="modal">
+                <div id="editNoteModal" class="modal">
                     <div class="modal-content">
                         <div class="flex-between">
-                            <h3>Edit Call</h3>
+                            <h3>Edit note</h3>
                             <span class="close flex-center" id="closeEditForm">&times;</span>
                         </div>
 
-                        <form id="editCall" action="/leads/calls/update" class="form-modal" method="POST">
+                        <form id="editNote" action="/leads/notes/update" class="form-modal" method="POST">
                             <input type="hidden" id="edit_lead_id" name="lead_id" value="<?= $lead->getId();?>" required>
-                            <input type="hidden" id="edit_id" name="call_id" required>
-                            <label for="edit_call_time">Date / time:</label>
-                            <input type="datetime-local" id="edit_call_time" name="call_time" required>
+                            <input type="hidden" id="edit_id" name="note_id" required>
 
-                            <label for="call_time">Status:</label>
-                            <select name="status" id="edit_status" required>
-                                <option value="">- Select status -</option>
-                                <option value="Canceled">Canceled</option>
-                                <option value="Completed">Completed</option>
-                                <option value="No answer">No answer</option>
-                                <option value="Pending">Pending</option>
-                                <option value="Rescheduled">Rescheduled</option>
-                                <option value="Voicemail left">Voicemail left</option>
-                            </select>
-
-                            <label for="edit_notes">Note:</label>
-                            <textarea id="edit_notes" name="notes" required></textarea>
+                            <label for="edit_content">Note:</label>
+                            <textarea id="edit_content" name="content" required></textarea>
 
                             <button type="submit" class="w100">Save</button>
                         </form>
@@ -98,14 +71,14 @@
                 </div>
 
                 <!-- Modal visualizzazione dettagli -->
-                <div id="viewCallModal" class="modal">
+                <div id="viewNoteModal" class="modal">
                     <div class="modal-content modal-detail">
                         <div class="flex-between">
-                            <h3>Call Details</h3>
+                            <h3>Note details</h3>
                             <span class="close flex-center" id="closeViewForm">&times;</span>
                         </div>
 
-                        <div id="callDetailsContainer">
+                        <div id="noteDetailsContainer">
                             <!-- Dettagli verranno caricati qui -->
                         </div>
                     </div>
@@ -131,37 +104,37 @@
                         </div>
                     </div>
                 </div>
-
-                <?php if (isset($calls) && count($calls) > 0): ?>
+           
+                <?php if (isset($notes) && count($notes) > 0): ?>
                     <div class="table-wrapper">
                         <table>
                             <thead>
                                 <tr>
                                     <th style="width:10%">Date</th>
-                                    <th style="width:40%">Note</th>
-                                    <th style="width:40%">Status</th>
+                                    <th style="width:60%">Note</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($calls as $call): ?>
+                                <?php foreach ($notes as $note): ?>
                                     <tr>
-                                        <td><?= $call->getCallTime()->format('d/m/Y H:i') ?></td>
-                                        <td><?= $call->getShortNotes() ?></td>
-                                        <td><?= $call->getStatus() ?></td>
+                                        <td>
+                                            <?= $note->getCreatedAt()->format('d/m/Y') ?>
+                                        </td>
+                                        <td><?= $note->getShortContent() ?></td>
                                         <td>
                                             <div class="buttons-container">
                                                 <div>
-                                                    <button class="viewBtn base-button view-button" data-id="<?= $call->getId(); ?>">
+                                                    <button class="viewBtn base-button view-button" data-id="<?= $note->getId(); ?>">
                                                         <i class="fa-solid fa-eye"></i>
                                                     </button>
                                                 </div>
                                                 <div>
-                                                    <button class="editBtn base-button edit-button" data-id="<?= $call->getId(); ?>">
+                                                    <button class="editBtn base-button edit-button" data-id="<?= $note->getId(); ?>">
                                                         <i class="fa-solid fa-pen-to-square"></i>
                                                     </button>
                                                 </div>
-                                                <div class="flex-center base-button delete-button"  onclick="confirmDelete(<?php echo $call->getId(); ?>,<?php echo $lead->getId(); ?>)">
+                                                <div class="flex-center base-button delete-button"  onclick="confirmDelete(<?php echo $note->getId(); ?>,<?php echo $lead->getId(); ?>)">
                                                     <i class="fa-solid fa-trash"></i>
                                                 </div>
                                             </div>
@@ -198,7 +171,7 @@
 
                 <?php else: ?>
                     <br />
-                    <b>Calls not found</b>
+                    <b>Notes not found</b>
                 <?php endif; ?>
             
             </div>
@@ -225,7 +198,7 @@
             let confirmBtn = document.getElementById('confirmDeleteBtn');
             
             // Imposta l'azione di cancellazione sul bottone di conferma
-            confirmBtn.href = '/leads/calls/'+lead_id+'/delete/' + id;
+            confirmBtn.href = '/leads/notes/'+lead_id+'/delete/' + id;
             modal.style.display = 'flex';
         }
     }
@@ -235,7 +208,7 @@
     }
 
     // Aggiungi l'event listener per il submit del form
-    document.getElementById("editCall").addEventListener("submit", function(event){
+    document.getElementById("editNote").addEventListener("submit", function(event){
         event.preventDefault(); // Blocca l'invio del form
 
         if (demoMode) {
@@ -252,18 +225,18 @@
         }
     });
 
-    // Apre il modulo di aggiunta call
-    document.getElementById("addCallBtn").addEventListener("click", function() {
-        document.getElementById("addCallForm").style.display = "flex";
+    // Apre il modulo di aggiunta note
+    document.getElementById("addNoteBtn").addEventListener("click", function() {
+        document.getElementById("addNoteForm").style.display = "flex";
     });
 
     // Chiude il modulo di aggiunta
     document.getElementById("closeAddForm").addEventListener("click", function() {
-        document.getElementById("addCallForm").style.display = "none";
+        document.getElementById("addNoteForm").style.display = "none";
     });
 
     // Aggiungi validazione (come nel codice esistente) se necessario
-    document.getElementById("addCall").addEventListener("submit", function(event){
+    document.getElementById("addNote").addEventListener("submit", function(event){
         let isValid = true;
         let errorMessage = "";
         
@@ -285,26 +258,20 @@
     // Apre modal di modifica e recupera i dati
     document.querySelectorAll(".editBtn").forEach(button => {
             button.addEventListener("click", function() {
-            const callId = this.getAttribute("data-id");
+            const noteId = this.getAttribute("data-id");
 
             // Effettua la richiesta per ottenere i dati della chiamata
-            fetch(`/leads/calls/edit/${callId}`)
+            fetch(`/leads/notes/edit/${noteId}`)
                 .then(response => response.json())
                 .then(data => {
 
-                    const callTime = data.call_time.date.replace(" ", "T").slice(0, 16);
-
                     // Popola il form con i dati ricevuti
                     document.getElementById("edit_id").value = data.id;
-                    document.getElementById("edit_call_time").value = callTime;
-                    document.getElementById("edit_notes").value = data.notes;
-                    document.getElementById("edit_id").value = callId;
+                    document.getElementById("edit_content").value = data.content;
+                    document.getElementById("edit_id").value = noteId;
                     
-                    // Seleziona lo stato corretto
-                    document.getElementById("edit_status").value = data.status;
-
                     // Mostra la modale
-                    document.getElementById("editCallModal").style.display = "flex";
+                    document.getElementById("editNoteModal").style.display = "flex";
                 })
                 .catch(error => {
                     console.error("Errore nel recupero della chiamata:", error);
@@ -315,40 +282,30 @@
 
     // Funzione per chiudere la modal di modifica
     document.getElementById("closeEditForm").addEventListener("click", function() {
-        document.getElementById("editCallModal").style.display = "none";
+        document.getElementById("editNoteModal").style.display = "none";
     });
 
     // Apre la modal di visualizzazione e recupera i dati
     document.querySelectorAll(".viewBtn").forEach(button => {
         button.addEventListener("click", function() {
-            const callId = this.getAttribute("data-id");
+            const noteId = this.getAttribute("data-id");
 
             // Effettua la richiesta per ottenere i dettagli della chiamata
-            fetch(`/leads/calls/detail/${callId}`)
+            fetch(`/leads/notes/detail/${noteId}`)
                 .then(response => response.json())
                 .then(data => {
                     // Popola il contenuto della modal con i dettagli
-                    const callTime = new Date(data.call_time.date.replace(" ", "T")).toLocaleString('it-IT', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                    });
-                    const status = data.status;
-                    const notes = data.notes;
+                    const content = data.content;
 
-                    const callDetailsHTML = `
-                        <p><strong>Date/time:</strong> ${callTime}</p>
-                        <p><strong>Status:</strong> ${status}</p>
-                        <p><strong>Notes:</strong> <div class=\"notes\">${notes}</div></p>
+                    const noteDetailsHTML = `
+                        <p><strong>Note:</strong> <div class=\"notes\">${content}</div></p>
                     `;
 
                     // Inserisce i dettagli nella modal
-                    document.getElementById("callDetailsContainer").innerHTML = callDetailsHTML;
+                    document.getElementById("noteDetailsContainer").innerHTML = noteDetailsHTML;
 
                     // Mostra la modal
-                    document.getElementById("viewCallModal").style.display = "flex";
+                    document.getElementById("viewNoteModal").style.display = "flex";
                 })
                 .catch(error => {
                     console.error("Errore nel recupero dei dettagli della chiamata:", error);
@@ -359,7 +316,7 @@
 
     // Funzione per chiudere la modal di visualizzazione
     document.getElementById("closeViewForm").addEventListener("click", function() {
-        document.getElementById("viewCallModal").style.display = "none";
+        document.getElementById("viewNoteModal").style.display = "none";
     });
 
 </script>

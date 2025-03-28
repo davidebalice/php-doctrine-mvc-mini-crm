@@ -3,22 +3,22 @@
 namespace App\Controllers;
 
 use App\Entity\Lead;
-use App\Entity\Source;
-use App\Entity\Status;
 use App\Entity\History;
-use App\Entity\Quotation;
-use App\Entity\Note;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-class QuotationsController extends RenderController
+use App\Service\HistoryService;
+
+class HistorysController extends RenderController
 {
     private $entityManager;
-    
-    public function __construct(EntityManagerInterface $entityManager)
+    private $historyService;
+
+    public function __construct(EntityManagerInterface $entityManager, HistoryService $historyService)
     {
         $this->entityManager = $entityManager;
-        parent::__construct($entityManager);
+        $this->historyService = $historyService;
+        parent::__construct($entityManager,$historyService);
     }
 
     //metodo per inviare risposta in json
@@ -29,8 +29,8 @@ class QuotationsController extends RenderController
         exit;
     }
 
-    // Ottieni tutti i preventivi legati al lead
-    public function quotations($id)
+    // Ottieni tutti i histories
+    public function histories($id)
     {
         // Verifica che l'ID sia valido
         $leadId = filter_var($id, FILTER_VALIDATE_INT);
@@ -55,7 +55,7 @@ class QuotationsController extends RenderController
         $search = htmlspecialchars($search, ENT_QUOTES, 'UTF-8');
 
         // Query per ottenere le chiamate del lead specifico
-        $queryBuilder = $this->entityManager->getRepository(Quotation::class)->createQueryBuilder('c')
+        $queryBuilder = $this->entityManager->getRepository(History::class)->createQueryBuilder('c')
             ->where('c.lead = :lead')
             ->setParameter('lead', $lead);
 
@@ -77,25 +77,25 @@ class QuotationsController extends RenderController
         $totalPages = ceil($totalItems / $limit);
 
         $data = [
-            'title' => 'Quotations',
-            'description' => 'View quotations of lead',
+            'title' => 'Historys',
+            'description' => 'View histories of lead',
             'lead' => $lead,
-            'quotations' => $paginator,
+            'histories' => $paginator,
             'currentPage' => $page,
             'totalPages' => $totalPages,
             'search' => $search
         ];
 
-        $this->render('/leads/quotations', $data);
+        $this->render('/leads/histories', $data);
     }
 
     public function detail($id) {
-        $quotation = $this->entityManager->getRepository(Quotation::class)->find($id);
+        $history = $this->entityManager->getRepository(History::class)->find($id);
 
         $data = [
-            'due_date' => $quotation->getDueDate(),
-            'status' => $quotation->getStatus(),
-            'description' => $quotation->getDescription(),
+            'due_date' => $history->getDueDate(),
+            'status' => $history->getStatus(),
+            'description' => $history->getDescription(),
         ];
 
         return $this->jsonResponse($data);
@@ -106,7 +106,7 @@ class QuotationsController extends RenderController
 
         if (DEMO_MODE) {
             echo "<script>alert('Demo mode: crud operations not allowed'); 
-            window.location.href='/leads/quotations/$lead_id';</script>";
+            window.location.href='/leads/histories/$lead_id';</script>";
             exit();
         }
 
@@ -137,27 +137,29 @@ class QuotationsController extends RenderController
         }
 
         // Crea un nuovo Lead e imposta i dati
-        $quotation = new Quotation();
+        $history = new History();
         $due_date = new \DateTime($due_date);
-        $quotation->setDueDate($due_date);
-        $quotation->setStatus($status);
-        $quotation->setDescription($description);
-        $quotation->setLead($lead);
+        $history->setDueDate($due_date);
+        $history->setStatus($status);
+        $history->setDescription($description);
+        $history->setLead($lead);
 
-        $this->entityManager->persist($quotation);
+        $this->entityManager->persist($history);
         $this->entityManager->flush();
 
-        header('Location: /leads/quotations/'.$lead_id);
+        $this->historyService->logAction('Create new history', 'History');
+
+        header('Location: /leads/histories/'.$lead_id);
         exit();
     }
 
     public function edit($id) {
-        $quotation = $this->entityManager->getRepository(Quotation::class)->find($id);
+        $history = $this->entityManager->getRepository(History::class)->find($id);
 
         $data = [
-            'due_date' => $quotation->getDueDate(),
-            'status' => $quotation->getStatus(),
-            'description' => $quotation->getDescription(),
+            'due_date' => $history->getDueDate(),
+            'status' => $history->getStatus(),
+            'description' => $history->getDescription(),
         ];
 
         return $this->jsonResponse($data);
@@ -171,13 +173,13 @@ class QuotationsController extends RenderController
             exit();
         }
 
-        $id = $request->request->get('quotation_id');
+        $id = $request->request->get('history_id');
         $id = (int) $id; // Conversione sicura a intero
 
-        $quotation = $this->entityManager->getRepository(Quotation::class)->find($id);
+        $history = $this->entityManager->getRepository(History::class)->find($id);
 
-        if (!$quotation) {
-            die('quotation non found');
+        if (!$history) {
+            die('history non found');
         }
 
         // Recupero e sanificazione dei dati inviati dal form
@@ -196,19 +198,19 @@ class QuotationsController extends RenderController
         // Verifica se i campi obbligatori sono vuoti
         if (empty($due_date) || empty($status) || empty($description) ) {
             $_SESSION['error'] = "All fields are mandatory";
-            header('Location: /leads/quotations/'.$lead_id);
+            header('Location: /leads/histories/'.$lead_id);
             exit();
         }
 
         $due_date = new \DateTime($due_date);
-        $quotation->setDueDate($due_date);
-        $quotation->setStatus($status);
-        $quotation->setDescription($description);
+        $history->setDueDate($due_date);
+        $history->setStatus($status);
+        $history->setDescription($description);
       
 
         $this->entityManager->flush();
 
-        header('Location: /leads/quotations/'.$lead_id);
+        header('Location: /leads/histories/'.$lead_id);
         exit();
     }
 
@@ -216,18 +218,18 @@ class QuotationsController extends RenderController
     {
         if (DEMO_MODE) {
             echo "<script>alert('Demo mode: crud operations not allowed'); 
-            window.location.href='/leads/quotations/$lead_id';</script>";
+            window.location.href='/leads/histories/$lead_id';</script>";
             exit();
         }
 
-        $quotation = $this->entityManager->getRepository(Quotation::class)->find($id);
+        $history = $this->entityManager->getRepository(History::class)->find($id);
     
-        if ($quotation) {
-            $this->entityManager->remove($quotation);
+        if ($history) {
+            $this->entityManager->remove($history);
             $this->entityManager->flush();
         }
     
-        header('Location: /leads/quotations/'.$lead_id);
+        header('Location: /leads/histories/'.$lead_id);
         exit();
     }
 }

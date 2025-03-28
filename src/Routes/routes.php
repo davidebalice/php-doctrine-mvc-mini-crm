@@ -26,7 +26,6 @@ function defineRoutes(RouteCollector $r) {
     $r->addRoute('POST', '/leads/update', 'leads_update');
     $r->addRoute('GET', '/leads/delete/{id:\d+}', 'leads_delete');
     $r->addRoute('GET', '/leads/history/{id:\d+}', 'leads_history');
-    $r->addRoute('GET', '/leads/notes/{id:\d+}', 'leads_notes');
 
     //Leads quotations
     $r->addRoute('GET', '/leads/quotations/{id:\d+}', 'leads_quotations');
@@ -61,6 +60,22 @@ function defineRoutes(RouteCollector $r) {
     $r->addRoute('GET', '/leads/tasks/detail/{id:\d+}', 'leads_tasks_detail');
     $r->addRoute('POST', '/leads/tasks/update', 'leads_tasks_update');
     $r->addRoute('GET', '/leads/tasks/{lead_id:\d+}/delete/{id:\d+}', 'leads_tasks_delete');
+
+    //Documents
+    $r->addRoute('GET', '/leads/documents/{id:\d+}', 'leads_documents');
+    $r->addRoute('POST', '/leads/documents/store', 'leads_documents_store');
+    $r->addRoute('GET', '/leads/documents/edit/{id:\d+}', 'leads_documents_edit');
+    $r->addRoute('GET', '/leads/documents/detail/{id:\d+}', 'leads_documents_detail');
+    $r->addRoute('POST', '/leads/documents/update', 'leads_documents_update');
+    $r->addRoute('GET', '/leads/documents/{lead_id:\d+}/delete/{id:\d+}', 'leads_documents_delete');
+
+    //Notes
+    $r->addRoute('GET', '/leads/notes/{id:\d+}', 'leads_notes');
+    $r->addRoute('POST', '/leads/notes/store', 'leads_notes_store');
+    $r->addRoute('GET', '/leads/notes/edit/{id:\d+}', 'leads_notes_edit');
+    $r->addRoute('GET', '/leads/notes/detail/{id:\d+}', 'leads_notes_detail');
+    $r->addRoute('POST', '/leads/notes/update', 'leads_notes_update');
+    $r->addRoute('GET', '/leads/notes/{lead_id:\d+}/delete/{id:\d+}', 'leads_notes_delete');
 
     //Sources
     $r->addRoute('GET', '/sources', 'sources');

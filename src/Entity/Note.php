@@ -19,7 +19,7 @@ class Note
     #[ORM\Column(type: 'datetime')]
     private \DateTime $created_at;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "notes")]
+    #[ORM\ManyToOne(targetEntity: Lead::class, inversedBy: "notes")]
     #[ORM\JoinColumn(name: "lead_id", referencedColumnName: "id")]
     private Lead $lead;
 
@@ -36,6 +36,11 @@ class Note
     public function getContent(): string
     {
         return $this->content;
+    }
+
+    public function getShortContent(int $length = 70): string
+    {
+        return strlen($this->content) > $length ? substr($this->content, 0, $length) . '...' : $this->content;
     }
 
     public function setContent(string $content): void

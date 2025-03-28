@@ -4,22 +4,18 @@ namespace App\Controllers;
 
 use App\Entity\Lead;
 use App\Entity\History;
-use App\Entity\Task;
+use App\Entity\Note;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use App\Services\HistoryService;
-
-class TasksController extends RenderController
+class NotesController extends RenderController
 {
     private $entityManager;
-    private $historyService;
-
-    public function __construct(EntityManagerInterface $entityManager, HistoryService $historyService)
+    
+    public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
-        $this->historyService = $historyService;
-        parent::__construct($entityManager,$historyService);
+        parent::__construct($entityManager);
     }
 
     //metodo per inviare risposta in json
@@ -30,8 +26,8 @@ class TasksController extends RenderController
         exit;
     }
 
-    // Ottieni tutti i tasks
-    public function tasks($id)
+    // Ottieni tutti i notes
+    public function notes($id)
     {
         // Verifica che l'ID sia valido
         $leadId = filter_var($id, FILTER_VALIDATE_INT);
@@ -56,7 +52,7 @@ class TasksController extends RenderController
         $search = htmlspecialchars($search, ENT_QUOTES, 'UTF-8');
 
         // Query per ottenere le chiamate del lead specifico
-        $queryBuilder = $this->entityManager->getRepository(Task::class)->createQueryBuilder('c')
+        $queryBuilder = $this->entityManager->getRepository(Note::class)->createQueryBuilder('c')
             ->where('c.lead = :lead')
             ->setParameter('lead', $lead);
 
@@ -68,7 +64,7 @@ class TasksController extends RenderController
         */
 
         $query = $queryBuilder
-            ->orderBy('c.due_date', 'DESC')
+            ->orderBy('c.created_at', 'DESC')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->getQuery();
@@ -78,25 +74,24 @@ class TasksController extends RenderController
         $totalPages = ceil($totalItems / $limit);
 
         $data = [
-            'title' => 'Tasks',
-            'description' => 'View tasks of lead',
+            'title' => 'Notes',
+            'description' => 'View notes of lead',
             'lead' => $lead,
-            'tasks' => $paginator,
+            'notes' => $paginator,
             'currentPage' => $page,
             'totalPages' => $totalPages,
             'search' => $search
         ];
 
-        $this->render('/leads/tasks', $data);
+        $this->render('/leads/notes', $data);
     }
 
     public function detail($id) {
-        $task = $this->entityManager->getRepository(Task::class)->find($id);
+        $note = $this->entityManager->getRepository(Note::class)->find($id);
 
         $data = [
-            'due_date' => $task->getDueDate(),
-            'status' => $task->getStatus(),
-            'description' => $task->getDescription(),
+            'created_at' => $note->getCreatedAt(),
+            'content' => $note->getContent(),
         ];
 
         return $this->jsonResponse($data);
@@ -107,14 +102,12 @@ class TasksController extends RenderController
 
         if (DEMO_MODE) {
             echo "<script>alert('Demo mode: crud operations not allowed'); 
-            window.location.href='/leads/tasks/$lead_id';</script>";
+            window.location.href='/leads/notes/$lead_id';</script>";
             exit();
         }
 
         // Recupero e sanificazione dei dati inviati dal form
-        $due_date = trim($request->request->get('due_date', ''));
-        $status = trim($request->request->get('status', ''));
-        $description = trim($request->request->get('description', ''));
+        $content = trim($request->request->get('content', ''));
         $lead_id = trim($request->request->get('lead_id', ''));
 
 
@@ -126,41 +119,34 @@ class TasksController extends RenderController
         }
         
         // Sanificazione dei dati
-        $due_date = htmlspecialchars($due_date, ENT_QUOTES, 'UTF-8');
-        $status = htmlspecialchars($status, ENT_QUOTES, 'UTF-8');
-        $description = htmlspecialchars($description, ENT_QUOTES, 'UTF-8');
+        $content = htmlspecialchars($content, ENT_QUOTES, 'UTF-8');
 
         // Verifica se i campi obbligatori sono vuoti
-        if (empty($due_date) || empty($description) || empty($status)) {
+        if (empty($content)) {
             $_SESSION['error'] = "All fields are mandatory";
-            header('Location: /leads');
+            header('Location: /leads/notes/'.$lead_id);
             exit();
         }
 
         // Crea un nuovo Lead e imposta i dati
-        $task = new Task();
-        $due_date = new \DateTime($due_date);
-        $task->setDueDate($due_date);
-        $task->setStatus($status);
-        $task->setDescription($description);
-        $task->setLead($lead);
+        $note = new Note();
+        $created_at = new \DateTime();
+        $note->setCreatedAt($created_at);
+        $note->setContent($content);
+        $note->setLead($lead);
 
-        $this->entityManager->persist($task);
+        $this->entityManager->persist($note);
         $this->entityManager->flush();
 
-        $this->historyService->logAction('Create new task', 'Task');
-
-        header('Location: /leads/tasks/'.$lead_id);
+        header('Location: /leads/notes/'.$lead_id);
         exit();
     }
 
     public function edit($id) {
-        $task = $this->entityManager->getRepository(Task::class)->find($id);
+        $note = $this->entityManager->getRepository(Note::class)->find($id);
 
         $data = [
-            'due_date' => $task->getDueDate(),
-            'status' => $task->getStatus(),
-            'description' => $task->getDescription(),
+            'content' => $note->getContent(),
         ];
 
         return $this->jsonResponse($data);
@@ -174,44 +160,36 @@ class TasksController extends RenderController
             exit();
         }
 
-        $id = $request->request->get('task_id');
+        $id = $request->request->get('note_id');
         $id = (int) $id; // Conversione sicura a intero
 
-        $task = $this->entityManager->getRepository(Task::class)->find($id);
+        $note = $this->entityManager->getRepository(Note::class)->find($id);
 
-        if (!$task) {
-            die('task non found');
+        if (!$note) {
+            die('note non found');
         }
 
         // Recupero e sanificazione dei dati inviati dal form
-        $due_date = trim($request->request->get('due_date', ''));
-        $status = trim($request->request->get('status', ''));
-        $description = trim($request->request->get('description', ''));
+        $content = trim($request->request->get('content', ''));
         $lead_id = trim($request->request->get('lead_id', ''));
   
         
         // Sanificazione dei dati
-        $due_date = htmlspecialchars($due_date, ENT_QUOTES, 'UTF-8');
-        $status = htmlspecialchars($status, ENT_QUOTES, 'UTF-8');
-        $description = htmlspecialchars($description, ENT_QUOTES, 'UTF-8');
+        $content = htmlspecialchars($content, ENT_QUOTES, 'UTF-8');
 
 
         // Verifica se i campi obbligatori sono vuoti
-        if (empty($due_date) || empty($status) || empty($description) ) {
+        if (empty($content) ) {
             $_SESSION['error'] = "All fields are mandatory";
-            header('Location: /leads/tasks/'.$lead_id);
+            header('Location: /leads/notes/'.$lead_id);
             exit();
         }
 
-        $due_date = new \DateTime($due_date);
-        $task->setDueDate($due_date);
-        $task->setStatus($status);
-        $task->setDescription($description);
+        $note->setContent($content);
       
-
         $this->entityManager->flush();
 
-        header('Location: /leads/tasks/'.$lead_id);
+        header('Location: /leads/notes/'.$lead_id);
         exit();
     }
 
@@ -219,18 +197,18 @@ class TasksController extends RenderController
     {
         if (DEMO_MODE) {
             echo "<script>alert('Demo mode: crud operations not allowed'); 
-            window.location.href='/leads/tasks/$lead_id';</script>";
+            window.location.href='/leads/notes/$lead_id';</script>";
             exit();
         }
 
-        $task = $this->entityManager->getRepository(Task::class)->find($id);
+        $note = $this->entityManager->getRepository(Note::class)->find($id);
     
-        if ($task) {
-            $this->entityManager->remove($task);
+        if ($note) {
+            $this->entityManager->remove($note);
             $this->entityManager->flush();
         }
     
-        header('Location: /leads/tasks/'.$lead_id);
+        header('Location: /leads/notes/'.$lead_id);
         exit();
     }
 }
