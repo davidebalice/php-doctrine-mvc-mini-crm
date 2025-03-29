@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Mar 28, 2025 alle 18:26
+-- Creato il: Mar 29, 2025 alle 17:36
 -- Versione del server: 10.4.27-MariaDB
 -- Versione PHP: 8.2.0
 
@@ -85,7 +85,8 @@ CREATE TABLE `history` (
 --
 
 INSERT INTO `history` (`id`, `created_at`, `event`, `type`, `lead_id`) VALUES
-(1, '2025-03-22 14:37:47', 'Added calls', '', 1);
+(1, '2025-03-22 14:37:47', 'Added calls', '', 1),
+(2, '2025-03-28 18:59:22', 'Create new task', 'Task', NULL);
 
 -- --------------------------------------------------------
 
@@ -95,6 +96,7 @@ INSERT INTO `history` (`id`, `created_at`, `event`, `type`, `lead_id`) VALUES
 
 CREATE TABLE `leads` (
   `id` int(11) NOT NULL,
+  `active` int(1) NOT NULL DEFAULT 1,
   `first_name` varchar(100) NOT NULL,
   `last_name` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
@@ -117,10 +119,10 @@ CREATE TABLE `leads` (
 -- Dump dei dati per la tabella `leads`
 --
 
-INSERT INTO `leads` (`id`, `first_name`, `last_name`, `email`, `phone`, `city`, `address`, `zip`, `country`, `source`, `status`, `created_at`, `updated_at`, `user_id`, `status_id`, `source_id`, `notes`) VALUES
-(1, 'Luigi', 'Verdi', 'luigi@verdi.it', '32345643643', 'Milan', 'Corso Buenos Aires, 1', 20124, 'Italy', 'Facebook', 'New', '2025-03-14 11:12:13', '2025-03-14 11:12:13', 1, 1, 1, ''),
-(2, 'sedfsfsfsdf', 'wefwefcwefwefe', '3123213@lklk.gg', '1233232423', '12312', '324', 32423, '', '', '', '2025-03-21 14:22:33', '2025-03-21 14:49:50', 1, 15, 8, NULL),
-(4, 'ciao', 'wfwefwefwefw', 'efw@lk.lk', 'efwef', 'dfsdf', 'fsdfs', 6678, 'Italy', '', '', '2025-03-21 14:53:21', '2025-03-24 10:27:38', 1, 11, 1, 'aaaaaaaaaaaaaaaaaaaaaa\r\nsdfsd\r\nfsd\r\nf\r\nsdf\r\nsd\r\nfsd');
+INSERT INTO `leads` (`id`, `active`, `first_name`, `last_name`, `email`, `phone`, `city`, `address`, `zip`, `country`, `source`, `status`, `created_at`, `updated_at`, `user_id`, `status_id`, `source_id`, `notes`) VALUES
+(1, 1, 'Luigi', 'Verdi', 'luigi@verdi.it', '32345643643', 'Milan', 'Corso Buenos Aires, 1', 20124, 'Italy', 'Facebook', 'New', '2025-03-14 11:12:13', '2025-03-14 11:12:13', 1, 1, 1, ''),
+(2, 1, 'sedfsfsfsdf', 'wefwefcwefwefe', '3123213@lklk.gg', '1233232423', '12312', '324', 32423, '', '', '', '2025-03-21 14:22:33', '2025-03-21 14:49:50', 1, 15, 8, NULL),
+(4, 1, 'ciao', 'wfwefwefwefw', 'efw@lk.lk', 'efwef', 'dfsdf', 'fsdfs', 6678, 'Italy', '', '', '2025-03-21 14:53:21', '2025-03-24 10:27:38', 1, 11, 1, 'aaaaaaaaaaaaaaaaaaaaaa\r\nsdfsd\r\nfsd\r\nf\r\nsdf\r\nsd\r\nfsd');
 
 -- --------------------------------------------------------
 
@@ -265,7 +267,8 @@ CREATE TABLE `tasks` (
 
 INSERT INTO `tasks` (`id`, `description`, `due_date`, `status`, `lead_id`) VALUES
 (1, 'sdfsdfewrfefwefwef', '2025-06-27 10:41:00', 'In progress', 1),
-(2, 'efdf', '2025-05-08 10:47:00', 'Canceled', 1);
+(2, 'efdf', '2025-05-08 10:47:00', 'Canceled', 1),
+(3, 'asdasdasd', '2025-03-01 18:59:00', 'In progress', 1);
 
 -- --------------------------------------------------------
 
@@ -391,7 +394,7 @@ ALTER TABLE `documents`
 -- AUTO_INCREMENT per la tabella `history`
 --
 ALTER TABLE `history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT per la tabella `leads`
@@ -433,7 +436,7 @@ ALTER TABLE `statuses`
 -- AUTO_INCREMENT per la tabella `tasks`
 --
 ALTER TABLE `tasks`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT per la tabella `users`

@@ -14,6 +14,12 @@
         </div>
 
         <ul>
+            <a href="/dashboard">
+                <li>
+                    <i class="fa-solid fa-bars"></i>
+                    Dashboard
+                </li>
+            </a>
             <a href="/leads">
                 <li>
                     <i class="fa-regular fa-address-card"></i>

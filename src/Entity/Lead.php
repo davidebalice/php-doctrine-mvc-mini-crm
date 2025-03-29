@@ -22,6 +22,9 @@ class Lead
     #[ORM\Column(type: 'integer')]
     private int $id;
 
+    #[ORM\Column(type: 'boolean')]
+    private bool $active = true;
+
     #[ORM\Column(type: 'string', length: 100)]
     private string $first_name;
 
@@ -120,6 +123,16 @@ class Lead
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): void
+    {
+        $this->active = $active;
     }
 
     public function getFirstName(): string

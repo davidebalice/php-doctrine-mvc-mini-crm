@@ -19,8 +19,8 @@ class HomeController extends RenderController
     public function index()
     {
        $data=[
-           'title'=>'Homepage',
-           'description'=>'Homepage',
+           'title'=>'Mini Crm - Php custom framework - www.davidebalice.dev',
+           'description'=>'Mini Crm developed in Php and Doctrine',
        ];
        $this->render('index', $data);
     }
