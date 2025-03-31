@@ -41,10 +41,11 @@
         ?>
 
         <?php if (isset($leads) && count($leads) > 0): ?>
-            <div class="table-wrapper">
+            <div class="table-wrapper-leads">
                 <table>
                     <thead>
                         <tr>
+                        <th style="width:5%">Active</th>
                         <th style="width:30%">Surname name</th>
                         <th style="width:15%">Status</th>
                         <th style="width:15%">Source</th>
@@ -56,6 +57,20 @@
                     <tbody>
                         <?php foreach ($leads as $lead): ?>
                             <tr>
+                                <td>
+                                    <?php
+                                        if($lead->isActive()){
+                                    ?>
+                                            <img src="/images/on.png" class="activeBtn" data-id="<?php echo $lead->getId() ?>" data-active="<?php echo $lead->isActive() ?>">
+                                    <?php
+                                        }
+                                        else{
+                                    ?>
+                                            <img src="/images/off.png" class="activeBtn" data-id="<?php echo $lead->getId() ?>" data-active="<?php echo $lead->isActive() ?>">
+                                    <?php
+                                        }
+                                    ?>
+                                </td>
                                 <td><?= $lead->getLastName() ?> <?= $lead->getFirstName() ?></td>
                                 <td><?= $lead->getStatus()->getName() ?></td>
                                 <td><?= $lead->getSource()->getName() ?></td>
@@ -168,5 +183,34 @@
     function closeModal() {
         document.getElementById('deleteModal').style.display = 'none';
     }
+
+    // Funzione che attiva e disattiva il lead
+    document.querySelectorAll(".activeBtn").forEach(button => {
+        button.addEventListener("click", function() {
+            const leadId = this.getAttribute("data-id");
+            let active = this.getAttribute("data-active") || "0"; // Default a 0 se vuoto
+            const activeValue = active === "1" ? 0 : 1; // Cambia lo stato
+
+            fetch(`/leads/active`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ id: leadId, active: activeValue })
+            })
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                this.setAttribute("data-active", data.active);
+                const img = document.querySelector(`img[data-id="${leadId}"]`);
+                if (img) {
+                    img.src = data.active === 1 ? "/images/on.png" : "/images/off.png";
+                }
+            })
+
+        });
+    });
+
 </script>
 

@@ -10,6 +10,7 @@ use App\Entity\Quotation;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Symfony\Component\HttpFoundation\JsonResponse;
 class LeadsController extends RenderController
 {
     private $entityManager;
@@ -368,5 +369,52 @@ class LeadsController extends RenderController
 
         $this->render('/leads/quotations', $data);
     }
+
+    public function active(Request $request)
+    {
+        if (DEMO_MODE) {
+            echo "<script>alert('Demo mode: crud operations not allowed'); 
+            window.location.href='/leads';</script>";
+            exit();
+        }
+
+        // Decodifica il JSON ricevuto
+        $data = json_decode($request->getContent(), true);
+
+        // Verifica se i dati sono stati ricevuti correttamente
+        if (!isset($data['id'])) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'ID non ricevuto',
+            ]);
+        }
+        
+        $id = (int) $data['id'];
+        $active = isset($data['active']) ? (int) $data['active'] : 0;
+
+        $lead = $this->entityManager->getRepository(Lead::class)->find($id);
+
+        if (!$lead) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Lead non trovato',
+            ]);
+        }
+
+        // Aggiorna il valore active
+        $lead->setActive($active);
+        $this->entityManager->flush();
+
+        echo json_encode([
+            'success' => true,
+            'message' => 'Stato aggiornato con successo',
+            'id' => $id,
+            'active' => $active,
+        ]);
+
+        exit();
+
+    }
+
 
 }

@@ -169,7 +169,7 @@ header span {
 }
 
 main {
-  height: calc(100vh - 86px);
+  min-height: calc(100vh - 86px);
   display: flex;
   justify-content: start;
 }
@@ -226,10 +226,9 @@ footer a {
   width: 30%;
   max-width: 250px;
   background-color: var(--primary-color);
-  height: 100vh;
-  max-height: calc(100vh - 86px);
   color: white;
   position: relative;
+  flex-grow: 1;
 }
 
 .sidebar-container {
@@ -415,6 +414,10 @@ table {
 
 .table-wrapper {
   min-height: calc(100vh - 520px);
+}
+
+.table-wrapper-leads {
+  min-height: calc(100vh - 320px);
 }
 
 td {
@@ -810,6 +813,7 @@ label {
 .dashboard {
   display: flex;
   padding: 20px;
+  padding-bottom: 0;
   gap: 20px;
   width: calc(100% - 60px);
 }
@@ -849,13 +853,69 @@ label {
   color: #444;
   display: flex;
   align-items: center;
+  gap: 30px;
   text-align: center;
-  flex-direction: column;
+  text-align: left;
+  flex-direction: row;
+  justify-content: start;
+  padding-left: 40px;
+  overflow-y: auto;
+  box-shadow: 0px 2px 4px 0px rgb(0, 0, 0, 0.2);
+  line-height: 27px;
+  font-size: 32px;
+}
+
+.dashboard-box2 p {
+  font-size: 17px;
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+  padding-bottom: 5px;
+}
+
+.dashboard-icon-container {
+  width: 70px;
+  height: 70px;
+  border-radius: 6px;
+  font-size: 40px;
+  color: #fff;
+  display: flex;
+  align-items: center;
   justify-content: center;
+}
+
+.dashboard-icon1 {
+  background-color: #119ac2;
+}
+
+.dashboard-icon2 {
+  background-color: #71bb37;
+}
+
+.dashboard-icon3 {
+  background-color: #ac892c;
+}
+
+.dashboard-icon4 {
+  background-color: #444;
+}
+
+.dashboard-box3 {
+  border: 1px solid #ddd;
+  width: 50%;
+  height: 500px;
+  background: white;
+  color: #444;
+  text-align: left;
   overflow-y: auto;
   box-shadow: 0px 2px 4px 0px rgb(0, 0, 0, 0.2);
   line-height: 27px;
 }
+
+.dashboard-box-int {
+  padding: 20px;
+}
+
 .demo-mode {
   color: red;
   font-size: 24px;
@@ -863,4 +923,9 @@ label {
 
 .alert {
   width: 110px;
+}
+
+.activeBtn {
+  width: 60px;
+  cursor: pointer;
 }

@@ -24,6 +24,7 @@ function defineRoutes(RouteCollector $r) {
     $r->addRoute('GET', '/leads/detail/{id:\d+}', 'leads_detail');
     $r->addRoute('GET', '/leads/edit/{id:\d+}', 'leads_edit');
     $r->addRoute('POST', '/leads/update', 'leads_update');
+    $r->addRoute('POST', '/leads/active', 'leads_active');
     $r->addRoute('GET', '/leads/delete/{id:\d+}', 'leads_delete');
     $r->addRoute('GET', '/leads/history/{id:\d+}', 'leads_history');
 

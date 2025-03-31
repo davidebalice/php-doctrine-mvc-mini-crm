@@ -62,7 +62,8 @@ switch ($routeInfo[0]) {
             'leads_history' => ['App\\Controllers\\LeadsController', 'history', true],
             'leads_quotations' => ['App\\Controllers\\LeadsController', 'quotations', true],
             'leads_notes' => ['App\\Controllers\\LeadsController', 'notes', true],
-
+            'leads_active' => ['App\\Controllers\\LeadsController', 'active', true],
+            
             //leads quotations
             'leads_quotations' => ['App\\Controllers\\LeadsQuotationsController', 'quotations', true],
             'leads_quotations_create' => ['App\\Controllers\\LeadsQuotationsController', 'create', true],

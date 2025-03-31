@@ -49,7 +49,7 @@
                             <select id="status" name="status" required>
                                 <option value="">- Select status -</option>
                                 <option value="To Do">To Do</option>
-                                <option value="In progress">In progress</option>
+                                <option value="Pending">Pending</option>
                                 <option value="Blocked">Blocked</option>
                                 <option value="Review">Review</option>
                                 <option value="Done">Done</option>
@@ -83,7 +83,7 @@
                             <select name="status" id="edit_status" required>
                                 <option value="">- Select status -</option>
                                 <option value="To Do">To Do</option>
-                                <option value="In progress">In progress</option>
+                                <option value="Pending">Pending</option>
                                 <option value="Blocked">Blocked</option>
                                 <option value="Review">Review</option>
                                 <option value="Done">Done</option>
