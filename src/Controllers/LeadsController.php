@@ -10,7 +10,7 @@ use App\Entity\Quotation;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Services\HistoryService;
 class LeadsController extends RenderController
 {
     private $entityManager;
@@ -30,6 +30,9 @@ class LeadsController extends RenderController
         $offset = ($page - 1) * $limit;
         $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 
+        //utente loggato
+        $user = $this->getLoggedInUser();
+
         // Impostiamo un limite alla lunghezza della ricerca per evitare query pesanti
         if (strlen($search) > 255) {
             $search = substr($search, 0, 255);
@@ -40,8 +43,13 @@ class LeadsController extends RenderController
 
         $queryBuilder = $this->entityManager->getRepository(Lead::class)->createQueryBuilder('s');
 
+        $queryBuilder
+        ->innerJoin('s.assigned_user', 'u')
+        ->where('u.id = :user_id')
+        ->setParameter('user_id', $user->getId());
+    
         if (!empty($search)) {
-            $queryBuilder->where('s.name LIKE :search')
+            $queryBuilder->andWhere('s.name LIKE :search')
                         ->setParameter('search', "%$search%");
         }
 
@@ -50,6 +58,7 @@ class LeadsController extends RenderController
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->getQuery();
+
 
         $paginator = new Paginator($query);
         $totalItems = count($paginator);

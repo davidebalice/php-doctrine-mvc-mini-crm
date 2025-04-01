@@ -28,13 +28,10 @@
             This app is in Demo Mode
             <br />
             Crud operations are not allowed
-            <?php
-            if(isset($user)){
-                echo $user->getEmail();
-            }else{
-                echo"user non loggato";
-            }
-        ?>
+            <br />
+            Leads data are placeholder 
+            <br />
+            and generate with Php Faker
         </div>
     </div>
 
@@ -45,7 +42,7 @@
             </div>
             <div>
                 <p>Total leads:</p>
-                <?php echo $leads; ?>
+                <?php echo $total_leads; ?>
             </div>
         </div>
 
@@ -84,15 +81,96 @@
         <div class="dashboard-box3">
             <div class="dashboard-box-int">
                 <div class="line"></div>
-                <h3>aaaaaaaaaa</h3>
+                <h3>Last leads</h3>
+
+                <?php if (isset($leads) && count($leads) > 0): ?>
+                    <table>
+                        <thead>
+                            <tr>
+                            <th style="width:30%">Surname name</th>
+                            <th style="width:15%">Status</th>
+                            <th style="width:15%">Source</th>
+                            <th style="width:15%">Assigned user</th>
+                            <th style="width:15%">Data</th>
+                            <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($leads as $lead): ?>
+                                <tr>
+                                    <td><?= $lead->getLastName() ?> <?= $lead->getFirstName() ?></td>
+                                    <td><?= $lead->getStatus()->getName() ?></td>
+                                    <td><?= $lead->getSource()->getName() ?></td>
+                                    <td><?= $lead->getAssignedUser()->getName() ?></td>
+                                    <td><?= $lead->getCreatedAt()->format('d/m/Y H:i')  ?></td>
+                                    <td>
+                                        <div class="buttons-container">
+                                            <a href="/leads/detail/<?php echo $lead->getId(); ?>">
+                                                <div class="flex-center base-button detail-button ">
+                                                    <i class="fa-regular fa-address-card"></i>
+                                                    Detail
+                                                </div>
+                                            </a>
+                                        
+                                            <a href="/leads/edit/<?php echo $lead->getId(); ?>">
+                                                <div class="flex-center base-button edit-button ">
+                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
              
+                    <?php else: ?>
+                        <br />
+                        <b>Leads not found</b>
+                    <?php endif; ?>
             </div>
         </div>
 
         <div class="dashboard-box3">
             <div class="dashboard-box-int">
                 <div class="line"></div>
-                <h3>aaaaaaaaaa</h3>
+                <h3>Recent activity</h3>
+
+                <?php if (isset($histories) && count($histories) > 0): ?>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:20%">Date</th>
+                                <th style="width:80%">Event</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($histories as $history): ?>
+                                <tr>
+                                    <td><?= $history->getCreatedAt()->format('d/m/Y H:i') ?></td>
+                                    <td><?= $history->getEvent() ?></td>
+                                    <td>
+                                        <div class="buttons-container">
+                                            <a href="/leads/history/edit/<?php echo $history->getId(); ?>">
+                                                <div class="flex-center base-button edit-button ">
+                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                </div>
+                                            </a>
+                                            <div class="flex-center base-button delete-button"  onclick="confirmDelete(<?php echo $history->getId(); ?>)">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+             
+                    <?php else: ?>
+                        <br />
+                        <b>Leads not found</b>
+                    <?php endif; ?>
              
             </div>
         </div>

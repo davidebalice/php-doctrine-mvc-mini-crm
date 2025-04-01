@@ -9,15 +9,19 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use App\Services\HistoryService;
 class DocumentsController extends RenderController
 {
     private $entityManager;
+    private $historyService;
+
     private $uploadDir = __DIR__ . '/../../public/uploads/documents/';
     
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, HistoryService $historyService)
     {
         $this->entityManager = $entityManager;
-        parent::__construct($entityManager);
+        $this->historyService = $historyService;
+        parent::__construct($entityManager,$historyService);
     }
 
     //metodo per inviare risposta in json
@@ -132,6 +136,10 @@ class DocumentsController extends RenderController
         $this->entityManager->persist($document);
         $this->entityManager->flush();
 
+        //crea la voce in history
+        $this->historyService->logAction('Create new document: '.$newFilename, 'Document');
+        //
+
         header('Location: /leads/documents/'.$lead_id);
         exit();
     }
@@ -149,21 +157,14 @@ class DocumentsController extends RenderController
 
     public function update(Request $request)
     {
-       
-       
-       
         if (DEMO_MODE) {
             echo "<script>alert('Demo mode: crud operations not allowed'); 
             window.location.href='/leads';</script>";
             exit();
         }
 
-      
-
         $id = $request->request->get('document_id');
         $id = (int) $id; // Conversione sicura a intero
-
-      
 
         $document = $this->entityManager->getRepository(Document::class)->find($id);
 
@@ -177,7 +178,6 @@ class DocumentsController extends RenderController
         $lead_id = trim($request->request->get('lead_id', ''));
 
        
-        
         // Sanificazione dei dati
         $title = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
         //$filename = htmlspecialchars($filename, ENT_QUOTES, 'UTF-8');
@@ -191,11 +191,15 @@ class DocumentsController extends RenderController
         }
 
         $document->setTitle($title);
-       // $document->setFilename($filename);
+        // $document->setFilename($filename);
       
     
 
         $this->entityManager->flush();
+
+        //crea la voce in history
+        $this->historyService->logAction('Update document: '.$title, 'Document');
+        //
         
 
         header('Location: /leads/documents/'.$lead_id);
@@ -227,6 +231,10 @@ class DocumentsController extends RenderController
             $this->entityManager->remove($document);
             $this->entityManager->flush();
         }
+
+        //crea la voce in history
+        $this->historyService->logAction('Delete document: '.$filename, 'Document');
+        //
     
         // Redirect dopo l'operazione di cancellazione
         header('Location: /leads/documents/'.$lead_id);

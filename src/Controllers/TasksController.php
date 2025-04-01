@@ -148,7 +148,11 @@ class TasksController extends RenderController
         $this->entityManager->persist($task);
         $this->entityManager->flush();
 
-        $this->historyService->logAction('Create new task', 'Task');
+        //crea la voce in history
+        $length=50;
+        $short_description =  strlen($description) > $length ? substr($description, 0, $length) . '...' : $description;
+        $this->historyService->logAction('Create new task: '.$short_description, 'Task');
+        //
 
         header('Location: /leads/tasks/'.$lead_id);
         exit();
@@ -211,6 +215,12 @@ class TasksController extends RenderController
 
         $this->entityManager->flush();
 
+        //crea la voce in history
+        $length=50;
+        $short_description =  strlen($description) > $length ? substr($description, 0, $length) . '...' : $description;
+        $this->historyService->logAction('Update task: '.$short_description, 'Task');
+        //
+
         header('Location: /leads/tasks/'.$lead_id);
         exit();
     }
@@ -218,7 +228,7 @@ class TasksController extends RenderController
     public function delete($lead_id,$id)
     {
         if (DEMO_MODE) {
-            echo "<script>alert('Demo mode: crud operations not allowed'); 
+            echo "<script>alert('Demo mode: crud operations not allowed');
             window.location.href='/leads/tasks/$lead_id';</script>";
             exit();
         }
@@ -229,6 +239,10 @@ class TasksController extends RenderController
             $this->entityManager->remove($task);
             $this->entityManager->flush();
         }
+
+        //crea la voce in history
+        $this->historyService->logAction('Delete task', 'Task');
+        //
     
         header('Location: /leads/tasks/'.$lead_id);
         exit();

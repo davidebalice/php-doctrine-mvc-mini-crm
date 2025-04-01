@@ -9,6 +9,7 @@ use App\Entity\QuotationItem;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use App\Services\HistoryService;
 class LeadsQuotationsController extends RenderController
 {
     private $entityManager;

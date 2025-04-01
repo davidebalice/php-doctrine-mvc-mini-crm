@@ -13,6 +13,7 @@ use App\Entity\Note;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use App\Services\HistoryService;
 class CallsController extends RenderController
 {
     private $entityManager;
