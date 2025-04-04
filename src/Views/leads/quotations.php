@@ -69,25 +69,41 @@
                             </thead>
                             <tbody>
                                 <?php foreach ($quotations as $quotation): ?>
+                                    <?php
+                                        if($quotation->getStatus()==="Approved"){
+                                            $badgeColor="green";
+                                        }
+                                        else if($quotation->getStatus()==="Rejected"){
+                                            $badgeColor="red";
+                                        }
+                                        else{
+                                            $badgeColor="orange";
+                                        }
+                                    ?>
                                     <tr>
                                         <td>
                                             <?= $quotation->getCreatedAt()->format('d/m/Y') ?>
                                         </td>
                                         <td><?= $quotation->getTitle() ?></td>
-                                        <td><?= $quotation->getStatus() ?></td>
-                                        <td><?= $quotation->getTotal() ?>
+                                        <td><div class="badge badge-<?= $badgeColor?>"><?= $quotation->getStatus() ?></div></td>
+                                        <td>€ <?= number_format($quotation->getTotal(), 2, ',', '.') ?>
                                     
-                                    
-                                    
-                                <?php foreach ($quotation->getItems() as $item): ?>
-                                    <tr>
-                                        <td><?php echo $item->getServiceName(); ?></td>
-                                        <td><?php echo $item->getDescription(); ?></td>
-                                        <td><?php echo $item->getQuantity(); ?></td>
-                                        <td>&euro;<?php echo number_format($item->getPrice(), 2, ',', '.'); ?></td>
-                                        <td>&euro;<?php echo number_format($item->getSubtotal(), 2, ',', '.'); ?></td>
-                                    </tr>
-                                <?php endforeach; ?>
+                                        <?php
+                                        /*
+                                        foreach ($quotation->getItems() as $item): ?>
+                                            <table>
+                                            <tr>
+                                                <td><?php echo $item->getServiceName(); ?></td>
+                                                <td><?php echo $item->getDescription(); ?></td>
+                                                <td><?php echo $item->getQuantity(); ?></td>
+                                                <td>&euro;<?php echo number_format($item->getPrice(), 2, ',', '.'); ?></td>
+                                                <td>&euro;<?php echo number_format($item->getSubtotal(), 2, ',', '.'); ?></td>
+                                            </tr>
+                                        </table>
+                                        <?php
+                                        endforeach;
+                                        */
+                                        ?>
                                     
                                     
 

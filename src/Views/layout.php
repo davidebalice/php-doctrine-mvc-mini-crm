@@ -17,14 +17,27 @@
         <span>
             Mini Crm - PHP custom Framework
         </span>
-        <img src="/images/github.png" alt="Logo" class="githubLogo">
+
+        <div class="flex-center">
+            <div class="lang-switcher">
+                <button class="lang-button" title="Cambia lingua">
+                    <i class="fas fa-globe"></i>
+                </button>
+                <div class="lang-dropdown">
+                    <a href="?lang=it">Italiano</a>
+                    <a href="?lang=en">English</a>
+                </div>
+            </div>
+
+            <img src="/images/github.png" alt="Logo" class="githubLogo">
+        </div>
     </header>
 
     <!-- Contenuto Dinamico -->
     <main>
         <?php
             if(isset($user)){
-                include __DIR__ . '/admin/siderbar.php';
+                include __DIR__ . '/admin/sidebar.php';
             }
         ?>
         <?php include $content; ?>

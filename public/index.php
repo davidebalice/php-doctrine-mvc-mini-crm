@@ -1,11 +1,30 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../src/Routes/routes.php';
+require_once __DIR__ . '/../includes/functions.php';
+
+//multilingua - setta la variabile di sessione
+if (isset($_GET['lang']) && in_array($_GET['lang'], ['en', 'it'])) {
+    $_SESSION['lang'] = $_GET['lang'];
+    if (isset($_GET['lang']) && in_array($_GET['lang'], ['en', 'it'])) {
+        $_SESSION['lang'] = $_GET['lang'];
+    
+        //Rimuove i parametri GET dalla URL (compreso ?lang=it)
+        $url_clean = strtok($_SERVER['REQUEST_URI'], '?');
+    
+        //Reindirizza alla stessa pagina senza il parametro
+        header("Location: $url_clean");
+        exit;
+    }
+    exit;
+}
+
 /*
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 */
+
 use FastRoute\RouteCollector;
 use FastRoute\Dispatcher;
 use App\Middlewares\AuthMiddleware;
@@ -59,7 +78,7 @@ switch ($routeInfo[0]) {
             'leads_edit' => ['App\\Controllers\\LeadsController', 'edit', true],
             'leads_update' => ['App\\Controllers\\LeadsController', 'update', true],
             'leads_delete' => ['App\\Controllers\\LeadsController', 'delete', true],
-            'leads_history' => ['App\\Controllers\\LeadsController', 'history', true],
+            'leads_history' => ['App\\Controllers\\LeadsController', 'histories', true],
             'leads_quotations' => ['App\\Controllers\\LeadsController', 'quotations', true],
             'leads_notes' => ['App\\Controllers\\LeadsController', 'notes', true],
             'leads_active' => ['App\\Controllers\\LeadsController', 'active', true],

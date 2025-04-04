@@ -14,6 +14,9 @@
                 <span>Back</span>
             </div>
         </a>
+        <?php
+            include('selected_lead.php');
+        ?>
     </div>
 
     <div class="page-body">
@@ -25,55 +28,56 @@
             
             <div class="tab-content" id="content-detail">
                 <h2>Lead details</h2>
-               
-                <div class="detail-row">
-                    <div>Name:</div>
-                    <div><?php echo $lead->getFirstName() ?></div>
-                </div>
+                <div class="box">
+                    <div class="detail-row">
+                        <div>Name:</div>
+                        <div><?php echo $lead->getFirstName() ?></div>
+                    </div>
 
-                <div class="detail-row">
-                    <div>Surname:</div>
-                    <div><?php echo $lead->getLastName(); ?></div>
-                </div>
+                    <div class="detail-row">
+                        <div>Surname:</div>
+                        <div><?php echo $lead->getLastName(); ?></div>
+                    </div>
 
-                <div class="detail-row">
-                    <div>Status:</div>
-                    <div><?php echo $lead->getStatus()->getName(); ?></div>
-                </div>
+                    <div class="detail-row">
+                        <div>Status:</div>
+                        <div><?php echo $lead->getStatus()->getName(); ?></div>
+                    </div>
 
-                <div class="detail-row">
-                    <div>Source:</div>
-                    <div><?php echo $lead->getSource()->getName(); ?></div>
-                </div>
+                    <div class="detail-row">
+                        <div>Source:</div>
+                        <div><?php echo $lead->getSource()->getName(); ?></div>
+                    </div>
 
-                <div class="detail-row">
-                    <div>City:</div>
-                    <div><?php echo $lead->getCity(); ?></div>
-                </div>
+                    <div class="detail-row">
+                        <div>City:</div>
+                        <div><?php echo $lead->getCity(); ?></div>
+                    </div>
 
-                <div class="detail-row">
-                    <div>Address:</div>
-                    <div><?php echo $lead->getAddress(); ?></div>
-                </div>
+                    <div class="detail-row">
+                        <div>Address:</div>
+                        <div><?php echo $lead->getAddress(); ?></div>
+                    </div>
 
-                <div class="detail-row">
-                    <div>ZIP:</div>
-                    <div><?php echo $lead->getZip(); ?></div>
-                </div>
+                    <div class="detail-row">
+                        <div>ZIP:</div>
+                        <div><?php echo $lead->getZip(); ?></div>
+                    </div>
 
-                <div class="detail-row">
-                    <div>Phone:</div>
-                    <div><?php echo $lead->getPhone(); ?></div>
-                </div>
+                    <div class="detail-row">
+                        <div>Phone:</div>
+                        <div><?php echo $lead->getPhone(); ?></div>
+                    </div>
 
-                <div class="detail-row">
-                    <div>Email:</div>
-                    <div><?php echo $lead->getEmail(); ?></div>
-                </div>
+                    <div class="detail-row">
+                        <div>Email:</div>
+                        <div><?php echo $lead->getEmail(); ?></div>
+                    </div>
 
-                <div class="detail-row">
-                    <div>Created at:</div>
-                    <div><?php echo $lead->getCreatedAt()->format('d/m/Y H:i'); ?></div>
+                    <div class="detail-row">
+                        <div>Created at:</div>
+                        <div><?php echo $lead->getCreatedAt()->format('d/m/Y H:i'); ?></div>
+                    </div>
                 </div>
             </div>
             <div class="tab-content" id="content-history">

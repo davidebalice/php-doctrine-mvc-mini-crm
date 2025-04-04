@@ -29,7 +29,7 @@
             <a href="/quotations">
                 <li>
                 <i class="fa-regular fa-file-lines"></i>
-                    Quotations
+                    <?= __('Quotations') ?>
                 </li>
             </a>
             <a href="/sources">

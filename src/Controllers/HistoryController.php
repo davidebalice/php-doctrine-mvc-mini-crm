@@ -55,8 +55,8 @@ class HistorysController extends RenderController
         $search = htmlspecialchars($search, ENT_QUOTES, 'UTF-8');
 
         // Query per ottenere le chiamate del lead specifico
-        $queryBuilder = $this->entityManager->getRepository(History::class)->createQueryBuilder('c')
-            ->where('c.lead = :lead')
+        $queryBuilder = $this->entityManager->getRepository(History::class)->createQueryBuilder('h')
+            ->where('h.lead = :lead')
             ->setParameter('lead', $lead);
 
         /*
@@ -67,7 +67,7 @@ class HistorysController extends RenderController
         */
 
         $query = $queryBuilder
-            ->orderBy('c.due_date', 'DESC')
+            ->orderBy('h.created_at', 'DESC')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->getQuery();
@@ -86,7 +86,7 @@ class HistorysController extends RenderController
             'search' => $search
         ];
 
-        $this->render('/leads/histories', $data);
+        $this->render('/leads/history', $data);
     }
 
     public function detail($id) {
@@ -139,9 +139,7 @@ class HistorysController extends RenderController
         // Crea un nuovo Lead e imposta i dati
         $history = new History();
         $due_date = new \DateTime($due_date);
-        $history->setDueDate($due_date);
-        $history->setStatus($status);
-        $history->setDescription($description);
+        $history->setEvent($description);
         $history->setLead($lead);
 
         $this->entityManager->persist($history);

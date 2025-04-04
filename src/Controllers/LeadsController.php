@@ -336,7 +336,7 @@ class LeadsController extends RenderController
         header('Location: /leads');
         exit();
     }
-
+/*
     public function history($id) {
         $lead = $this->entityManager->getRepository(Lead::class)->find($id);
 
@@ -353,6 +353,67 @@ class LeadsController extends RenderController
             'description' => 'Lead details',
             'lead' => $lead,
             'histories' => $histories,
+        ];
+
+        $this->render('/leads/history', $data);
+    }
+*/
+
+
+    public function histories($id)
+    {
+        // Verifica che l'ID sia valido
+        $leadId = filter_var($id, FILTER_VALIDATE_INT);
+        if (!$leadId || $leadId <= 0) {
+            die("ID Lead non valido.");
+        }
+
+        $lead = $this->entityManager->getRepository(Lead::class)->find($leadId);
+        
+        $page = isset($_GET['page']) ? filter_var($_GET['page'], FILTER_VALIDATE_INT) : 1;
+        $page = $page && $page > 0 ? $page : 1; // Controllo sulla variabile get page
+        $limit = 12;
+        $offset = ($page - 1) * $limit;
+        $search = isset($_GET['search']) ? trim($_GET['search']) : '';
+
+        // Impostiamo un limite alla lunghezza della ricerca per evitare query pesanti
+        if (strlen($search) > 255) {
+            $search = substr($search, 0, 255);
+        }
+
+        // Sanifica il valore per prevenire attacchi XSS
+        $search = htmlspecialchars($search, ENT_QUOTES, 'UTF-8');
+
+        // Query per ottenere le chiamate del lead specifico
+        $queryBuilder = $this->entityManager->getRepository(History::class)->createQueryBuilder('h')
+            ->where('h.lead = :lead')
+            ->setParameter('lead', $lead);
+
+        /*
+        if (!empty($search)) {
+            $queryBuilder->andWhere('c.name LIKE :search')
+                ->setParameter('search', "%$search%");
+        }
+        */
+
+        $query = $queryBuilder
+            ->orderBy('h.created_at', 'DESC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getQuery();
+
+        $paginator = new Paginator($query);
+        $totalItems = count($paginator);
+        $totalPages = ceil($totalItems / $limit);
+
+        $data = [
+            'title' => 'Historyes of lead',
+            'description' => 'View histories of lead',
+            'lead' => $lead,
+            'histories' => $paginator,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'search' => $search
         ];
 
         $this->render('/leads/history', $data);
