@@ -72,15 +72,13 @@
                                     ?>
                                 </td>
                                 <td><?= $lead->getLastName() ?> <?= $lead->getFirstName() ?></td>
-                                <td><?= $lead->getStatus()->getName() ?></td>
-                                <td><?= $lead->getSource()->getName() ?></td>
+                                <td><div class="badge badge-lead"><?= $lead->getStatus()->getName() ?></div></td>
+                                <td><div class="badge badge-lead2"><?= $lead->getSource()->getName() ?></div></td>
                                 <td><?= $lead->getAssignedUser()->getName() ?></td>
                                 <td><?= $lead->getCreatedAt()->format('d/m/Y H:i')  ?></td>
                                 <td>
                                     <div class="buttons-container">
                                         
-                                       
-                                    
                                         <a href="/leads/detail/<?php echo $lead->getId(); ?>">
                                             <div class="flex-center base-button detail-button ">
                                                 <i class="fa-regular fa-address-card"></i>

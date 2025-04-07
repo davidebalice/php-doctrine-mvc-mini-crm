@@ -29,7 +29,9 @@
                 </div>
             </div>
 
-            <img src="/images/github.png" alt="Logo" class="githubLogo">
+            <a href="https://github.com/davidebalice/php-doctrine-mvc-mini-crm" target="_blank">
+                <img src="/images/github.png" alt="Logo" class="githubLogo">
+            </a>
         </div>
     </header>
 

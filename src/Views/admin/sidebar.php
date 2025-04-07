@@ -26,12 +26,12 @@
                     Leads
                 </li>
             </a>
-            <a href="/quotations">
+            <!--a href="/quotations">
                 <li>
                 <i class="fa-regular fa-file-lines"></i>
                     <?= __('Quotations') ?>
                 </li>
-            </a>
+            </a-->
             <a href="/sources">
                 <li>
                     <i class="fa-solid fa-list"></i>
@@ -45,12 +45,12 @@
                 </li>
             </a>
 
-            <a href="/profile">
+            <!--a href="/profile">
                 <li>
                     <i class="fa-regular fa-circle-user"></i>
                     Users
                 </li>
-            </a>
+            </a-->
 
 
             <a href="#">

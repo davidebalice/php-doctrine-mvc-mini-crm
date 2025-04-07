@@ -964,6 +964,14 @@ label {
   background-color: #e88821;
 }
 
+.badge-lead {
+  background-color: #1095bc;
+}
+
+.badge-lead2 {
+  background-color: #117b9a;
+}
+
 .lang-switcher {
   position: relative;
   display: inline-block;
